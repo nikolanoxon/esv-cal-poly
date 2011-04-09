@@ -1,4 +1,4 @@
-function [pdot,slp_ang,acc_out,Fout] = fcn(p,steer,torque,acc_in)
+function [pdot,slp_ang,acc_out,Fout] = DVM(p,steer,torque,acc_in)
  
 %==output==%
 pdot=zeros(10,1);
