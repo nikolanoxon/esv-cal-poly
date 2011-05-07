@@ -1,0 +1,201 @@
+/**	==========================================================================
+ *	File: uart1.c
+ *	==========================================================================
+ *
+ *	History:
+ *		2010-08-13 T. Cooke file created.
+ *
+ *	Description:
+ *		Sets up dsPIC33F to use UART1 on which ever pins
+ *		were mapped in setup_IO() in main.c.
+ */
+
+#include "uart1.h"
+
+
+/*	Recieved data will be stored in an 80 character array named Buf */
+char Buf[80]; 				
+
+/*	Pointer to the most recent character in Buf */
+char * Receiveddata = Buf;
+
+
+/** ==========================================================================
+ *	Function: _U1TXInterrupt
+ *	==========================================================================
+ *
+ *	History:
+ *		2010-08-13 T. Cooke function created.
+ *
+ *	Description:
+ *		This is the UART1 transmit ISR. Note that the Tx interrupt
+ *		has not been enabled yet.
+ *
+ *	Variable(s):
+ *		@param void
+ *		@return void
+ */
+
+void __attribute__( ( interrupt, no_auto_psv ) ) _U1TXInterrupt( void )
+{  
+	/*	IMPORTANT: Reset UART Receive interrupt flag. Note: if interrupt 
+		flag is not cleared a new interrupt will not occur.
+	 */
+	IFS0bits.U1TXIF = 0;
+} 
+
+
+/** ==========================================================================
+ *	Function: _U1RXInterrupt
+ *	==========================================================================
+ *
+ *	History:
+ *		2010-08-13 T. Cooke function created.
+ *
+ *	Description:
+ *		This is the UART1 receiving ISR.
+ *
+ *	Variable(s):
+ *		@param void
+ *		@return void
+ */
+
+void __attribute__( ( interrupt, no_auto_psv ) ) _U1RXInterrupt( void )
+{
+	/*	Checks the framing error for UART transmission & 
+	 *	if transmit shift register is empty
+	 */
+	if( U1STAbits.FERR == 1 && U1STAbits.TRMT ==  1);
+
+	/*	Checks parity error for UART transmission &
+	 *	if transmit shift register is empty	
+	 */
+	if( U1STAbits.PERR == 1 && U1STAbits.TRMT == 1 );
+
+	/*	Checks overrun error for UART transmission & 
+	 *	if transmit shift register is empty		
+	 */
+	if( U1STAbits.OERR == 1 && U1STAbits.TRMT == 1 );
+
+
+	/*	If we have recieved data and the transmit buffer is empty place it in 
+	 *	the recieve buffer increment the pointer, and echo the character back to 
+	 *	the terminal.
+	 *	
+	 *	-U1STA refers to UART1 Status Register
+	 *
+	 *	-URXDA refers to the Receive Buffer Data bit that is set to 1 when 
+	 *	 data is available to read.
+	 *
+	 *	-TRMT refers to Transmit Shift Register is Empty. This bit is set to 1
+	 *	 when the last transmission has completed successfully.
+	 */
+	if(	U1STAbits.URXDA == 1 && U1STAbits.TRMT == 1 );
+	{
+		/* Notice Reciveddata pointer is post incremented */
+		( *( Receiveddata )++ ) = U1RXREG;
+
+		/*	In order to echo the right character we have to send the char
+		 *	at (pointer-1)
+		 */
+		U1TXREG = *( Receiveddata - 1 );
+	}
+
+    
+	/*	IMPORTANT: Reset UART Receive interrupt flag. Note: if interrupt 
+		flag is not cleared a new interrupt will not occur.
+	 */
+    IFS0bits.U1RXIF = 0;  
+}
+
+
+/** ==========================================================================
+ *	Function: start_uart1
+ *	==========================================================================
+ *
+ *	History:
+ *		2010-08-13 T. Cooke function created.
+ *
+ *	Description:
+ *		Starts UART1 with the specified baudrate.
+ *
+ *	Variable(s):
+ *		@param unsigned long baudrate
+ *		@return void
+ */
+
+void start_uart1( unsigned long baudrate )
+{
+	/*	Holds the value of baud register */
+	unsigned int baudvalue;   
+
+	/*	Holds the value of uart config reg */
+	unsigned int U1MODEvalue;
+
+	/*	Holds the information regarding uart
+	 *	Tx and Rx interrupt modes
+	 */  
+	unsigned int U1STAvalue; 
+
+	/*	Turn off UART1module */
+    CloseUART1();
+
+    /*	Clear interupts */
+	IFS0bits.U1RXIF = 0;  
+	IFS0bits.U1RXIF = 0;
+
+	/* 	Configure uart1 receive and transmit interrupt */
+    ConfigIntUART1( UART_RX_INT_EN & UART_RX_INT_PR3 & 
+                    UART_TX_INT_DIS & UART_TX_INT_PR3 );
+
+	/* Configure UART1 module to transmit 8 bit data with one stopbit. 
+	 *  
+	 * Load a value into Baud Rate Generator.  Example is for 38400.
+	 * See section 19.3.1 of datasheet.
+	 *  	baudvalue = (Fcy/(16*BaudRate))-1
+	 *  	baudvalue = (40M/(16*38400))-1
+	 *  	baudvalue = 65
+	 */
+
+	/*	Slow speed settings */
+    if(baudrate <= 57600UL)
+    {
+	    baudvalue = ( unsigned int )( ( FCY / ( 16 * baudrate ) ) - 1 );
+	    U1MODEvalue = UART_EN & UART_IDLE_CON & UART_IrDA_DISABLE &
+                  	  UART_MODE_FLOW & UART_UEN_00 & UART_DIS_WAKE &
+                 	  UART_DIS_LOOPBACK & UART_DIS_ABAUD & UART_UXRX_IDLE_ONE &
+        			  UART_BRGH_SIXTEEN & UART_NO_PAR_8BIT & UART_1STOPBIT;
+	}
+	/*	High speed settings */
+	else
+	{
+    	baudvalue = ( unsigned int )( ( FCY / ( 4 * baudrate ) ) - 1 );
+    	U1MODEvalue = UART_EN & UART_IDLE_CON & UART_IrDA_DISABLE &
+                  	  UART_MODE_FLOW & UART_UEN_00 & UART_DIS_WAKE &
+                  	  UART_DIS_LOOPBACK & UART_DIS_ABAUD & UART_UXRX_IDLE_ONE &
+                  	  UART_BRGH_FOUR & UART_NO_PAR_8BIT & UART_1STOPBIT;
+ 	}
+    
+    /*	Status register settings */
+    U1STAvalue  = UART_INT_TX & UART_TX_ENABLE & 
+    			  UART_IrDA_POL_INV_ZERO & UART_SYNC_BREAK_DISABLED  & 
+    			  UART_INT_RX_CHAR & UART_ADR_DETECT_DIS & 
+    			  UART_TX_BUF_FUL & UART_RX_OVERRUN_CLEAR;
+	
+	/* Open UART1 connection
+	 *
+	 * This function is defined in uart.h the builtin library fuctions
+	 * provided with the compiler. See uart.h or the C30 library users
+	 * guide for more infromation
+	 */
+	
+	OpenUART1( U1MODEvalue, U1STAvalue, baudvalue );
+	
+	__delay_ms(10);
+
+	/*	Prints a welcome banner alerting user serial communication port
+	 *	has been opened.
+	 */
+
+	printf("Serial communication has connected successfully!.\r\n");
+}
