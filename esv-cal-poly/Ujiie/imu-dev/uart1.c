@@ -98,7 +98,7 @@ void __attribute__( ( interrupt, no_auto_psv ) ) _U1RXInterrupt( void )
 		/*	In order to echo the right character we have to send the char
 		 *	at (pointer-1)
 		 */
-		U1TXREG = *( Receiveddata - 1 );
+		//U1TXREG = *( Receiveddata - 1 );
 	}
 
     
@@ -197,5 +197,15 @@ void start_uart1( unsigned long baudrate )
 	 *	has been opened.
 	 */
 
-	printf("Serial communication has connected successfully!.\r\n");
+	print_uart1("Serial communication has connected successfully!.\r\n");
+}
+
+void print_uart1( const char string[] ) {
+	const char *Buffer_pointer = string;
+
+	while( *Buffer_pointer ) {
+		if( !U1STAbits.UTXBF ) {
+			U1TXREG = *Buffer_pointer++;
+		}
+	}
 }
