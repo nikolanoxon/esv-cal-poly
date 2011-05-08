@@ -43,10 +43,20 @@ _FICD(JTAGEN_OFF & ICS_PGD1);
 extern char Buf[80]; 				// 80 character buffer
 extern char * Receiveddata;
 
-extern char Buf2[80];
-extern char * Receiveddata2;
+extern unsigned char Buf2[80];
+extern unsigned char * Receiveddata2;
 
-int counter = 0;
+unsigned int start_flag = FALSE;
+unsigned int end_flag = FALSE;
+unsigned int msb_done = FALSE;
+unsigned char msb;
+unsigned char lsb;
+unsigned int imu_count = 0;
+unsigned int imu_size = 6;
+unsigned short int imu[6];
+
+
+
 
 /** ==========================================================================
  *	Function: main
@@ -97,27 +107,61 @@ int main ( void )
                 T2_SOURCE_INT, match_value);
 
 	/*	Start UART1 with the specified baudrate */
-	//start_uart1(115200UL);
+	start_uart1(115200UL);
 	start_uart2(115200UL);
 
-	int signal = 0;
 
 	/*	Contains current raw ASCII character */
 	char control = 0;
 	char control2 = 0;
 
 	// Get IMU menu by sending a space ascii character
-	printf(0x20);
+	//print_uart2("#");
+	//print_uart2("9");
 
 while(1)
 {
 	control = *( Receiveddata - 1 );
+
 	control2 = *( Receiveddata2 - 1 );
 
-	if( control != 0x0 ) {
-		printf(control);
-		Receiveddata = clear_buf(Buf, &Buf[0], 80);
+	// Check if data string is at the end and if so, stop storing data
+	if( control2 == 'Z' ) {
+
+		start_flag = FALSE;
+		end_flag = TRUE;
+		Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
 	}
+
+	// Store data if string has not ended yet
+	if( start_flag ) {
+		if( !msb_done ) {
+			//printf("%d", control2);
+			msb = control2;
+			Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
+			msb_done = TRUE;
+		} else {
+			//printf("%d\n", control2);
+			lsb = control2;
+			Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
+			imu[imu_count] = (msb << 8) | lsb;
+			imu_count++;
+			msb_done = FALSE;
+		}
+	}
+
+	// Check if data string is at the start and if so, start storing data
+	if( control2 == 'A' ) {
+
+		start_flag = TRUE;
+		Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
+	}
+
+	if( end_flag ) {
+		//print_uart1(imu[0]);
+		end_flag = FALSE;
+	}
+	
 }
 	return 1;
 }
