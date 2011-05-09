@@ -43,8 +43,8 @@ _FICD(JTAGEN_OFF & ICS_PGD1);
 extern char Buf[80]; 				// 80 character buffer
 extern char * Receiveddata;
 
-extern unsigned char Buf2[80];
-extern unsigned char * Receiveddata2;
+extern char Buf2[80];
+extern char * Receiveddata2;
 
 unsigned int start_flag = FALSE;
 unsigned int end_flag = FALSE;
@@ -116,51 +116,96 @@ int main ( void )
 	char control2 = 0;
 
 	// Get IMU menu by sending a space ascii character
-	//print_uart2("#");
-	//print_uart2("9");
-
+//	print_uart2(" ");
+//	print_uart2("9");
+//	print_uart2("#");
+	print_uart1("About to enter main loop.");
 while(1)
-{
+{	
 	control = *( Receiveddata - 1 );
 
 	control2 = *( Receiveddata2 - 1 );
+	
+	
+	switch( control ) {
+		case 'w':
+			print_uart1("Up\r\n");
+			Receiveddata = clear_buf(Buf, &Buf[0], 80);
+			break;
+		case 's':
+			print_uart1("Down\r\n");
+			Receiveddata = clear_buf(Buf, &Buf[0], 80);
+			break;
+		case 'a':
+			print_uart1("Left\r\n");
+			Receiveddata = clear_buf(Buf, &Buf[0], 80);
+			break;
+		case 'd':
+			print_uart1("Right\r\n");
+			Receiveddata = clear_buf(Buf, &Buf[0], 80);
+			break;
+		default:
+			break;
+}
 
-	// Check if data string is at the end and if so, stop storing data
-	if( control2 == 'Z' ) {
 
-		start_flag = FALSE;
-		end_flag = TRUE;
-		Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
-	}
+//	switch( control2 ) {
+//		case 'w':
+//			print_uart2("Up\r\n");
+//			Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
+//			break;
+//		case 's':
+//			print_uart2("Down\r\n");
+//			Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
+//			break;
+//		case 'a':
+//			print_uart2("Left\r\n");
+//			Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
+//			break;
+//		case 'd':
+//			print_uart2("Right\r\n");
+//			Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
+//			break;
+//		default:
+//			break;
+//	}
 
-	// Store data if string has not ended yet
-	if( start_flag ) {
-		if( !msb_done ) {
-			//printf("%d", control2);
-			msb = control2;
-			Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
-			msb_done = TRUE;
-		} else {
-			//printf("%d\n", control2);
-			lsb = control2;
-			Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
-			imu[imu_count] = (msb << 8) | lsb;
-			imu_count++;
-			msb_done = FALSE;
-		}
-	}
 
-	// Check if data string is at the start and if so, start storing data
-	if( control2 == 'A' ) {
-
-		start_flag = TRUE;
-		Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
-	}
-
-	if( end_flag ) {
-		//print_uart1(imu[0]);
-		end_flag = FALSE;
-	}
+//	// Check if data string is at the end and if so, stop storing data
+//	if( control2 == 'Z' ) {
+//		print_uart1("Z\r\n");
+//		start_flag = FALSE;
+//		end_flag = TRUE;
+//		Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
+//	}
+//
+//	// Store data if string has not ended yet
+//	if( start_flag ) {
+//		if( !msb_done ) {
+//			//printf("%d", control2);
+//			msb = control2;
+//			Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
+//			msb_done = TRUE;
+//		} else {
+//			lsb = control2;
+//			Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
+//			imu[imu_count] = (msb << 8) | lsb;
+//			imu_count++;
+//			msb_done = FALSE;
+//		}
+//	}
+//
+//	// Check if data string is at the start and if so, start storing data
+//	if( control2 == 'A' ) {
+//		print_uart1("A\r\n");
+//		start_flag = TRUE;
+//		Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
+//	}
+//
+//	if( end_flag ) {
+//		//print_uart1(imu[0]);
+//		end_flag = FALSE;
+//	}
 	
 }
 	return 1;
@@ -193,6 +238,9 @@ void setup_IO ( void )
 	TRISBbits.TRISB2 = 0;	// Set the pins as appropriate I/O
 							// This sets PB2 to an output
 	TRISBbits.TRISB3 = 1;	// Auto-set by UART1 anyways!
+
+	TRISBbits.TRISB8 = 0;
+	TRISBbits.TRISB9 = 1;
 	
 	/* Look out for analog pins. By defualt as an input the pin is tied to the 
 	A2D Converter*/
@@ -215,13 +263,15 @@ void setup_IO ( void )
 	 *	RPINR18bits.U1RXR 
 	 */
 	_U1RXR = 3;
-	_U2RXR = 7;	
+	
 
 	/*	UART1 Transmit on RP2 pin. Note: there is no _UTXR definition for
 	 *	the transmitting line. Use RPOR1bits.RP2R equivalent to _RP2R.
 	 */
 	_RP2R = 0b00011;
-	_RP6R = 0b00101;
+
+	_U2RXR = 9;	
+	_RP8R = 0b00101;
 
 	//Both QEIs, an additional interrupt pin, an
 	/* Lock the PPS pins */
