@@ -88,7 +88,8 @@ void __attribute__( ( interrupt, no_auto_psv ) ) _U1RXInterrupt( void )
 	 *	 data is available to read.
 	 *
 	 *	-TRMT refers to Transmit Shift Register is Empty. This bit is set to 1
-	 *	 when the last transmission has completed successfully.
+	 *	 when the last transmission has completed successfully. URXDA is set to 1
+	 *	 when data is available to read from the register.
 	 */
 	if(	U1STAbits.URXDA == 1 && U1STAbits.TRMT == 1 );
 	{
@@ -139,10 +140,6 @@ void start_uart1( unsigned long baudrate )
 
 	/*	Turn off UART1module */
     CloseUART1();
-
-    /*	Clear interupts */
-	IFS0bits.U1RXIF = 0;  
-	IFS0bits.U1RXIF = 0;
 
 	    /** Clear UART1 Receive Interrupt Flag
 	 *	Note: If flag is not cleared, the program will continue to
@@ -226,8 +223,6 @@ void start_uart1( unsigned long baudrate )
 	/*	Prints a welcome banner alerting user serial communication port
 	 *	has been opened.
 	 */
-
-	print_uart1("Serial communication has connected successfully!.\r\n");
 }
 
 void print_uart1( const char string[] ) {
@@ -236,7 +231,7 @@ void print_uart1( const char string[] ) {
 	while( *Buffer_pointer1 ) {
 		if( !U1STAbits.UTXBF ) {
 			U1TXREG = *Buffer_pointer1++;
+
 		}
 	}
 }
-
