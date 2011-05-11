@@ -40,20 +40,12 @@ _FPOR(FPWRT_PWR128);
 /*	Turn off JTAG debugging to free up pins */
 _FICD(JTAGEN_OFF & ICS_PGD1);
 
-extern char Buf[80]; 				// 80 character buffer
+extern char Buf[112]; 				// 80 character buffer
 extern char * Receiveddata;
 
-extern char Buf2[80];
+extern char Buf2[112];
 extern char * Receiveddata2;
 
-unsigned int start_flag = FALSE;
-unsigned int end_flag = FALSE;
-unsigned int msb_done = FALSE;
-unsigned char msb;
-unsigned char lsb;
-unsigned int imu_count = 0;
-unsigned int imu_size = 6;
-unsigned short int imu[6];
 
 
 
@@ -119,30 +111,44 @@ int main ( void )
 //	print_uart2(" ");
 //	print_uart2("9");
 //	print_uart2("#");
-	print_uart1("About to enter main loop.");
+	print_uart1("Hello, welcome!.\r\n");
+
 while(1)
-{	
+{
+		
 	control = *( Receiveddata - 1 );
 
 	control2 = *( Receiveddata2 - 1 );
-	
-	
+
+//switch( control ) {
+//	case 'w':
+//		print_uart1("hi\r\n");
+//		break;
+//	default:
+//		break;
+//}
+
+//	if( flag ) {
+//		print_uart1("key pressed\r\n");
+//		flag = 0;
+//	}	
+
 	switch( control ) {
 		case 'w':
 			print_uart1("Up\r\n");
-			Receiveddata = clear_buf(Buf, &Buf[0], 80);
+			Receiveddata = clear_buf(Buf, &Buf[0], 112);
 			break;
 		case 's':
 			print_uart1("Down\r\n");
-			Receiveddata = clear_buf(Buf, &Buf[0], 80);
+			Receiveddata = clear_buf(Buf, &Buf[0], 112);
 			break;
 		case 'a':
 			print_uart1("Left\r\n");
-			Receiveddata = clear_buf(Buf, &Buf[0], 80);
+			Receiveddata = clear_buf(Buf, &Buf[0], 112);
 			break;
 		case 'd':
 			print_uart1("Right\r\n");
-			Receiveddata = clear_buf(Buf, &Buf[0], 80);
+			Receiveddata = clear_buf(Buf, &Buf[0], 112);
 			break;
 		default:
 			break;
