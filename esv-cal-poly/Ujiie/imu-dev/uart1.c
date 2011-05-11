@@ -19,6 +19,8 @@ char Buf[80];
 /*	Pointer to the most recent character in Buf */
 char * Receiveddata = Buf;
 
+int flag = 0;
+
 
 /** ==========================================================================
  *	Function: _U1TXInterrupt
@@ -93,13 +95,16 @@ void __attribute__( ( interrupt, no_auto_psv ) ) _U1RXInterrupt( void )
 	 */
 	if(	U1STAbits.URXDA == 1 && U1STAbits.TRMT == 1 );
 	{
+
 		/* Notice Reciveddata pointer is post incremented */
 		( *( Receiveddata )++ ) = U1RXREG;
-
+			
+	
 		/*	In order to echo the right character we have to send the char
 		 *	at (pointer-1)
 		 */
 		U1TXREG = *( Receiveddata - 1 );
+		
 	}
 
     
