@@ -13,6 +13,10 @@
 #include "encoder_driver.h"
 
 float tire_radius = 0.0;
+float tire_circumference = 0.0;
+float encoder_stepsize;
+
+float total_ticks = 8.0; // number of ticks on encoder wheel
 
 volatile unsigned int old_ticks = 0;
 volatile unsigned int new_ticks = 0;
@@ -21,6 +25,7 @@ volatile unsigned int del_ticks = 0;
 volatile unsigned int enc_ISR_count = 0;
 
 volatile float velocity = 0.0;
+
 
 /** ==========================================================================
  *	Function: encoder_setup
@@ -105,6 +110,12 @@ void encoder_setup ( void )
 void encoder_set_tire_radius ( float _radius )
 {
 	tire_radius = _radius;
+	tire_circumference = (2.0 * 3.14159 * tire_radius);
+}
+
+float encoder_get_stepsize ( void ) {
+	encoder_stepsize = ( tire_circumference / total_ticks ); // ft/ticks
+	return encoder_stepsize;
 }
 
 
