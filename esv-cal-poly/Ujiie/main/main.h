@@ -19,6 +19,16 @@
 #define TRUE	1
 #define FALSE	0
 
+typedef signed char		int8_t;
+typedef short int		int16_t;
+typedef int				int32_t;
+typedef long int		int64_t;
+
+typedef unsigned char		uint8_t;
+typedef unsigned short int	uint16_t;
+typedef unsigned int		uint32_t;
+typedef unsigned long int	uint64_t;
+
 
 /*	Header that automatically loads correct chip header based
  *	on what is set in the configure:select_device of MPLAB IDE
@@ -71,5 +81,12 @@
 
 int main ( void );			//	Main program
 void setup_IO ( void );		//	Input/Output setup
+
+void __attribute__((__interrupt__)) _INT0Interrupt(void); /*Declare external interrupt ISRs*/
+void __attribute__((__interrupt__)) _INT1Interrupt(void);
+
+void __attribute__((__interrupt__)) _T2Interrupt(void);
+void __attribute__((__interrupt__)) _QEI1Interrupt(void);
+void __attribute__((__interrupt__)) _QEI2Interrupt(void);
 
 #endif
