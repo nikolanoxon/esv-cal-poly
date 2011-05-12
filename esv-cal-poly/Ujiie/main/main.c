@@ -96,7 +96,7 @@ int main ( void )
 	encoder_setup();
 
 	/*	Start UART1 with the specified baudrate */
-	start_uart1(38400UL);
+	start_uart1(115200UL);
 
 	/*	Begin motor setup */
 	motor_setup();
@@ -126,35 +126,14 @@ int main ( void )
 	// start IMU
 	printf("#\n");
 
+	unsigned int qei_count = 0;
+
 while(1)
 {
-	unsigned char number = '132';
-   // printf("%d\n", number);
 	control = *( Receiveddata - 1 );
 
+	printf("%d\n", counter);
 	/**	===[Terminal controls]============================ */
-	static int counter = 0;
-	if( control == 'A' ) {
-		unsigned int val = char_to_int(Buf, 80);
-		printf("%d", val);
-		printf("A");
-		Receiveddata = clear_buf(Buf, &Buf[0], 0);
-	} else if( control == 'Z' ) {
-		printf("Z");
-		printf("\t");
-		Receiveddata = clear_buf(Buf, &Buf[0], 0);
-	}
-
-
-	// Wait for the user to press return
-	if( control == 0xD ) {
-		// Convert ascii to integer number
-		unsigned int numb = char_to_int(Buf, 80);
-		printf("Motor Speed: %d\n", numb);
-		
-		// Clear input buffer
-		Receiveddata = clear_buf(Buf, &Buf[0], 80);
-	}
 	
 	switch ( control )
 	{
@@ -261,6 +240,8 @@ void setup_IO ( void )
 	TRISBbits.TRISB2 = 0;	// Set the pins as appropriate I/O
 							// This sets PB2 to an output
 	TRISBbits.TRISB3 = 1;	// Auto-set by UART1 anyways!
+
+	TRISBbits.TRISB13 = 1; 	// Set pin 24 to input pin
 	
 	/* Look out for analog pins. By defualt as an input the pin is tied to the 
 	A2D Converter*/
@@ -292,9 +273,6 @@ void setup_IO ( void )
 
 	//Map QEI pins to RP13 and RP4
 	_QEA1R = 13;			//mapping to pin 24 worked
-	//_QEB1R = 4;				//mapping to pin 11 worked
-	   	               /* Assign A (QEA) to the corresponding pin (RP9)*/
-	                   /* Assign B (QEB) to the corresponding pin (RP8)*/
 
 	//Both QEIs, an additional interrupt pin, an
 	/* Lock the PPS pins */
