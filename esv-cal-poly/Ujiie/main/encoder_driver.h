@@ -18,6 +18,8 @@ void encoder_setup ( void );
 
 void encoder_set_tire_radius ( float _radius );
 
+float encoder_get_stepsize( void );
+
 void encoder_read ( void );
 
 #endif
