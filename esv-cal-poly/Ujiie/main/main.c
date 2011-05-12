@@ -43,7 +43,8 @@ _FICD(JTAGEN_OFF & ICS_PGD1);
 extern char Buf[80]; 				// 80 character buffer
 extern char * Receiveddata;
 
-int counter = 0;
+unsigned int qei1counter = 0;
+unsigned int qei2counter = 0;
 
 /** ==========================================================================
  *	Function: main
@@ -132,7 +133,7 @@ while(1)
 {
 	control = *( Receiveddata - 1 );
 
-	printf("%d\n", counter);
+	printf("%d - %d\n", qei1counter, qei2counter);
 	/**	===[Terminal controls]============================ */
 	
 	switch ( control )
@@ -210,6 +211,7 @@ while(1)
 //	}
 }
 	CloseQEI1();
+	CloseQEI2();
 	return 1;
 }
 
@@ -241,7 +243,8 @@ void setup_IO ( void )
 							// This sets PB2 to an output
 	TRISBbits.TRISB3 = 1;	// Auto-set by UART1 anyways!
 
-	TRISBbits.TRISB13 = 1; 	// Set pin 24 to input pin
+	TRISBbits.TRISB11 = 1; 	// Set pin 22 to input pin
+	TRISBbits.TRISB10 = 1;	// Set pin 21 to input pin
 	
 	/* Look out for analog pins. By defualt as an input the pin is tied to the 
 	A2D Converter*/
@@ -272,7 +275,8 @@ void setup_IO ( void )
 	_RP2R = 0b00011;
 
 	//Map QEI pins to RP13 and RP4
-	_QEA1R = 13;			//mapping to pin 24 worked
+	_QEA1R = 11;			// mapping to pin 22 
+	_QEA2R = 10;				// mapping to pin 21
 
 	//Both QEIs, an additional interrupt pin, an
 	/* Lock the PPS pins */
@@ -320,6 +324,11 @@ void __attribute__((__interrupt__)) _T2Interrupt(void)
 
 void __attribute__((__interrupt__)) _QEI1Interrupt(void) 
 {
-   counter++;
+   qei1counter++;
    _QEI1IF = 0;
 } 
+
+void __attribute__((__interrupt__)) _QEI2Interrupt(void) {
+	qei2counter++;
+	_QEI2IF = 0;
+}
