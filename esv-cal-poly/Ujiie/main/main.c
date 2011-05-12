@@ -46,6 +46,9 @@ extern char * Receiveddata;
 unsigned int qei1counter = 0;
 unsigned int qei2counter = 0;
 
+unsigned int qei1max = 8;
+unsigned int qei2max = 8;
+
 /** ==========================================================================
  *	Function: main
  *	==========================================================================
@@ -324,11 +327,19 @@ void __attribute__((__interrupt__)) _T2Interrupt(void)
 
 void __attribute__((__interrupt__)) _QEI1Interrupt(void) 
 {
-   qei1counter++;
+	if( qei1counter == qei1max ) {
+		qei1counter = 0;
+	} else {
+   		qei1counter++;
+	}
    _QEI1IF = 0;
 } 
 
 void __attribute__((__interrupt__)) _QEI2Interrupt(void) {
-	qei2counter++;
+	if( qei2counter == qei2max ) {
+		qei2counter = 0;
+	} else {
+		qei2counter++;
+	}
 	_QEI2IF = 0;
 }
