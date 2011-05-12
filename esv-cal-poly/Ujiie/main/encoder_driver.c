@@ -60,6 +60,29 @@ void encoder_setup ( void )
 	//This QEI config bit needs separate line because it's not
 	//included in OpenQEI1 function. Need to explain...
     QEI1CONbits.UPDN = 1;
+
+
+
+	/*	Enable QEI interrupts */
+	ConfigIntQEI2(QEI_INT_PRI_1 & QEI_INT_DISABLE);
+
+	POS2CNT = 0;         //reset POS1CNT register
+	MAX2CNT = 360;	     //Set point to reset POS1CNT counter
+
+	/*	Open QEI connection */
+	OpenQEI2(QEI_INT_CLK & QEI_INDEX_RESET_DISABLE & 
+
+            QEI_CLK_PRESCALE_256 & 
+
+            QEI_GATED_ACC_DISABLE & QEI_INPUTS_NOSWAP &
+
+            QEI_MODE_x4_MATCH & QEI_DIR_SEL_CNTRL &  
+
+            QEI_IDLE_CON, 0);
+
+	//This QEI config bit needs separate line because it's not
+	//included in OpenQEI1 function. Need to explain...
+    QEI2CONbits.UPDN = 1;
 }
 
 
