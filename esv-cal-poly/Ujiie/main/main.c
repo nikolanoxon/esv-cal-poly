@@ -43,11 +43,46 @@ _FICD(JTAGEN_OFF & ICS_PGD1);
 extern char Buf[80]; 				// 80 character buffer
 extern char * Receiveddata;
 
+extern float tire_circumference;
+
+float encoder_unit;
+
 unsigned int qei1counter = 0;
 unsigned int qei2counter = 0;
 
-unsigned int qei1max = 8;
-unsigned int qei2max = 8;
+unsigned int encoder1counter = 0;
+unsigned int encoder2counter = 0;
+
+unsigned int qei1max = 60000;
+unsigned int qei2max = 60000;
+
+unsigned int encoder1max = 60000;
+unsigned int encoder2max = 60000;
+
+unsigned int update_encoder = 1;
+unsigned int delay_count = 0;
+
+typedef struct {
+	uint8_t new;
+	uint8_t old;
+	uint8_t del;
+	float speed;
+} Encoder;
+
+typedef struct {
+	uint8_t new;
+	uint8_t old;
+	uint8_t del;
+	float speed;
+} Qei;
+
+Qei qei1 = {0, 0, 0, 0.0};
+Qei qei2 = {0, 0, 0, 0.0}; 
+
+Encoder encoder1 = {0, 0, 0, 0.0};
+Encoder encoder2 = {0, 0, 0, 0.0};
+
+float del_time = 1.0 ; // seconds
 
 /** ==========================================================================
  *	Function: main
@@ -85,7 +120,7 @@ int main ( void )
 
 	/* Enable Timer1 Interrupt and Priority to "1" */
     ConfigIntTimer2(T2_INT_PRIOR_2 & T2_INT_ON);
-
+	PR1 = 31250;
     WriteTimer2(0);
 
     match_value = 4999;
@@ -94,8 +129,9 @@ int main ( void )
     OpenTimer2(	T2_ON & 
 				T2_GATE_OFF & 
 				T2_IDLE_STOP &
-                T2_PS_1_8 &
+                T2_PS_1_256 &
                 T2_SOURCE_INT, match_value);
+
 	encoder_set_tire_radius( 0.5 );
 	encoder_setup();
 
@@ -127,8 +163,10 @@ int main ( void )
 	float motor_speed = 0.0;
 	float servo_angle = 0.0;
 
+	encoder_unit = encoder_get_stepsize();
+
 	// start IMU
-	printf("#\n");
+	//printf("#\n");
 
 	unsigned int qei_count = 0;
 
@@ -136,7 +174,28 @@ while(1)
 {
 	control = *( Receiveddata - 1 );
 
-	printf("%d - %d\n", qei1counter, qei2counter);
+	if( update_encoder ) {
+		qei1.new = qei1counter;
+		qei1.speed = (qei1.new - qei1.old) * encoder_unit * (1.0 / 5280.0) * (1.0 / del_time) * 3600.0;
+		qei1.old = qei1.new;	
+	
+		qei2.new = qei2counter;
+		qei2.speed = (qei2.new - qei2.old) * encoder_unit * (1.0 / 5280.0) * (1.0 / del_time) * 3600.0;
+		qei2.old = qei2.new;
+
+		encoder1.new = encoder1counter;
+		encoder1.speed = (encoder1.new - encoder1.old) * encoder_unit * (1.0 /5280.0) * (1.0 / del_time) * 3600.0;
+		encoder1.old = encoder1.new;
+
+		encoder2.new = encoder2counter;
+		encoder2.speed = (encoder2.new - encoder2.old) * encoder_unit * (1.0 /5280.0) * (1.0 / del_time) * 3600.0;
+		encoder2.old = encoder2.new;
+		
+		update_encoder = 0;
+	}
+
+
+	printf("Encoder Stepsize: %.2f\tQEI1 New ticks: %d\tQEI1 Old ticks: %d\t QEI1 Speed: %.2f\tQEI2 New ticks: %d\tQEI2 Old ticks: %d\tQEI2 Speed: %.2f\n", encoder_unit, encoder1.new, encoder1.old, encoder1.speed, encoder2.new, encoder2.old, encoder2.speed); 
 	/**	===[Terminal controls]============================ */
 	
 	switch ( control )
@@ -236,7 +295,15 @@ while(1)
  */
 
 void setup_IO ( void )
-{
+{	
+    INTCON2 = 0x0000;       /* Setup all INT on rising edge triggering */
+
+    IFS1bits.INT1IF = 0;    /*Reset INT0 interrupt flag */
+    IEC1bits.INT1IE = 1;    /*Enable INT0 Interrupt Service Routine */
+
+    IFS1bits.INT2IF = 0;    /*Reset INT1 interrupt flag */
+    IEC1bits.INT2IE = 1;    /*Enable INT1 Interrupt Service Routine */
+
 	/**	====[Input/Output Pin Configuration]=================================== 
 	 *	This section sets up the pins to be used as either input or output. 
 	 *	=======================================================================
@@ -248,6 +315,9 @@ void setup_IO ( void )
 
 	TRISBbits.TRISB11 = 1; 	// Set pin 22 to input pin
 	TRISBbits.TRISB10 = 1;	// Set pin 21 to input pin
+
+	TRISBbits.TRISB5 = 1;	// Set pin 14 to input pin
+	TRISBbits.TRISB15 = 1;	// set pin 26 to input pin
 	
 	/* Look out for analog pins. By defualt as an input the pin is tied to the 
 	A2D Converter*/
@@ -279,7 +349,10 @@ void setup_IO ( void )
 
 	//Map QEI pins to RP13 and RP4
 	_QEA1R = 11;			// mapping to pin 22 
-	_QEA2R = 10;				// mapping to pin 21
+	_QEA2R = 10;			// mapping to pin 21
+
+	_INT1R = 5;				// mapping to pin 14
+	_INT2R = 15;			// mapping to pin 26
 
 	//Both QEIs, an additional interrupt pin, an
 	/* Lock the PPS pins */
@@ -287,6 +360,38 @@ void setup_IO ( void )
 	__delay_ms(10);
 }
 
+
+/* _INT1Interrupt() is the INT1 interrupt service routine (ISR).
+The routine must have global scope in order to be an ISR.
+The ISR name is chosen from the device linker script.
+*/
+void __attribute__((interrupt, no_auto_psv)) _INT1Interrupt(void)
+{
+	if( encoder1counter == encoder1max ) {
+		encoder1counter = 0;
+	} else {
+   		encoder1counter++;
+	}
+    IFS1bits.INT1IF = 0;    //Clear the INT0 interrupt flag or else
+                            //the CPU will keep vectoring back to the ISR
+}
+
+
+/*
+_INT2Interrupt() is the INT2 interrupt service routine (ISR).
+The routine must have global scope in order to be an ISR.
+The ISR name is chosen from the device linker script.
+*/
+void __attribute__((interrupt, no_auto_psv)) _INT2Interrupt(void)
+{
+ 	if( encoder2counter == encoder2max ) {
+		encoder2counter = 0;
+	 } else {
+		encoder2counter++;
+	}
+    IFS1bits.INT2IF = 0;    //Clear the INT1 interrupt flag or else
+                            //the CPU will keep vectoring back to the ISR
+}
 
 /** ==========================================================================
  *	Function: _T2Interrupt
@@ -305,7 +410,13 @@ void setup_IO ( void )
 
 void __attribute__((__interrupt__)) _T2Interrupt(void)
 {
-	encoder_read();
+	if( delay_count == 10 && !update_encoder ) {
+		update_encoder = 1;
+		delay_count = 0;	
+	} else if( !update_encoder ){
+		delay_count++;
+	}
+	
 	IFS0bits.T2IF = 0;    /* Clear Timer interrupt flag */
 }  
 
