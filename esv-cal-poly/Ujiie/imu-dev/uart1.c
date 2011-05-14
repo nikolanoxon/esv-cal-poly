@@ -19,8 +19,6 @@ char Buf[80];
 /*	Pointer to the most recent character in Buf */
 char * Receiveddata = Buf;
 
-int flag = 0;
-
 
 /** ==========================================================================
  *	Function: _U1TXInterrupt
@@ -152,7 +150,7 @@ void start_uart1( unsigned long baudrate )
 	 *		  the user defined interrupt routine.
 	 */
 	IFS0bits.U1RXIF = 0;  
-	IFS0bits.U1RXIF = 0;
+	IFS0bits.U1TXIF = 0;
 	
 	/** Configure UART1 Receive and Transmit Interrupts */
     ConfigIntUART1( UART_RX_INT_EN & 	// Enable UART1 Receive Interrupts
@@ -180,7 +178,7 @@ void start_uart1( unsigned long baudrate )
 					  UART_UEN_00 & 		// U1TX and U1RX used, U1TCS, U1RTS, and BCLK controlled by latch for flow control
 					  UART_DIS_WAKE &		// Disable wakeup on start
                  	  UART_DIS_LOOPBACK & 	// Disable loopback mode
-					  UART_DIS_ABAUD & 		// Baudrate measurment disabled
+					  UART_DIS_ABAUD & 		// Baudrate me asurment disabled
 					  UART_UXRX_IDLE_ONE &	// U1Rx Idle state is 1 (not 0)
         			  UART_BRGH_SIXTEEN & 	// Baud Rate Generator generates 16 clocks per bit second (16x baudrate)
 					  UART_NO_PAR_8BIT & 	// Do not use a parity bit
