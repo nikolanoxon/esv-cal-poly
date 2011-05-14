@@ -40,13 +40,25 @@ _FPOR(FPWRT_PWR128);
 /*	Turn off JTAG debugging to free up pins */
 _FICD(JTAGEN_OFF & ICS_PGD1);
 
-extern char Buf[112]; 				// 80 character buffer
+extern char Buf[80]; 				// 80 character buffer
 extern char * Receiveddata;
 
-extern char Buf2[112];
+extern char Buf2[80];
 extern char * Receiveddata2;
 
+typedef struct {
+	uint8_t msb;
+	uint8_t lsb;
+} DATA;
 
+typedef struct {
+	DATA accelX;
+	DATA accelY;
+	DATA accelZ;
+	DATA pitch;
+	DATA roll;
+	DATA yaw;
+} IMU;
 
 
 
@@ -111,107 +123,38 @@ int main ( void )
 //	print_uart2(" ");
 //	print_uart2("9");
 //	print_uart2("#");
-	print_uart1("Hello, welcome!.\r\n");
-
+	//print_uart1("Hello, welcome!\r\n");
+//print_uart1("Hello, Brian Ujiie\r\n");	
+	print_uart2("hi there\r\n");
+	print_uart2("hello there, Brian Ujiie\r\n");
+	int cnt = 0;
 while(1)
-{
-		
+{			
 	control = *( Receiveddata - 1 );
 
 	control2 = *( Receiveddata2 - 1 );
 
-//switch( control ) {
-//	case 'w':
-//		print_uart1("hi\r\n");
-//		break;
-//	default:
-//		break;
-//}
 
-//	if( flag ) {
-//		print_uart1("key pressed\r\n");
-//		flag = 0;
-//	}	
-
-	switch( control ) {
-		case 'w':
-			print_uart1("Up\r\n");
-			Receiveddata = clear_buf(Buf, &Buf[0], 112);
-			break;
-		case 's':
-			print_uart1("Down\r\n");
-			Receiveddata = clear_buf(Buf, &Buf[0], 112);
-			break;
-		case 'a':
-			print_uart1("Left\r\n");
-			Receiveddata = clear_buf(Buf, &Buf[0], 112);
-			break;
-		case 'd':
-			print_uart1("Right\r\n");
-			Receiveddata = clear_buf(Buf, &Buf[0], 112);
-			break;
-		default:
-			break;
-}
-
-
-//	switch( control2 ) {
+//	switch( control ) {
 //		case 'w':
-//			print_uart2("Up\r\n");
-//			Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
+//			print_uart1("Up\r\n");
+//			Receiveddata = clear_buf(Buf, &Buf[0], 112);
 //			break;
 //		case 's':
-//			print_uart2("Down\r\n");
-//			Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
+//			print_uart1("Down\r\n");
+//			Receiveddata = clear_buf(Buf, &Buf[0], 112);
 //			break;
 //		case 'a':
-//			print_uart2("Left\r\n");
-//			Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
+//			print_uart1("Left\r\n");
+//			Receiveddata = clear_buf(Buf, &Buf[0], 112);
 //			break;
 //		case 'd':
-//			print_uart2("Right\r\n");
-//			Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
+//			print_uart1("Right\r\n");
+//			Receiveddata = clear_buf(Buf, &Buf[0], 112);
 //			break;
 //		default:
 //			break;
-//	}
-
-
-//	// Check if data string is at the end and if so, stop storing data
-//	if( control2 == 'Z' ) {
-//		print_uart1("Z\r\n");
-//		start_flag = FALSE;
-//		end_flag = TRUE;
-//		Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
-//	}
-//
-//	// Store data if string has not ended yet
-//	if( start_flag ) {
-//		if( !msb_done ) {
-//			//printf("%d", control2);
-//			msb = control2;
-//			Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
-//			msb_done = TRUE;
-//		} else {
-//			lsb = control2;
-//			Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
-//			imu[imu_count] = (msb << 8) | lsb;
-//			imu_count++;
-//			msb_done = FALSE;
-//		}
-//	}
-//
-//	// Check if data string is at the start and if so, start storing data
-//	if( control2 == 'A' ) {
-//		print_uart1("A\r\n");
-//		start_flag = TRUE;
-//		Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
-//	}
-//
-//	if( end_flag ) {
-//		//print_uart1(imu[0]);
-//		end_flag = FALSE;
-//	}
+//}
 	
 }
 	return 1;
