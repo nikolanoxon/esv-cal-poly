@@ -92,7 +92,7 @@ Qei qei2 = {0, 0, 0, 0.0};
 Encoder encoder1 = {0, 0, 0, 0.0};
 Encoder encoder2 = {0, 0, 0, 0.0};
 
-float del_time = 1.0 ; // seconds
+float del_time = 0.0086 * 116.0 ; // seconds
 
 /** ==========================================================================
  *	Function: main
@@ -130,7 +130,7 @@ int main ( void )
 
 	/* Enable Timer1 Interrupt and Priority to "1" */
     ConfigIntTimer2(T2_INT_PRIOR_2 & T2_INT_ON);
-	PR1 = 31250;
+	PR1 = 5375;
     WriteTimer2(0);
 
     match_value = 4999;
@@ -139,7 +139,7 @@ int main ( void )
     OpenTimer2(	T2_ON & 
 				T2_GATE_OFF & 
 				T2_IDLE_STOP &
-                T2_PS_1_256 &
+                T2_PS_1_64 &
                 T2_SOURCE_INT, match_value);
 
 	encoder_set_tire_radius( 0.5 );
@@ -499,7 +499,7 @@ void __attribute__((interrupt, no_auto_psv)) _INT2Interrupt(void)
 
 void __attribute__((__interrupt__)) _T2Interrupt(void)
 {
-	if( delay_count == 10 && !update_encoder ) {
+	if( delay_count == 116 && !update_encoder ) {
 		update_encoder = 1;
 		delay_count = 0;	
 	} else if( !update_encoder ){
