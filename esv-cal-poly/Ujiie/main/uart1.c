@@ -88,17 +88,21 @@ void __attribute__( ( interrupt, no_auto_psv ) ) _U1RXInterrupt( void )
 	 *	 data is available to read.
 	 *
 	 *	-TRMT refers to Transmit Shift Register is Empty. This bit is set to 1
-	 *	 when the last transmission has completed successfully.
+	 *	 when the last transmission has completed successfully. URXDA is set to 1
+	 *	 when data is available to read from the register.
 	 */
 	if(	U1STAbits.URXDA == 1 && U1STAbits.TRMT == 1 );
 	{
+
 		/* Notice Reciveddata pointer is post incremented */
 		( *( Receiveddata )++ ) = U1RXREG;
-
+			
+	
 		/*	In order to echo the right character we have to send the char
 		 *	at (pointer-1)
 		 */
 		U1TXREG = *( Receiveddata - 1 );
+		
 	}
 
     
@@ -140,13 +144,19 @@ void start_uart1( unsigned long baudrate )
 	/*	Turn off UART1module */
     CloseUART1();
 
-    /*	Clear interupts */
+	    /** Clear UART1 Receive Interrupt Flag
+	 *	Note: If flag is not cleared, the program will continue to
+	 *		  think an interrupt has occured and remain within the
+	 *		  the user defined interrupt routine.
+	 */
 	IFS0bits.U1RXIF = 0;  
-	IFS0bits.U1RXIF = 0;
-
-	/* 	Configure uart1 receive and transmit interrupt */
-    ConfigIntUART1( UART_RX_INT_EN & UART_RX_INT_PR3 & 
-                    UART_TX_INT_DIS & UART_TX_INT_PR3 );
+	IFS0bits.U1TXIF = 0;
+	
+	/** Configure UART1 Receive and Transmit Interrupts */
+    ConfigIntUART1( UART_RX_INT_EN & 	// Enable UART1 Receive Interrupts
+					UART_RX_INT_PR3 & 	// Set UART1 Receive interrupts to priority 3
+                    UART_TX_INT_DIS & 	// Disable UART1 Transmit interrupts	
+					UART_TX_INT_PR3 );	// Set UART1 Transmit interrupts to priority 3
 
 	/* Configure UART1 module to transmit 8 bit data with one stopbit. 
 	 *  
@@ -161,26 +171,46 @@ void start_uart1( unsigned long baudrate )
     if(baudrate <= 57600UL)
     {
 	    baudvalue = ( unsigned int )( ( FCY / ( 16 * baudrate ) ) - 1 );
-	    U1MODEvalue = UART_EN & UART_IDLE_CON & UART_IrDA_DISABLE &
-                  	  UART_MODE_FLOW & UART_UEN_00 & UART_DIS_WAKE &
-                 	  UART_DIS_LOOPBACK & UART_DIS_ABAUD & UART_UXRX_IDLE_ONE &
-        			  UART_BRGH_SIXTEEN & UART_NO_PAR_8BIT & UART_1STOPBIT;
+	    U1MODEvalue = UART_EN & 			// Enable UART1
+					  UART_IDLE_CON & 		// Work in idle mode
+					  UART_IrDA_DISABLE &	// Disable IrDA encoder and decoder
+                  	  UART_MODE_FLOW & 		// UART1 pin in flow control mode
+					  UART_UEN_00 & 		// U1TX and U1RX used, U1TCS, U1RTS, and BCLK controlled by latch for flow control
+					  UART_DIS_WAKE &		// Disable wakeup on start
+                 	  UART_DIS_LOOPBACK & 	// Disable loopback mode
+					  UART_DIS_ABAUD & 		// Baudrate me asurment disabled
+					  UART_UXRX_IDLE_ONE &	// U1Rx Idle state is 1 (not 0)
+        			  UART_BRGH_SIXTEEN & 	// Baud Rate Generator generates 16 clocks per bit second (16x baudrate)
+					  UART_NO_PAR_8BIT & 	// Do not use a parity bit
+					  UART_1STOPBIT;		// Use 1 stop bit
 	}
 	/*	High speed settings */
 	else
 	{
     	baudvalue = ( unsigned int )( ( FCY / ( 4 * baudrate ) ) - 1 );
-    	U1MODEvalue = UART_EN & UART_IDLE_CON & UART_IrDA_DISABLE &
-                  	  UART_MODE_FLOW & UART_UEN_00 & UART_DIS_WAKE &
-                  	  UART_DIS_LOOPBACK & UART_DIS_ABAUD & UART_UXRX_IDLE_ONE &
-                  	  UART_BRGH_FOUR & UART_NO_PAR_8BIT & UART_1STOPBIT;
+    	U1MODEvalue = UART_EN & 			
+					  UART_IDLE_CON & 
+					  UART_IrDA_DISABLE &
+                  	  UART_MODE_FLOW & 
+					  UART_UEN_00 & 
+					  UART_DIS_WAKE &
+                  	  UART_DIS_LOOPBACK & 
+					  UART_DIS_ABAUD & 
+					  UART_UXRX_IDLE_ONE &
+                  	  UART_BRGH_FOUR & 		// Baud Rate Generator generates 4 clocks per bit second (4x baudrate) high speed
+					  UART_NO_PAR_8BIT & 
+					  UART_1STOPBIT;
  	}
     
     /*	Status register settings */
-    U1STAvalue  = UART_INT_TX & UART_TX_ENABLE & 
-    			  UART_IrDA_POL_INV_ZERO & UART_SYNC_BREAK_DISABLED  & 
-    			  UART_INT_RX_CHAR & UART_ADR_DETECT_DIS & 
-    			  UART_TX_BUF_FUL & UART_RX_OVERRUN_CLEAR;
+    U1STAvalue  = UART_INT_TX & 				// Interrupt on transfer of every character to Trap Service Routine
+				  UART_TX_ENABLE & 				// Enable UART1 transmit
+    			  UART_IrDA_POL_INV_ZERO & 		// IrDA encoded, idle state is 0 (not 1)
+				  UART_SYNC_BREAK_DISABLED  & 	// Sync break transmission disabled
+    			  UART_INT_RX_CHAR & 			// Trigger an interrupt on every character received
+				  UART_ADR_DETECT_DIS & 		// Disable address detection
+    			  UART_TX_BUF_FUL & 			// Transmit buffer is full
+				  UART_RX_OVERRUN_CLEAR;		// Rx buffer over run bit clear
 	
 	/* Open UART1 connection
 	 *
@@ -197,5 +227,16 @@ void start_uart1( unsigned long baudrate )
 	 *	has been opened.
 	 */
 
-	printf("Serial communication has connected successfully!.\r\n");
+	putsUART1("UART1 started!\r\n");
+}
+
+void print_uart1( const char string[] ) {
+	const char *Buffer_pointer1 = string;
+
+	while( *Buffer_pointer1 ) {
+		if( !U1STAbits.UTXBF ) {
+			U1TXREG = *Buffer_pointer1++;
+
+		}
+	}
 }
