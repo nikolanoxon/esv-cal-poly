@@ -43,7 +43,13 @@ _FICD(JTAGEN_OFF & ICS_PGD1);
 extern char Buf[80]; 				// 80 character buffer
 extern char * Receiveddata;
 
+extern char Buf2[80];
+extern char * Receiveddata2;
+
 extern float tire_circumference;
+
+unsigned int status_flag = 0;
+unsigned int display_menu = 1;
 
 float encoder_unit;
 
@@ -61,6 +67,10 @@ unsigned int encoder2max = 60000;
 
 unsigned int update_encoder = 1;
 unsigned int delay_count = 0;
+
+/*	Contains current raw ASCII character */
+char control = 0;
+char control2 = 0;
 
 typedef struct {
 	uint8_t new;
@@ -137,6 +147,9 @@ int main ( void )
 
 	/*	Start UART1 with the specified baudrate */
 	start_uart1(115200UL);
+	start_uart2(115200UL);
+
+	
 
 	/*	Begin motor setup */
 	motor_setup();
@@ -157,8 +170,7 @@ int main ( void )
 	 */
 	int signal = 0;
 
-	/*	Contains current raw ASCII character */
-	char control = 0;
+
 
 	float motor_speed = 0.0;
 	float servo_angle = 0.0;
@@ -169,61 +181,129 @@ int main ( void )
 	//printf("#\n");
 
 	unsigned int qei_count = 0;
+	putsUART1("Program Started again\r\n");
+
 
 while(1)
 {
+	if( display_menu ) {
+		putsUART1("Hello, Welcome!\r\n");
+		putsUART1("==========================================\r\n");
+		putsUART1("(g) Press 'g' to start encoder sampling\r\n");
+		putsUART1("(x) Press 'x' to exit during sampling\r\n");
+		putsUART1("==========================================\r\n");
+		display_menu = 0;
+	}		
+	
 	control = *( Receiveddata - 1 );
+	control2 = *( Receiveddata2 - 1 );
 
-	if( update_encoder ) {
-		qei1.new = qei1counter;
-		qei1.speed = (qei1.new - qei1.old) * encoder_unit * (1.0 / 5280.0) * (1.0 / del_time) * 3600.0;
-		qei1.old = qei1.new;	
-	
-		qei2.new = qei2counter;
-		qei2.speed = (qei2.new - qei2.old) * encoder_unit * (1.0 / 5280.0) * (1.0 / del_time) * 3600.0;
-		qei2.old = qei2.new;
-
-		encoder1.new = encoder1counter;
-		encoder1.speed = (encoder1.new - encoder1.old) * encoder_unit * (1.0 /5280.0) * (1.0 / del_time) * 3600.0;
-		encoder1.old = encoder1.new;
-
-		encoder2.new = encoder2counter;
-		encoder2.speed = (encoder2.new - encoder2.old) * encoder_unit * (1.0 /5280.0) * (1.0 / del_time) * 3600.0;
-		encoder2.old = encoder2.new;
-		
-		update_encoder = 0;
-	}
-
-
-	printf("Encoder Stepsize: %.2f\tQEI1 New ticks: %d\tQEI1 Old ticks: %d\t QEI1 Speed: %.2f\tQEI2 New ticks: %d\tQEI2 Old ticks: %d\tQEI2 Speed: %.2f\n", encoder_unit, encoder1.new, encoder1.old, encoder1.speed, encoder2.new, encoder2.old, encoder2.speed); 
-	/**	===[Terminal controls]============================ */
-	
-	switch ( control )
-	{
-		case 'w':
-			motor_speed = motor_speed + 0.5;
-			printf("Motor Speed: %f\n", motor_speed);
+	switch( control ) {
+		case 'g':
+			status_flag = 1;
 			Receiveddata = clear_buf(Buf, &Buf[0], 80);
+			print_uart1("g pressed\r\n");
 			break;
-		case 's':
-			motor_speed = motor_speed - 0.5;
-			printf("Motor Speed: %f\n", motor_speed);
+		case 'x':
+			status_flag = 0;
 			Receiveddata = clear_buf(Buf, &Buf[0], 80);
-			break;
-		case 'a':
-			servo_angle = servo_angle - 5.0;
-			printf("Servo Angle %f\n", servo_angle);
-			Receiveddata = clear_buf(Buf, &Buf[0], 80);
-			break;
-		case 'd':
-			servo_angle = servo_angle + 5.0;
-			printf("Servo Angle %f\n", servo_angle);
-			Receiveddata = clear_buf(Buf, &Buf[0], 80);
+			print_uart1("x pressed\r\n");
 			break;
 		default:
-			// Do nothing
-			break;			
+			break;
 	}
+
+	switch( control2 ) {
+		case 'g':
+			status_flag = 1;
+			Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
+			putsUART2("g pressed\r\n");
+			break;
+		case 'x':
+			status_flag = 0;
+			Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
+			putsUART2("x pressed\r\n");
+			break;
+		default:
+			break;
+	}
+
+
+//switch ( control2 ) {
+//	case 'w':
+//		print_uart2("Up\r\n");
+//		Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
+//		break;
+//	case 's':
+//		print_uart2("Down\r\n");
+//		Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
+//		break;
+//	case 'a':
+//		print_uart2("Left\r\n");
+//		Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
+//		break;
+//	case 'd':
+//		print_uart2("Right\r\n");
+//		Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
+//		break;
+//	default:
+//		break;
+//}
+
+	if( status_flag ) {
+		if( update_encoder ) {
+			qei1.new = qei1counter;
+			qei1.speed = (qei1.new - qei1.old) * encoder_unit * (1.0 / 5280.0) * (1.0 / del_time) * 3600.0;
+			qei1.old = qei1.new;	
+		
+			qei2.new = qei2counter;
+			qei2.speed = (qei2.new - qei2.old) * encoder_unit * (1.0 / 5280.0) * (1.0 / del_time) * 3600.0;
+			qei2.old = qei2.new;
+	
+			encoder1.new = encoder1counter;
+			encoder1.speed = (encoder1.new - encoder1.old) * encoder_unit * (1.0 /5280.0) * (1.0 / del_time) * 3600.0;
+			encoder1.old = encoder1.new;
+	
+			encoder2.new = encoder2counter;
+			encoder2.speed = (encoder2.new - encoder2.old) * encoder_unit * (1.0 /5280.0) * (1.0 / del_time) * 3600.0;
+			encoder2.old = encoder2.new;
+			
+			update_encoder = 0;
+		}
+
+printf("Encoder Stepsize: %.2f\tQEI1 New ticks: %d\tQEI1 Old ticks: %d\t QEI1 Speed: %.2f\tQEI2 New ticks: %d\tQEI2 Old ticks: %d\tQEI2 Speed: %.2f\n", encoder_unit, qei1.new, qei1.old, qei1.speed, qei2.new, qei2.old, qei2.speed); 
+//		printf("Encoder Stepsize: %.2f\tEnc1 New ticks: %d\tEnc1 Old ticks: %d\t Enc1 Speed: %.2f\tEnc2 New ticks: %d\tEnc2 Old ticks: %d\tEnc2 Speed: %.2f\n", encoder_unit, encoder1.new, encoder1.old, encoder1.speed, encoder2.new, encoder2.old, encoder2.speed); 
+	}
+
+
+	/**	===[Terminal controls]============================ */
+	
+//	switch ( control )
+//	{
+//		case 'w':
+//			motor_speed = motor_speed + 0.5;
+//			printf("Motor Speed: %f\n", motor_speed);
+//			Receiveddata = clear_buf(Buf, &Buf[0], 80);
+//			break;
+//		case 's':
+//			motor_speed = motor_speed - 0.5;
+//			printf("Motor Speed: %f\n", motor_speed);
+//			Receiveddata = clear_buf(Buf, &Buf[0], 80);
+//			break;
+//		case 'a':
+//			servo_angle = servo_angle - 5.0;
+//			printf("Servo Angle %f\n", servo_angle);
+//			Receiveddata = clear_buf(Buf, &Buf[0], 80);
+//			break;
+//		case 'd':
+//			servo_angle = servo_angle + 5.0;
+//			printf("Servo Angle %f\n", servo_angle);
+//			Receiveddata = clear_buf(Buf, &Buf[0], 80);
+//			break;
+//		default:
+//			// Do nothing
+//			break;			
+//	}
 
 	
 	motor_set_speed( motor_speed );
@@ -273,7 +353,7 @@ while(1)
 //	}
 }
 	CloseQEI1();
-	CloseQEI2();
+	Closeencoder2();
 	return 1;
 }
 
@@ -313,16 +393,22 @@ void setup_IO ( void )
 							// This sets PB2 to an output
 	TRISBbits.TRISB3 = 1;	// Auto-set by UART1 anyways!
 
-	TRISBbits.TRISB11 = 1; 	// Set pin 22 to input pin
-	TRISBbits.TRISB10 = 1;	// Set pin 21 to input pin
+	TRISBbits.TRISB0 = 0;
+	TRISBbits.TRISB1 = 1;
 
-	TRISBbits.TRISB5 = 1;	// Set pin 14 to input pin
-	TRISBbits.TRISB15 = 1;	// set pin 26 to input pin
+	TRISBbits.TRISB7 = 1;  // Set pin 22 to input pin
+    TRISBbits.TRISB13 = 1;  // Set pin 21 to input pin
+
+    TRISBbits.TRISB5 = 1;   // Set pin 14 to input pin
+    TRISBbits.TRISB15 = 1;  // set pin 26 to input pin
 	
 	/* Look out for analog pins. By defualt as an input the pin is tied to the 
 	A2D Converter*/
 	AD1PCFGLbits.PCFG4 = 1;	// IMPORTANT. RB2 is muxxed with AN4 by default
 	AD1PCFGLbits.PCFG5 = 1;	// IMPORTANT. RB3 is muxxed with AN5 by default
+
+	AD1PCFGLbits.PCFG2 = 1;	// IMPORTANT. RP0 is muxxed with AN2 by default
+	AD1PCFGLbits.PCFG3 = 1;	// IMPORTANT. RP1 is muxxed with AN3 by default
 
 	/**	====[Remapable pin section]============================================ 
 	 *	This section sets up specific perifrials to output pins. This is a great
@@ -340,16 +426,19 @@ void setup_IO ( void )
 	 *	RPINR18bits.U1RXR 
 	 */
 	_U1RXR = 3;
-
+	
 
 	/*	UART1 Transmit on RP2 pin. Note: there is no _UTXR definition for
 	 *	the transmitting line. Use RPOR1bits.RP2R equivalent to _RP2R.
 	 */
 	_RP2R = 0b00011;
 
+	_U2RXR = 1;	
+	_RP0R = 0b00101;
+
 	//Map QEI pins to RP13 and RP4
-	_QEA1R = 11;			// mapping to pin 22 
-	_QEA2R = 10;			// mapping to pin 21
+	_QEA1R = 7;			// mapping to pin 18
+	_QEA2R = 13;			// mapping to pin 17
 
 	_INT1R = 5;				// mapping to pin 14
 	_INT2R = 15;			// mapping to pin 26
