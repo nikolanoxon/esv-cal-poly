@@ -66,10 +66,11 @@ typedef unsigned long int	uint64_t;
 #include 	<float.h>
 #include	<delay.h>
 #include	<timer.h>
-
+#include	<uart.h>
 
 /*	Programmer specified header files for each component driver. */
 #include	"uart1.h"
+#include	"uart2.h"
 #include	"motor_driver.h"
 #include	"servo_driver.h"
 #include	"helper_driver.h"
