@@ -12,7 +12,7 @@
 
 /* All other includes should be defined in the main header file */
 #include "main.h"
-
+#include "data_types.h"
 
 /*	These macro's set up the configuration registers using scripts 
  *	included with C30. See p33FJ64MC202.h for definitions.
@@ -46,6 +46,7 @@ extern char * Receiveddata;
 extern char Buf2[80];
 extern char * Receiveddata2;
 
+extern unsigned int data_ready;
 extern float tire_circumference;
 
 unsigned int status_flag = 0;
@@ -68,9 +69,27 @@ unsigned int encoder2max = 60000;
 unsigned int update_encoder = 1;
 unsigned int delay_count = 0;
 
+extern IMU imu;
 /*	Contains current raw ASCII character */
 char control = 0;
 char control2 = 0;
+
+
+//typedef struct {
+//	unsigned int msb;
+//	unsigned int lsb;
+//} WORD;
+//
+//typedef struct {
+//	WORD accelX;
+//	WORD accelY;
+//	WORD accelZ;
+//	WORD pitch;
+//	WORD roll;
+//	WORD yaw;
+//} IMU;
+
+
 
 typedef struct {
 	uint8_t new;
@@ -86,6 +105,7 @@ typedef struct {
 	float speed;
 } Qei;
 
+IMU test;
 Qei qei1 = {0, 0, 0, 0.0};
 Qei qei2 = {0, 0, 0, 0.0}; 
 
@@ -174,7 +194,7 @@ int main ( void )
 
 	float motor_speed = 0.0;
 	float servo_angle = 0.0;
-
+	int start_imu = 0;
 	encoder_unit = encoder_get_stepsize();
 
 	// start IMU
@@ -182,19 +202,11 @@ int main ( void )
 
 	unsigned int qei_count = 0;
 	putsUART1("Program Started again\r\n");
+	putsUART2("#");
 
 
 while(1)
 {
-	if( display_menu ) {
-		putsUART1("Hello, Welcome!\r\n");
-		putsUART1("==========================================\r\n");
-		putsUART1("(g) Press 'g' to start encoder sampling\r\n");
-		putsUART1("(x) Press 'x' to exit during sampling\r\n");
-		putsUART1("==========================================\r\n");
-		display_menu = 0;
-	}		
-	
 	control = *( Receiveddata - 1 );
 	control2 = *( Receiveddata2 - 1 );
 
@@ -209,24 +221,32 @@ while(1)
 			Receiveddata = clear_buf(Buf, &Buf[0], 80);
 			print_uart1("x pressed\r\n");
 			break;
+		case 's':
+			start_imu = 1;
+			Receiveddata = clear_buf(Buf, &Buf[0], 80);
+			break;
+		case 'c':
+			data_ready = 0;
+			putsUART1("Data cleared\r\n");
+			Receiveddata = clear_buf(Buf, &Buf[0], 80);
+			break;
 		default:
 			break;
 	}
 
-	switch( control2 ) {
-		case 'g':
-			status_flag = 1;
-			Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
-			putsUART2("g pressed\r\n");
-			break;
-		case 'x':
-			status_flag = 0;
-			Receiveddata2 = clear_buf(Buf2, &Buf2[0], 80);
-			putsUART2("x pressed\r\n");
-			break;
-		default:
-			break;
+	if( start_imu ) {
+		putsUART2(")#");
+		start_imu = 0;
 	}
+
+	if( data_ready ) {
+		putsUART1(imu.accelY.lsb);
+		putsUART1("\r\n");
+		data_ready = 0;
+	}
+
+
+
 
 
 //switch ( control2 ) {
@@ -271,7 +291,7 @@ while(1)
 			update_encoder = 0;
 		}
 
-printf("Encoder Stepsize: %.2f\tQEI1 New ticks: %d\tQEI1 Old ticks: %d\t QEI1 Speed: %.2f\tQEI2 New ticks: %d\tQEI2 Old ticks: %d\tQEI2 Speed: %.2f\n", encoder_unit, qei1.new, qei1.old, qei1.speed, qei2.new, qei2.old, qei2.speed); 
+//printf("Encoder Stepsize: %.2f\tQEI1 New ticks: %d\tQEI1 Old ticks: %d\t QEI1 Speed: %.2f\tQEI2 New ticks: %d\tQEI2 Old ticks: %d\tQEI2 Speed: %.2f\n", encoder_unit, qei1.new, qei1.old, qei1.speed, qei2.new, qei2.old, qei2.speed); 
 //		printf("Encoder Stepsize: %.2f\tEnc1 New ticks: %d\tEnc1 Old ticks: %d\t Enc1 Speed: %.2f\tEnc2 New ticks: %d\tEnc2 Old ticks: %d\tEnc2 Speed: %.2f\n", encoder_unit, encoder1.new, encoder1.old, encoder1.speed, encoder2.new, encoder2.old, encoder2.speed); 
 	}
 
@@ -353,7 +373,7 @@ printf("Encoder Stepsize: %.2f\tQEI1 New ticks: %d\tQEI1 Old ticks: %d\t QEI1 Sp
 //	}
 }
 	CloseQEI1();
-	Closeencoder2();
+	CloseQEI2();
 	return 1;
 }
 
