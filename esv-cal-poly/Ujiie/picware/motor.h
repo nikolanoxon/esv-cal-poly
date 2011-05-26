@@ -20,26 +20,30 @@
 #define MOTOR_DUTY_CYCLE_MID_PERCENT	15.0
 #define MOTOR_DUTY_CYCLE_MIN_PERCENT	10.0
 
+#define MOTOR_THROTTLE_INT_MAX_INDEX 120.0
+#define MOTOR_THROTTLE_INT_MIN_INDEX -120.0
+#define MOTOR_THROTTLE_INT_MID_INDEX 0.0
+
 #define	MOTOR_DUTY_CYCLE_MAX	12500.0
 #define	MOTOR_DUTY_CYCLE_MID	MOTOR_DUTY_CYCLE_MAX / 2.0
 #define	MOTOR_DUTY_CYCLE_MIN	0.0
 
 #include "main.h"
 
-void motor_task ( void );
+void initMotor( void );
 
-void motor_setup ( void );
+void configPWM( void );
 
-void motor_config_pwm ( void );
+void enablePWM( void );
 
-void motor_enable_pwm ( void );
+void disablePWM( void );
 
-void motor_disable_pwm ( void );
+void setMotorPWM( unsigned int );
 
-void motor_set_pwm ( unsigned int duty );
+void setMotorSpeedInt( int );
 
-void motor_set_speed ( float speed );
+void setMotorSpeed( float );
 
-void motor_set_brake ( float brake );
+void setMotorBrake( float );
 
 #endif

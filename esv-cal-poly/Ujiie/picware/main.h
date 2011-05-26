@@ -7,11 +7,6 @@
 #define FCY 	40000000ULL
 #define PI		3.14159
 
-#define QEI1MAX	60000
-#define QEI2MAX	60000
-#define ENC1MAX	60000
-#define ENC2MAX 60000
-
 typedef signed char		int8_t;
 typedef short int		int16_t;
 typedef int				int32_t;
@@ -46,12 +41,9 @@ typedef unsigned long int	uint64_t;
 int main ( void );			
 void setup ( void );
 
-void __attribute__((__interrupt__)) _INT0Interrupt(void);
-void __attribute__((__interrupt__)) _INT1Interrupt(void);
+
 
 void __attribute__((__interrupt__)) _T2Interrupt(void);
 
-void __attribute__((__interrupt__)) _QEI1Interrupt(void);
-void __attribute__((__interrupt__)) _QEI2Interrupt(void);
 
 #endif

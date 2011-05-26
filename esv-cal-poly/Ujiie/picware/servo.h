@@ -16,9 +16,13 @@
 #define SERVO_DUTY_CYCLE_MID_PERCENT	14.0
 #define SERVO_DUTY_CYCLE_MIN_PERCENT	10.0
 
-#define SERVO_ANGLE_MAX_INDEX	90.0
+#define SERVO_ANGLE_MAX_INDEX	30.0
 #define SERVO_ANGLE_MID_INDEX	0.0
-#define SERVO_ANGLE_MIN_INDEX	-90.0
+#define SERVO_ANGLE_MIN_INDEX	-30.0
+
+#define SERVO_ANGLE_INT_MAX_INDEX 120.0
+#define SERVO_ANGLE_INT_MIN_INDEX -120.0
+#define SERVO_ANGLE_INT_MID_INDEX 0.0
 
 #define	SERVO_DUTY_CYCLE_MAX			12500.0
 #define	SERVO_DUTY_CYCLE_MID			SERVO_DUTY_CYCLE_MAX / 2.0
@@ -26,20 +30,22 @@
 
 #include "main.h"
 
-void servo_task ( void );
+void initServo( void );
 
-void servo_setup ( void );
+void configServoPWM( void );
 
-void servo_config_pwm ( void );
+void enableServoPWM( void );
 
-void servo_enable_pwm ( void );
+void disableServoPWM( void );
 
-void servo_disable_pwm ( void );
+void setServoPWM( unsigned int );
 
-void servo_set_pwm ( unsigned int duty );
+void setServoAngleInt( int );
 
-void servo_set_angle ( float angle );
+void setServoAngleInt2( int );
 
-void servo_set_zero ( void );
+void setServoAngle( float );
+
+void setServoZero( void );
 
 #endif

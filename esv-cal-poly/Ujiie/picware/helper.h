@@ -8,18 +8,10 @@ Revision 1*/
 
 #include "main.h"
 //Clears a character array//
-char * clear_buf(char [], char *, int);
+char * clearBuffer(char [], char *, int);
 
-float char_to_float ( char buf[], int size );
+float char2float ( char buf[], int size );
 
-int char_to_int ( char buf[], int size );
-
-//Converts a character buffer to a floating point number
-float char2float(char [], int);
-
-//Converts a character buffer to an integer
-int char2int(char [], int);
-
-
+int char2int ( char buf[], int size );
 
 #endif

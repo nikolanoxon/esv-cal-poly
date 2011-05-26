@@ -15,4 +15,9 @@ typedef struct {
 	WORD yaw;
 } IMU;
 
+typedef struct {
+	int steer;
+	int throttle;
+} CONTROL;
+
 #endif

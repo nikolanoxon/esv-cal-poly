@@ -14,12 +14,29 @@
 
 #include "main.h"
 
-void encoder_setup ( void );
+void initEncoder( void );
 
-void encoder_set_tire_radius ( float _radius );
+void setEncoderWheelRadius( float );
 
-float encoder_get_stepsize( void );
+void getEncoderStep( void );
 
-void encoder_read ( void );
+void updateEncoder( int );
+
+int getEncoderDel( int );
+int getEncoderNew( int );
+int getEncoderOld( int );
+float getEncoderSpeed( int );
+
+void __attribute__((__interrupt__)) _INT0Interrupt(void);
+void __attribute__((__interrupt__)) _INT1Interrupt(void);
+
+void __attribute__((__interrupt__)) _QEI1Interrupt(void);
+void __attribute__((__interrupt__)) _QEI2Interrupt(void);
+
+//void encoder_setup ( void );
+//
+//void encoder_set_tire_radius ( float _radius );
+//
+//float encoder_get_stepsize( void );
 
 #endif

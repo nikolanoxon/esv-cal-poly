@@ -20,6 +20,6 @@
  */
 #include	"p33FJ64MC202.h"
 
-void ppl_setup(void);
+void initPPL(void);
 
 #endif

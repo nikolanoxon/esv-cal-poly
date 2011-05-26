@@ -36,7 +36,6 @@
 
 void __attribute__( ( interrupt, no_auto_psv ) ) _U2TXInterrupt( void );
 void __attribute__( ( interrupt, no_auto_psv ) ) _U2RXInterrupt( void );
-void print_uart2( const char string[] );
-void start_uart2( unsigned long baudrate );
+void initUART2( unsigned long baudrate );
 
 #endif
