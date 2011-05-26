@@ -1,98 +1,13 @@
-/**	==========================================================================
- *	File: motor_driver.c
- *	==========================================================================
- *
- *	History:
- *		2011-03-11 B. Ujiie file created.
- *
- *	Description:
- *		Sets servo motor to steer hobby steering servo connected to the
- *		R/C truck.
- */
-
 #include "servo.h"
 
-volatile unsigned int servo_register_max = 0;
-volatile unsigned int servo_duty_cycle = 0;
 
-
-/** ==========================================================================
- *	Function: motor_task
- *	==========================================================================
- *
- *	History:
- *		2010-03-17 B. Ujiie function created.
- *
- *	Description:
- *		Controls the driving D/C motor in a task/state oriented manner to
- *		reduce processor hoarding by any one process.
- *
- *	Variable(s):
- *		@param void
- *		@return void
- */
-
-void servo_task ( void )
+void initServo ( void )
 {
-	/*	Initialize motor task state. Note: "static" declaration keeps variable
-	 *	from reinitializing the next time the function is called.
-	 */
-	static int state = 0;
-
-	switch ( state )
-	{
-		case 0:	
-			break;
-		case 1:
-			break;
-		default:
-			break;
-	}
-	
-	P1DC1 = servo_duty_cycle;
+	configServoPWM();
+	enableServoPWM();
 }
 
-
-/** ==========================================================================
- *	Function: motor_setup
- *	==========================================================================
- *
- *	History:
- *		2010-03-17 B. Ujiie function created.
- *
- *	Description:
- *		Sets up motor driver to run D/C motor at specified PWM signals.
- *
- *	Variable(s):
- *		@param void
- *		@return void
- */
-
-void servo_setup ( void )
-{
-	servo_config_pwm();
-
-	servo_enable_pwm();
-}
-
-
-/** ==========================================================================
- *	Function: motor_config_pwm
- *	==========================================================================
- *
- *	History:
- *		2010-03-17 B. Ujiie function created.
- *
- *	Description:
- *		Configure dsPIC motor driver PWM settings to control D/C driving
- *		motor.
- *
- *	Variable(s):
- *		@param int frequency
- *		@return void
- */
-
-void servo_config_pwm ( void )
+void configServoPWM( void )
 {	
 	/*	Enable PWM1H for PWM output */
 	PWM1CON1bits.PEN1H = 1;
@@ -129,7 +44,7 @@ void servo_config_pwm ( void )
  *		@return void
  */
 
-void servo_enable_pwm ( void )
+void enableServoPWM( void )
 {
 	/*	PWM time base timer enabled */
 	P1TCONbits.PTEN = 1;
@@ -151,7 +66,7 @@ void servo_enable_pwm ( void )
  *		@return void
  */
 
-void servo_disable_pwm ( void )
+void disableServoPWM( void )
 {
 	/*	PWM time base timer disabled */
 	P1TCONbits.PTEN = 0;
@@ -173,11 +88,73 @@ void servo_disable_pwm ( void )
  *		@return void
  */
 
-void servo_set_pwm ( unsigned int duty )
+void setServoPWM( unsigned int duty )
 {
 	P1DC1 = duty;
 }
 
+
+void setServoAngleInt( int angle ) {
+	unsigned int duty;
+	float temp;
+	float percent;
+	float duty_cycle_percent;
+
+	/*	Angle saturation check */
+	if ( angle > 120 )
+	{
+		angle = 120;
+	}
+	else if ( angle < -120 )
+	{
+		angle = -120;
+	}
+
+	if ( angle >= 0 )
+	{
+		percent = (float)(angle / 120);
+	}
+	else if ( angle < 0 )
+	{
+		percent = (float)(angle / 120);
+	}
+
+	if ( percent >= 0.0 )
+	{
+		duty_cycle_percent = percent * ( SERVO_DUTY_CYCLE_MAX_PERCENT - SERVO_DUTY_CYCLE_MID_PERCENT ) + SERVO_DUTY_CYCLE_MID_PERCENT;
+	}
+	else if ( percent < 0.0 )
+	{
+		duty_cycle_percent = percent * ( SERVO_DUTY_CYCLE_MID_PERCENT - SERVO_DUTY_CYCLE_MIN_PERCENT ) + SERVO_DUTY_CYCLE_MID_PERCENT;
+	}
+
+	temp = ( ( duty_cycle_percent / 100.0 ) * ( SERVO_DUTY_CYCLE_MAX - SERVO_DUTY_CYCLE_MIN ) ) + SERVO_DUTY_CYCLE_MIN;
+
+	duty = (unsigned int)((-1.0)*temp);
+
+	setServoPWM( duty );
+}
+
+
+void setServoAngleInt2( int angle ) {
+	float fAngle = (float)angle;
+	float setAngle = 0.0;
+	float fPercent = 0.0;
+	float angleSpan = 0.0;
+	if( fAngle < 0.0 ) {
+		fPercent = fAngle / ( SERVO_ANGLE_INT_MID_INDEX - SERVO_ANGLE_INT_MIN_INDEX );
+		angleSpan = fPercent * ( SERVO_ANGLE_MID_INDEX - SERVO_ANGLE_MIN_INDEX );
+		setAngle = SERVO_ANGLE_MID_INDEX + angleSpan;
+	} else if( fAngle > 0.0 ) {
+		fPercent = fAngle / ( SERVO_ANGLE_INT_MAX_INDEX - SERVO_ANGLE_INT_MID_INDEX );
+		angleSpan = fPercent * ( SERVO_ANGLE_MAX_INDEX - SERVO_ANGLE_MID_INDEX );
+		setAngle = SERVO_ANGLE_MID_INDEX + angleSpan;
+	} else {
+		setAngle = 0.0;
+	}
+
+	setServoAngle( setAngle );
+}
 
 /** ==========================================================================
  *	Function: motor_set_speed
@@ -196,7 +173,7 @@ void servo_set_pwm ( unsigned int duty )
  *		@return void
  */
 
-void servo_set_angle ( float angle )
+void setServoAngle ( float angle )
 {
 	unsigned int duty;
 	float temp;
@@ -235,28 +212,10 @@ void servo_set_angle ( float angle )
 
 	duty = (unsigned int)temp;
 
-	servo_set_pwm( duty );
+	setServoPWM( duty );
 }
 
-
-/** ==========================================================================
- *	Function: motor_set_brake
- *	==========================================================================
- *
- *	History:
- *		2010-03-17 B. Ujiie function created.
- *
- *	Description:
- *		Set the desired braking "force" based on brake pedal input. Note: The
- *		maximum brake input is less than the speed input to induce a feeling
- *		of gradual braking.
- *
- *	Variable(s):
- *		@param float brake
- *		@return void
- */
-
-void servo_set_zero ( void )
+void setServoZero( void )
 {
 
 }
