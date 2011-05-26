@@ -40,7 +40,9 @@ void disableServoPWM( void );
 
 void setServoPWM( unsigned int );
 
-void setServoAngleInt( int );
+void floater( int );
+
+void setServoAngleInt( unsigned int );
 
 void setServoAngleInt2( int );
 

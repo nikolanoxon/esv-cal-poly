@@ -16,8 +16,8 @@ typedef struct {
 } IMU;
 
 typedef struct {
-	int steer;
-	int throttle;
+	unsigned int steer;
+	unsigned int throttle;
 } CONTROL;
 
 #endif
