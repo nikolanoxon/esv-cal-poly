@@ -3,7 +3,7 @@
 unsigned int updateEncoderFlag;
 unsigned int delayCounter;
 unsigned int matchValue;
-
+int testflag = 0;
 void initTimer( void ) {
  ConfigIntTimer2(T2_INT_PRIOR_2 & T2_INT_ON);
 	PR1 = 5375;
@@ -26,6 +26,7 @@ void __attribute__((__interrupt__)) _T2Interrupt( void )
 	} else if( !updateEncoderFlag ){
 		delayCounter++;
 	}
+	testflag = 1;
 	
 	IFS0bits.T2IF = 0;    /* Clear Timer interrupt flag */
 }  

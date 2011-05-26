@@ -29,6 +29,7 @@ extern float wheelCircumference;
 unsigned int status_flag = 0;
 unsigned int display_menu = 1;
 
+extern int testflag;
 
 extern IMU imu;
 extern CONTROL command;
@@ -43,7 +44,9 @@ float encoder2speed = 0.0;
 float encoder3speed = 0.0;
 float encoder4speed = 0.0;
 
-
+int value = -120;
+int fwd = 0;
+int cnt = 0;
 
 int main ( void )
 {
@@ -93,6 +96,7 @@ int main ( void )
 	putsUART2("#");
 status_flag = 1;
 	putsUART1("Menu\r\n");
+
 
 while(1)
 {
@@ -173,33 +177,14 @@ while(1)
 //			break;			
 //	}
 
-//	switch( control ) {
-//		case 'w':
-//			controller++;
-//			printf("%d\n", controller);
-//			Receiveddata = clearBuffer(Buf, &Buf[0], 80);
-//			break;
-//		case 's':
-//			controller--;
-//			printf("%d\n", controller);
-//			Receiveddata = clearBuffer(Buf, &Buf[0], 80);
-//			break;
-//		default:
-//			break;
-//	}
-
 if( commandReady ) {
+	
+	setServoAngleInt( command.steer );
 	sendUART1( command.steer );
 	sendUART1( command.throttle );
 	sendUART1( '\r' );
-	setServoAngleInt( command.steer );
 
 	commandReady = 0;
-//	putsUART1( command.steer );
-//	commandReady = 0;
-	//printf("%d", 4);
-	//setServoAngleInt( command.steer );
-	//commandReady = 0;
 }
 Receiveddata = clearBuffer(Buf, &Buf[0], 80);
 

@@ -10,9 +10,10 @@ unsigned int commandCount = 0;
 
 unsigned int counter = 0;
 
-int receivedValue;
+unsigned int receivedValue;
 
-CONTROL command;
+
+CONTROL command = {0, 0};
 
 void __attribute__( ( interrupt, no_auto_psv ) ) _U1TXInterrupt( void )
 {  
@@ -85,7 +86,7 @@ void __attribute__( ( interrupt, no_auto_psv ) ) _U1RXInterrupt( void )
 		receivedValue = U1RXREG;
 
 	//	if( !commandReady ) {
-			if( receivedValue == 121 ) {
+			if( receivedValue == 250 ) {
 				commandCount = 0;
 			}else{
 				switch( commandCount ) {

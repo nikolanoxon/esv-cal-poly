@@ -93,45 +93,27 @@ void setServoPWM( unsigned int duty )
 	P1DC1 = duty;
 }
 
-
-void setServoAngleInt( int angle ) {
-	unsigned int duty;
-	float temp;
+void floater( int angle ) {
 	float percent;
-	float duty_cycle_percent;
+	float fangle;
+	float temp;
+	unsigned int duty;
+	fangle = (float)angle;
+	percent = fangle/240.0;
+	temp = percent*( 2100.0 - 1400.0) + 1400.0;
+	duty = (unsigned int)temp;
+}
 
-	/*	Angle saturation check */
-	if ( angle > 120 )
-	{
-		angle = 120;
-	}
-	else if ( angle < -120 )
-	{
-		angle = -120;
-	}
-
-	if ( angle >= 0 )
-	{
-		percent = (float)(angle / 120);
-	}
-	else if ( angle < 0 )
-	{
-		percent = (float)(angle / 120);
-	}
-
-	if ( percent >= 0.0 )
-	{
-		duty_cycle_percent = percent * ( SERVO_DUTY_CYCLE_MAX_PERCENT - SERVO_DUTY_CYCLE_MID_PERCENT ) + SERVO_DUTY_CYCLE_MID_PERCENT;
-	}
-	else if ( percent < 0.0 )
-	{
-		duty_cycle_percent = percent * ( SERVO_DUTY_CYCLE_MID_PERCENT - SERVO_DUTY_CYCLE_MIN_PERCENT ) + SERVO_DUTY_CYCLE_MID_PERCENT;
-	}
-
-	temp = ( ( duty_cycle_percent / 100.0 ) * ( SERVO_DUTY_CYCLE_MAX - SERVO_DUTY_CYCLE_MIN ) ) + SERVO_DUTY_CYCLE_MIN;
-
-	duty = (unsigned int)((-1.0)*temp);
-
+void setServoAngleInt( unsigned int angle ) {
+	float percent;
+	float fangle;
+	float temp;
+	unsigned int duty;
+	angle = angle + 120;
+	fangle = (float)angle;
+	percent = fangle/240.0;
+	temp = 2100.0 - percent*( 2100.0 - 1400.0);
+	duty = (unsigned int)temp;
 	setServoPWM( duty );
 }
 
