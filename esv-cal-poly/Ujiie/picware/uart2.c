@@ -20,8 +20,8 @@ char Buf2[80];
 /*	Pointer to the most recent character in Buf */
 char * Receiveddata2 = Buf2;
 
-unsigned int data_ready = 0;
-unsigned int count = 0;
+unsigned int dataReady = 0;
+unsigned int dataCount = 0;
 
 IMU imu;
 
@@ -98,14 +98,14 @@ void __attribute__( ( interrupt, no_auto_psv ) ) _U2RXInterrupt( void )
 	if(	U2STAbits.URXDA == 1 && U2STAbits.TRMT == 1 );
 	{
 		if( U2RXREG == 'A' ) {
-			count = 0;
+			dataCount = 0;
 		} else if( U2RXREG == 'Z' ) {
-			data_ready = 1;
-			count = 0;
+			dataReady = 1;
+			dataCount = 0;
 		}
 
-		if( !data_ready ) {
-			switch( count ) {
+		if( !dataReady ) {
+			switch( dataCount ) {
 				case 0:
 					// Idle
 					break;
@@ -150,7 +150,7 @@ void __attribute__( ( interrupt, no_auto_psv ) ) _U2RXInterrupt( void )
 			}
 		}
 		
-		count++;
+		dataCount++;
 
 		/* Notice Reciveddata pointer is post incremented */
 		( *( Receiveddata2 )++ ) = U2RXREG;
@@ -184,7 +184,7 @@ void __attribute__( ( interrupt, no_auto_psv ) ) _U2RXInterrupt( void )
  *		@return void
  */
 
-void start_uart2( unsigned long baudrate )
+void initUART2( unsigned long baudrate )
 {
 	/*	Holds the value of baud register */
 	unsigned int baudvalue;   
@@ -256,6 +256,4 @@ void start_uart2( unsigned long baudrate )
 	/*	Prints a welcome banner alerting user serial communication port
 	 *	has been opened.
 	 */
-
-	printf("Serial 2 communication has connected successfully!.\r\n");
 }

@@ -1,40 +1,18 @@
-/**	==========================================================================
- *	File: uart1.c
- *	==========================================================================
- *
- *	History:
- *		2010-08-13 T. Cooke file created.
- *
- *	Description:
- *		Sets up dsPIC33F to use UART1 on which ever pins
- *		were mapped in setup_IO() in main.c.
- */
 
 #include "uart1.h"
+#include "definitions.h"
 
-
-/*	Recieved data will be stored in an 80 character array named Buf */
 char Buf[80]; 				
-
-/*	Pointer to the most recent character in Buf */
 char * Receiveddata = Buf;
 
+unsigned int commandReady = 0;
+unsigned int commandCount = 0;
 
-/** ==========================================================================
- *	Function: _U1TXInterrupt
- *	==========================================================================
- *
- *	History:
- *		2010-08-13 T. Cooke function created.
- *
- *	Description:
- *		This is the UART1 transmit ISR. Note that the Tx interrupt
- *		has not been enabled yet.
- *
- *	Variable(s):
- *		@param void
- *		@return void
- */
+unsigned int counter = 0;
+
+int receivedValue;
+
+CONTROL command;
 
 void __attribute__( ( interrupt, no_auto_psv ) ) _U1TXInterrupt( void )
 {  
@@ -44,21 +22,6 @@ void __attribute__( ( interrupt, no_auto_psv ) ) _U1TXInterrupt( void )
 	IFS0bits.U1TXIF = 0;
 } 
 
-
-/** ==========================================================================
- *	Function: _U1RXInterrupt
- *	==========================================================================
- *
- *	History:
- *		2010-08-13 T. Cooke function created.
- *
- *	Description:
- *		This is the UART1 receiving ISR.
- *
- *	Variable(s):
- *		@param void
- *		@return void
- */
 
 void __attribute__( ( interrupt, no_auto_psv ) ) _U1RXInterrupt( void )
 {
@@ -93,6 +56,54 @@ void __attribute__( ( interrupt, no_auto_psv ) ) _U1RXInterrupt( void )
 	 */
 	if(	U1STAbits.URXDA == 1 && U1STAbits.TRMT == 1 );
 	{
+//		if( U1RXREG == 121 ) {
+//			commandCount = 0;
+//		}
+//		if( commandCount == 2 ) { // 2 stores only steering, 3 stores both
+//			commandReady = 1;
+//			commandCount = 0;
+//		}
+//
+//		if( !commandReady ) {
+//			switch( commandCount ) {
+//				case 0:
+//					// Idle
+//					break;
+//				case 1:
+//					command.steer = U1RXREG;
+//					break;
+//				case 2:	
+//					command.throttle = U1RXREG;
+//					break;
+//				default:
+//					break;
+//			}
+//		}
+//		
+//		commandCount++;
+
+		receivedValue = U1RXREG;
+
+	//	if( !commandReady ) {
+			if( receivedValue == 121 ) {
+				commandCount = 0;
+			}else{
+				switch( commandCount ) {
+					case 0:
+						command.steer = receivedValue;
+						commandCount++;	
+						break;
+					case 1:
+						command.throttle = receivedValue;
+						commandReady = 1;
+						break;
+					default:
+						break;
+				}
+			}
+	//	}
+		
+
 
 		/* Notice Reciveddata pointer is post incremented */
 		( *( Receiveddata )++ ) = U1RXREG;
@@ -101,7 +112,7 @@ void __attribute__( ( interrupt, no_auto_psv ) ) _U1RXInterrupt( void )
 		/*	In order to echo the right character we have to send the char
 		 *	at (pointer-1)
 		 */
-		U1TXREG = *( Receiveddata - 1 );
+		//U1TXREG = *( Receiveddata - 1 );
 		
 	}
 
@@ -128,7 +139,7 @@ void __attribute__( ( interrupt, no_auto_psv ) ) _U1RXInterrupt( void )
  *		@return void
  */
 
-void start_uart1( unsigned long baudrate )
+void initUART1( unsigned long baudrate )
 {
 	/*	Holds the value of baud register */
 	unsigned int baudvalue;   
@@ -230,13 +241,6 @@ void start_uart1( unsigned long baudrate )
 	//putsUART1("UART1 started!\r\n");
 }
 
-void print_uart1( const char string[] ) {
-	const char *Buffer_pointer1 = string;
-
-	while( *Buffer_pointer1 ) {
-		if( !U1STAbits.UTXBF ) {
-			U1TXREG = *Buffer_pointer1++;
-
-		}
-	}
+void sendUART1( int _command ) {
+	U1TXREG = _command;
 }

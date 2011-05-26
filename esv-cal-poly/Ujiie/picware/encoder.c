@@ -1,49 +1,47 @@
-/**	==========================================================================
- *	File: encoder_driver.c
- *	==========================================================================
- *
- *	History:
- *		2011-04-27 B. Ujiie file created.
- *
- *	Description:
- *		Sets up the quadrature encoder modules to monitor two of the four
- *		encoders on the R/C truck.
- */
-
 #include "encoder.h"
 
-float tire_radius = 0.0;
-float tire_circumference = 0.0;
-float encoder_stepsize;
+float wheelRadius = 0.0;
+float wheelCircumference = 0.0;
+float encoderStepsize;
 
-float total_ticks = 8.0; // number of ticks on encoder wheel
+float totalTicks = 8.0; // number of ticks on encoder wheel
 
-volatile unsigned int old_ticks = 0;
-volatile unsigned int new_ticks = 0;
-volatile unsigned int del_ticks = 0;
+unsigned int encoder1counter = 0;
+unsigned int encoder2counter = 0;
 
-volatile unsigned int enc_ISR_count = 0;
+unsigned int encoder1max = 60000;
+unsigned int encoder2max = 60000;
 
-volatile float velocity = 0.0;
+unsigned int qei1max = 60000;
+unsigned int qei2max = 60000;
 
+unsigned int qei1counter = 0;
+unsigned int qei2counter = 0;
 
-/** ==========================================================================
- *	Function: encoder_setup
- *	==========================================================================
- *
- *	History:
- *		2010-04-27 B. Ujiie function created.
- *
- *	Description:
- *		Sets up the quadrature encoder modules to read the encoder interrupts
- *		without disturbing the main program.
- *
- *	Variable(s):
- *		@param void
- *		@return void
- */
+float encoderUnit;
+float delTime = 0.0086 * 116.0;
 
-void encoder_setup ( void )
+typedef struct {
+	uint8_t new;
+	uint8_t old;
+	uint8_t del;
+	float speed;
+} QEI;
+
+typedef struct {
+	uint8_t new;
+	uint8_t old;
+	uint8_t del;
+	float speed;
+} Encoder;
+
+Encoder encoder1 = {0, 0, 0, 0.0};
+Encoder encoder2 = {0, 0, 0, 0.0};
+
+QEI qei1 = {0, 0, 0, 0.0};
+QEI qei2 = {0, 0, 0, 0.0}; 
+
+void initEncoder ( void )
 {
 	/*	Enable QEI interrupts */
 	ConfigIntQEI1(QEI_INT_PRI_1 & QEI_INT_DISABLE);
@@ -92,73 +90,159 @@ void encoder_setup ( void )
 
 
 
-/** ==========================================================================
- *	Function: encoder_set_tire_radius
- *	==========================================================================
- *
- *	History:
- *		2010-04-27 B. Ujiie function created.
- *
- *	Description:
- *		Set the tire radius to be used in calculating the average velocity.
- *
- *	Variable(s):
- *		@param float _radius
- *		@return void
- */
-
-void encoder_set_tire_radius ( float _radius )
+void setEncoderWheelRadius ( float _radius )
 {
-	tire_radius = _radius;
-	tire_circumference = (2.0 * 3.14159 * tire_radius);
+	wheelRadius = _radius;
+	wheelCircumference = (2.0 * 3.14159 * wheelRadius);
 }
 
-float encoder_get_stepsize ( void ) {
-	encoder_stepsize = ( tire_circumference / total_ticks ); // ft/ticks
-	return encoder_stepsize;
+float getEncoderStepsize ( void ) {
+	encoderStepsize = ( wheelCircumference / totalTicks ); // ft/ticks
+	return encoderStepsize;
 }
 
+void updateEncoder( int _encoder ) {
 
-/** ==========================================================================
- *	Function: encoder_read
- *	==========================================================================
- *
- *	History:
- *		2010-04-27 B. Ujiie function created.
- *
- *	Description:
- *		Read the QEI count register and grab the number of current ticks from
- *		the encoder. Note that this function will be called in the timer ISR
- *		as a means of reading the tick values at a specified period.
- *
- *	Variable(s):
- *		@param void
- *		@return void
- */
+	encoderUnit = getEncoderStepsize();
 
-void encoder_read ( void )
-{
-	// count the number of times the encoder module was read
-	enc_ISR_count++;
+	if( _encoder == 1 ) {
+		encoder1.new = encoder1counter;
+		encoder1.del = encoder1.new - encoder1.old;
+		encoder1.speed = (float)(encoder1.del * encoderUnit * (1.0 /5280.0) * (1.0 / delTime) * 3600.0);
+
+	//	printf("New: %d\tOld: %d\tDel: %d\tUnit: %.2f\tTime: %.2f\tSpeed: %.2f\n",encoder1.new,encoder1.old,encoder1.del,encoderUnit,delTime,encoder1.speed); 
+		encoder1.old = encoder1.new;
+	}else if( _encoder == 2 ) {
+		encoder2.new = encoder2counter;
+		encoder2.del = encoder2.new - encoder2.old;
+		encoder2.speed = (float)(encoder2.del * encoderUnit * (1.0 /5280.0) * (1.0 / delTime) * 3600.0);
+		encoder2.old = encoder2.new;
+	}else if( _encoder == 3 ) {
+		qei1.new = qei1counter;
+		qei1.del = qei1.new - qei1.old;
+		qei1.speed = (float)(qei1.del * encoderUnit * (1.0 / 5280.0) * (1.0 / delTime) * 3600.0);
+		qei1.old = qei1.new;
+	}else if( _encoder == 4 ) {
+		qei2.new = qei2counter;
+		qei2.del = qei2.new - qei2.old;
+		qei2.speed = (float)(qei2.del * encoderUnit * (1.0 / 5280.0) * (1.0 / delTime) * 3600.0);
+		qei2.old = qei2.new;
+	}else{
+		// Do nothing
+	}
+}
+
+int getEncoderDel( int _encoder ) {
 	
-	// Read in the current encoder tick count
-	new_ticks = POS1CNT;
+	unsigned int temp = 0;
 
-	// Calculate the difference between the current encoder reading and the previous
-	del_ticks = new_ticks - old_ticks;
-
-	// Check sign of the difference in encoder ticks
-	if( del_ticks < 0 )
-	{
-		del_ticks = del_ticks + MAX1CNT;
+	if( _encoder == 1 ) {
+		temp = encoder1.del;
+	}else if( _encoder == 2 ) {
+		temp = encoder2.del;
+	}else if( _encoder == 3 ) {
+		temp = qei1.del;
+	}else if( _encoder == 4 ) {
+		temp = qei2.del;
+	}else{
+		// Do nothing
 	}
-	else 
-	{
-		float radians = ( 2 * 3.14159 ) / MAX1CNT;
-		float arcLength = tire_radius * radians;
-		velocity = arcLength / 0.20 ; // feet/sec
-	}
+	return temp;
 }
+
+int getEncoderNew( int _encoder ) {
+
+	unsigned int temp = 0;
+
+	if( _encoder == 1 ) {
+		temp = encoder1.new;
+	}else if( _encoder == 2 ) {
+		temp = encoder2.new;
+	}else if( _encoder == 3 ) {
+		temp = qei1.new;
+	}else if( _encoder == 4 ) {
+		temp = qei2.new;
+	}else{
+		// Do nothing
+	}
+	return temp;
+}
+
+int getEncoderOld( int _encoder ) {
+
+	unsigned int temp = 0;
+
+	if( _encoder == 1 ) {
+		temp = encoder1.old;
+	}else if( _encoder == 2 ) {
+		temp = encoder2.old;
+	}else if( _encoder == 3 ) {
+		temp = qei1.old;
+	}else if( _encoder == 4 ) {
+		temp = qei2.old;
+	}else{
+		// Do nothing
+	}
+	return temp;
+}
+
+float getEncoderSpeed( int _encoder ) {
+
+	unsigned int temp = 0;
+
+	if( _encoder == 1 ) {
+		temp = encoder1.speed;
+	}else if( _encoder == 2 ) {
+		temp = encoder2.speed;
+	}else if( _encoder == 3 ) {
+		temp = qei1.speed;
+	}else if( _encoder == 4 ) {
+		temp = qei2.speed;
+	}else {
+		// Do nothing
+	}
+	return temp;
+}
+
+void __attribute__((interrupt, no_auto_psv)) _INT1Interrupt(void)
+{
+	if( encoder1counter == encoder1max ) {
+		encoder1counter = 0;
+	} else {
+   		encoder1counter++;
+	}
+    IFS1bits.INT1IF = 0;
+}
+
+void __attribute__((interrupt, no_auto_psv)) _INT2Interrupt(void)
+{
+ 	if( encoder2counter == encoder2max ) {
+		encoder2counter = 0;
+	 } else {
+		encoder2counter++;
+	}
+    IFS1bits.INT2IF = 0;
+}
+
+void __attribute__((__interrupt__)) _QEI1Interrupt(void) 
+{
+	if( qei1counter == qei1max ) {
+		qei1counter = 0;
+	} else {
+   		qei1counter++;
+	}
+   _QEI1IF = 0;
+} 
+
+void __attribute__((__interrupt__)) _QEI2Interrupt(void) {
+	if( qei2counter == qei2max ) {
+		qei2counter = 0;
+	} else {
+		qei2counter++;
+	}
+	_QEI2IF = 0;
+}
+
 
 
 
