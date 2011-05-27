@@ -248,7 +248,7 @@ void __attribute__((__interrupt__)) _QEI2Interrupt(void) {
 	} else {
 		qei2counter++;
 	}
-	printf("I am QEI2: %d\n", qei2counter);
+	printf("I am QEI2: %d\n", qei2counter); // working
 	_QEI2IF = 0;
 }
 

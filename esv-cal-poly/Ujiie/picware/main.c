@@ -244,7 +244,7 @@ void setup( void ) {
 	_QEA1R = 7;			
 	_QEB1R = 8;
 
-	_QEA2R = 13;		
+	_QEA2R = 13;		// working!
 	_QEB2R = 9;
 
 	_INT1R = 5;			
