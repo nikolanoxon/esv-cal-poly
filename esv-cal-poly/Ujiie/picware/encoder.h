@@ -27,8 +27,8 @@ int getEncoderNew( int );
 int getEncoderOld( int );
 float getEncoderSpeed( int );
 
-void __attribute__((__interrupt__)) _INT0Interrupt(void);
 void __attribute__((__interrupt__)) _INT1Interrupt(void);
+void __attribute__((__interrupt__)) _INT2Interrupt(void);
 
 void __attribute__((__interrupt__)) _QEI1Interrupt(void);
 void __attribute__((__interrupt__)) _QEI2Interrupt(void);

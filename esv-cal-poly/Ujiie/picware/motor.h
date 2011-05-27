@@ -40,7 +40,9 @@ void disablePWM( void );
 
 void setMotorPWM( unsigned int );
 
-void setMotorSpeedInt( int );
+void setMotorSpeedInt( unsigned int );
+
+void setMotorSpeedInt2( int );
 
 void setMotorSpeed( float );
 
