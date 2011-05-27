@@ -23,7 +23,19 @@ void setMotorPWM( unsigned int duty ) {
 	P1DC2 = duty;
 }
 
-void setMotorSpeedInt( int speed ) {
+void setMotorSpeedInt( unsigned int angle ) {
+	float percent;
+	float fangle;
+	float temp;
+	unsigned int duty;
+	fangle = (float)angle;
+	percent = fangle/240.0;
+	temp = 2100.0 - percent*( 2100.0 - 1400.0);
+	duty = (unsigned int)temp;
+	setMotorPWM( duty );
+}
+
+void setMotorSpeedInt2( int speed ) {
 	float fThrottle = (float)speed;
 	float setThrottle = 0.0;
 	float fPercent = 0.0;

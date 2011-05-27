@@ -109,14 +109,12 @@ void setServoAngleInt( unsigned int angle ) {
 	float fangle;
 	float temp;
 	unsigned int duty;
-	angle = angle + 120;
 	fangle = (float)angle;
 	percent = fangle/240.0;
 	temp = 2100.0 - percent*( 2100.0 - 1400.0);
 	duty = (unsigned int)temp;
 	setServoPWM( duty );
 }
-
 
 void setServoAngleInt2( int angle ) {
 	float fAngle = (float)angle;

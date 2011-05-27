@@ -55,7 +55,7 @@ int main ( void )
 	initPPL();
 	setup();
     initTimer();
-	setEncoderWheelRadius( 0.5 );
+	setEncoderWheelRadius( 2.25/12.0 );
 	initEncoder();
 	initUART1(115200UL);
 	initUART2(115200UL);
@@ -69,10 +69,10 @@ int main ( void )
 	initServo();
 
 	/*	Initialize motor to a speed of 0 */
-	setMotorSpeed(0.0);
+	setMotorSpeedInt(120);
 	
 	/*	Initialize servo steering angle to 0 */
-	setServoAngle(0.0);
+	setServoAngleInt(120);
 	
 	/*	Contains integer value of signal from buffer. Used to check
 	 *	for start bit set at 125.
@@ -136,7 +136,8 @@ while(1)
 		//	putfUART1(encoder2speed);
 		//	putfUART1(encoder3speed);
 		//	putfUART1(encoder4speed);
-	//	printf("%.2f - %.2f\n", encoder1speed, encoder2speed);
+		
+		//printf("%d\t%d\t%d\t%.2f\n", getEncoderNew(2), getEncoderOld(2), getEncoderOld(2), encoder2speed);
 
 			updateEncoderFlag = 0;
 			// get encoder speeds here getEncoderSpeed()
@@ -180,6 +181,7 @@ while(1)
 if( commandReady ) {
 	
 	setServoAngleInt( command.steer );
+	setMotorSpeedInt( command.steer );
 	sendUART1( command.steer );
 	sendUART1( command.throttle );
 	sendUART1( '\r' );
@@ -216,9 +218,14 @@ void setup( void ) {
 
 	TRISBbits.TRISB7 = 1;  
     TRISBbits.TRISB13 = 1; 
+	TRISBbits.TRISB9 = 1;
+	TRISBbits.TRISB8 = 1;
 
     TRISBbits.TRISB5 = 1;   
     TRISBbits.TRISB15 = 1; 
+
+	TRISBbits.TRISB9 = 1;
+	TRISBbits.TRISB8 = 1;
 	
 	AD1PCFGLbits.PCFG4 = 1;	
 	AD1PCFGLbits.PCFG5 = 1;	
@@ -235,7 +242,10 @@ void setup( void ) {
 	_RP0R = 0b00101;
 
 	_QEA1R = 7;			
+	_QEB1R = 8;
+
 	_QEA2R = 13;		
+	_QEB2R = 9;
 
 	_INT1R = 5;			
 	_INT2R = 15;		
