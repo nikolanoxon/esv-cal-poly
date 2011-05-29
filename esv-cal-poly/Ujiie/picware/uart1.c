@@ -6,7 +6,7 @@ char Buf[80];
 char * Receiveddata = Buf;
 
 unsigned int commandReady = 0;
-unsigned int commandCount = 0;
+unsigned int commandCount = 2;
 
 unsigned int counter = 0;
 
@@ -83,6 +83,10 @@ void __attribute__( ( interrupt, no_auto_psv ) ) _U1RXInterrupt( void )
 //		
 //		commandCount++;
 
+
+		/* Notice Reciveddata pointer is post incremented */
+		//( *( Receiveddata )++ ) = U1RXREG;
+
 		receivedValue = U1RXREG;
 
 	//	if( !commandReady ) {
@@ -104,10 +108,6 @@ void __attribute__( ( interrupt, no_auto_psv ) ) _U1RXInterrupt( void )
 			}
 	//	}
 		
-
-
-		/* Notice Reciveddata pointer is post incremented */
-		( *( Receiveddata )++ ) = U1RXREG;
 			
 	
 		/*	In order to echo the right character we have to send the char
