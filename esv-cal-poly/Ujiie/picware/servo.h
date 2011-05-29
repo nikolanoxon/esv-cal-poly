@@ -46,6 +46,8 @@ void setServoAngleInt( unsigned int );
 
 void setServoAngleInt2( int );
 
+void setServoAngleInt3( unsigned int );
+
 void setServoAngle( float );
 
 void setServoZero( void );
