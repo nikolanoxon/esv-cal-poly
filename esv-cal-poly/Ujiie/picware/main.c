@@ -68,11 +68,6 @@ int main ( void )
 	/*	Begin servo setup */
 	initServo();
 
-	/*	Initialize motor to a speed of 0 */
-	setMotorSpeed(0.0);
-	
-	/*	Initialize servo steering angle to 0 */
-	setServoAngle(0.0);
 	
 	/*	Contains integer value of signal from buffer. Used to check
 	 *	for start bit set at 125.
@@ -98,6 +93,7 @@ status_flag = 1;
 	putsUART1("Menu\r\n");
 
 	setMotorPWM(1885);
+	setServoPWM( 1775 );
 while(1)
 {
 	control = *( Receiveddata - 1 );
