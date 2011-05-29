@@ -55,7 +55,7 @@ int main ( void )
 	initPPL();
 	setup();
     initTimer();
-	setEncoderWheelRadius( 2.25/12.0 );
+	setEncoderWheelRadius( 0.5 );
 	initEncoder();
 	initUART1(115200UL);
 	initUART2(115200UL);
@@ -69,10 +69,10 @@ int main ( void )
 	initServo();
 
 	/*	Initialize motor to a speed of 0 */
-	setMotorSpeedInt(120);
+	setMotorSpeed(0.0);
 	
 	/*	Initialize servo steering angle to 0 */
-	setServoAngleInt(120);
+	setServoAngle(0.0);
 	
 	/*	Contains integer value of signal from buffer. Used to check
 	 *	for start bit set at 125.
@@ -97,7 +97,7 @@ int main ( void )
 status_flag = 1;
 	putsUART1("Menu\r\n");
 
-
+	setMotorPWM(1885);
 while(1)
 {
 	control = *( Receiveddata - 1 );
@@ -136,8 +136,7 @@ while(1)
 		//	putfUART1(encoder2speed);
 		//	putfUART1(encoder3speed);
 		//	putfUART1(encoder4speed);
-		
-		//printf("%d\t%d\t%d\t%.2f\n", getEncoderNew(2), getEncoderOld(2), getEncoderOld(2), encoder2speed);
+	//	printf("%.2f - %.2f\n", encoder1speed, encoder2speed);
 
 			updateEncoderFlag = 0;
 			// get encoder speeds here getEncoderSpeed()
@@ -178,17 +177,40 @@ while(1)
 //			break;			
 //	}
 
+//switch( control ) {
+//	case 'g':
+//		//setMotorPWM( 2100 );
+//		setMotorSpeedInt( 180 );
+//		printf("Motor at PWM 2100\n");
+//		Receiveddata = clearBuffer(Buf, &Buf[0], 80);
+//		break;
+//	case 's':
+//		//setMotorPWM( 1885 );
+//		setMotorSpeedInt( 120 );
+//		printf("Motor at PWM 1885\n");
+//		Receiveddata = clearBuffer(Buf, &Buf[0], 80);
+//		break;
+//	case 'm':
+//		//setMotorPWM( 2000 );
+//		setMotorSpeedInt( 160 );
+//		printf("Motor at PWM 1900\n");
+//		Receiveddata = clearBuffer(Buf, &Buf[0], 80);
+//		break;
+//	default:
+//		break;
+//}
+
+
 if( commandReady ) {
 	
 	setServoAngleInt( command.steer );
-	setMotorSpeedInt( command.steer );
+	setMotorSpeedInt( command.throttle );
 	sendUART1( command.steer );
 	sendUART1( command.throttle );
 	sendUART1( '\r' );
 
 	commandReady = 0;
 }
-Receiveddata = clearBuffer(Buf, &Buf[0], 80);
 
 //setMotorSpeedInt( controller );
 	//setMotorSpeed( motor_speed );
@@ -218,14 +240,9 @@ void setup( void ) {
 
 	TRISBbits.TRISB7 = 1;  
     TRISBbits.TRISB13 = 1; 
-	TRISBbits.TRISB9 = 1;
-	TRISBbits.TRISB8 = 1;
 
     TRISBbits.TRISB5 = 1;   
     TRISBbits.TRISB15 = 1; 
-
-	TRISBbits.TRISB9 = 1;
-	TRISBbits.TRISB8 = 1;
 	
 	AD1PCFGLbits.PCFG4 = 1;	
 	AD1PCFGLbits.PCFG5 = 1;	
@@ -242,10 +259,7 @@ void setup( void ) {
 	_RP0R = 0b00101;
 
 	_QEA1R = 7;			
-	_QEB1R = 8;
-
-	_QEA2R = 13;		// working!
-	_QEB2R = 9;
+	_QEA2R = 13;		
 
 	_INT1R = 5;			
 	_INT2R = 15;		
