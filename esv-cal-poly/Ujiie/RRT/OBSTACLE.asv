@@ -23,7 +23,7 @@ function setup(block)
   block.InputPort(1).Dimensions        = 2;     %PRE SET [ Y, L]
   block.InputPort(1).DirectFeedthrough = false;
   
-  block.InputPort(2).Dimensions        = 3;     %FROM SERIAL [X, W, V]
+  block.InputPort(2).Dimensions        = 2;     %FROM Xiphos, both ultrasonic readings
   block.InputPort(2).DirectFeedthrough = false;
   
   block.OutputPort(1).Dimensions       = 5;
@@ -62,17 +62,32 @@ function InitConditions(block)
 
 function Output(block)
 
+
+  %[x y L W V]
+  
+  %distance between the two ultrasonic sensors
+  separation=48;
+ 
   %GET PRESET DATA
   PRESET = block.InputPort(1).Data;
   
   %GET SERIAL DATA
   SERIAL = block.InputPort(2).Data;
     
+
+  
+  %DETERMINE THE WIDTH OF THE OBSTACLE
+  width=separation-(SERIAL(1)+SERIAL(2));
+  
+  
+    %Get X position
+  
   %OUTPUT THE TWO IN ONE ARRAY
 
-  SEND(1) = SERIAL (1);
-  SEND(2:3)=PRESET(:);
-  SEND(4:5)=SERIAL (2:3);
+  SEND(1) = (SERIAL (1) - 32)/12; %X position (ft)
+  SEND(2:3)=PRESET(:);     %Y positon and length (ft)
+  SEND(4)=SERIAL (2)/12;   %width (ft)
+  SEND(5)=SERIAL (3)/120;  %Velocity (ft/s)
   
     block.OutputPort(1).Data = SEND;
     %block.OutputPort(1).Data = PATH(1, 4);

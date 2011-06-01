@@ -12,7 +12,7 @@ function setup(block)
   block.NumDialogPrms  = 1;
   
   %% Register number of input and output ports
-  block.NumInputPorts  = 2;
+  block.NumInputPorts  = 3;
   block.NumOutputPorts = 1;
 
   %% Setup functional port properties to dynamically
@@ -25,6 +25,9 @@ function setup(block)
   
   block.InputPort(2).Dimensions        = 1;     %CLOCK
   block.InputPort(2).DirectFeedthrough = false;
+
+  block.InputPort(3).Dimensions        = 4;     %VEHICLE DATA
+  block.InputPort(3).DirectFeedthrough = false;  
   
   block.OutputPort(1).Dimensions       = 3;
   
@@ -68,7 +71,9 @@ function Output(block)
   
   %GET THE CURRENT TIME
   TIME = block.InputPort(2).Data;
-    
+  
+  VEHICLE = block.InputPort(3).Data;    
+
   %OUTPUT THE STEERING COMMAND FOR THE APPROPRIATE TIME
   CANCEL = 0;
   c=1;
@@ -80,13 +85,15 @@ function Output(block)
       end
   end
   
-    SEND(2) = (SEND(2))*120/30+120;
+    SEND(2) = -1*(SEND(2))*120/30+120;
     
     
-    if (TIME > 7)
+    
+   
+    if (TIME > 8)
         SEND(3)= 120;
     else
-        SEND(3) = 145;
+        SEND(3) = 3.7702*VEHICLE(4)+134.99;
     end
     block.OutputPort(1).Data = SEND;
     %block.OutputPort(1).Data = PATH(1, 4);

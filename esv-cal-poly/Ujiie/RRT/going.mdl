@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.58"
+    ComputedModelVersion    "1.80"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -25,9 +25,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "bujiie"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Sun May 29 18:10:08 2011"
-  RTWModifiedTimeStamp	  228496858
-  ModelVersionFormat	  "1.%<AutoIncrement:58>"
+  LastModifiedDate	  "Wed Jun 01 13:16:02 2011"
+  RTWModifiedTimeStamp	  228834557
+  ModelVersionFormat	  "1.%<AutoIncrement:80>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -110,7 +110,7 @@ Model {
 	  $ObjectID		  2
 	  Version		  "1.10.0"
 	  StartTime		  "0.0"
-	  StopTime		  "inf"
+	  StopTime		  "10"
 	  AbsTol		  "auto"
 	  FixedStep		  ".05"
 	  InitialStep		  "auto"
@@ -715,7 +715,7 @@ Model {
   }
   System {
     Name		    "going"
-    Location		    [10, 82, 1274, 991]
+    Location		    [2, 82, 1662, 1007]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -729,7 +729,7 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    50
+    SIDHighWatermark	    54
     Block {
       BlockType		      Clock
       Name		      "Clock"
@@ -770,7 +770,7 @@ Model {
       Name		      "Concatinate the \nObstacle Data"
       SID		      43
       Ports		      [2, 1]
-      Position		      [435, 278, 510, 362]
+      Position		      [430, 273, 505, 357]
       FunctionName	      "OBSTACLE"
       Parameters	      "2"
     }
@@ -829,7 +829,7 @@ Model {
       Ports		      [1]
       Position		      [435, 414, 465, 446]
       Floating		      off
-      Location		      [3, 719, 1008, 1046]
+      Location		      [6, 228, 822, 627]
       Open		      on
       NumInputPorts	      "1"
       ZoomMode		      "yonly"
@@ -838,8 +838,8 @@ Model {
 	axes1			"%<SignalLabel>"
       }
       TimeRange		      "10"
-      YMin		      "0"
-      YMax		      "250"
+      YMin		      "-1"
+      YMax		      "1"
       DataFormat	      "StructureWithTime"
       SampleTime	      "0"
     }
@@ -848,17 +848,17 @@ Model {
       Name		      "GOAL"
       SID		      14
       Position		      [720, 411, 770, 449]
-      Value		      "[2, 30]"
+      Value		      "[2, 50]"
       VectorParams1D	      off
     }
     Block {
       BlockType		      "M-S-Function"
       Name		      "Get the necesary \nturn from \nlook-up table"
       SID		      23
-      Ports		      [2, 1]
+      Ports		      [3, 1]
       Position		      [250, 636, 335, 714]
       FunctionName	      "TURN_OUT"
-      Parameters	      "2"
+      Parameters	      "3"
     }
     Block {
       BlockType		      "M-S-Function"
@@ -883,8 +883,76 @@ Model {
       Name		      "Obstacle"
       SID		      16
       Position		      [505, 186, 575, 224]
-      Value		      "[2 15 3 4 0]"
+      Value		      "[2 28 4 5 0]"
       VectorParams1D	      off
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "PIC"
+      SID		      3
+      Ports		      []
+      Position		      [15, 155, 125, 201]
+      Priority		      "-200000"
+      LibraryVersion	      "1.84"
+      DialogController	      "instrumentcreatedialog"
+      DialogControllerArgs    "DataTag0"
+      SourceBlock	      "instrumentlib/Serial Configuration"
+      SourceType	      "Serial Configuration"
+      ComPortMenu	      "COM3"
+      ComPort		      "COM3"
+      ObjConstructor	      "serial('COM3');"
+      BaudRate		      "115200"
+      DataBits		      "8"
+      Parity		      "none"
+      StopBits		      "1"
+      FlowControl	      "none"
+      Timeout		      "10"
+      ByteOrder		      "LittleEndian"
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "PIC Data"
+      SID		      4
+      Ports		      [0, 2]
+      Position		      [120, 349, 230, 396]
+      LibraryVersion	      "1.84"
+      DialogController	      "instrumentcreatedialog"
+      DialogControllerArgs    "DataTag1"
+      SourceBlock	      "instrumentlib/Serial Receive"
+      SourceType	      "Serial Receive"
+      ComPortMenu	      "COM3"
+      ComPort		      "COM3"
+      ObjConstructor	      "serial('COM3');"
+      Terminator	      "CR ('\\r')"
+      DataSize		      "[1  1]"
+      DataType		      "uint8"
+      EnableBlockingMode      off
+      ActionDataUnavailable   "Output last received value"
+      CustomValue	      "0"
+      SampleTime	      "0.05"
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "PIC1"
+      SID		      53
+      Ports		      []
+      Position		      [155, 45, 265, 91]
+      Priority		      "-200000"
+      LibraryVersion	      "1.84"
+      DialogController	      "instrumentcreatedialog"
+      DialogControllerArgs    "DataTag2"
+      SourceBlock	      "instrumentlib/Serial Configuration"
+      SourceType	      "Serial Configuration"
+      ComPortMenu	      "COM5"
+      ComPort		      "COM5"
+      ObjConstructor	      "serial('COM5');"
+      BaudRate		      "9600"
+      DataBits		      "8"
+      Parity		      "none"
+      StopBits		      "1"
+      FlowControl	      "none"
+      Timeout		      "10"
+      ByteOrder		      "LittleEndian"
     }
     Block {
       BlockType		      DataStoreMemory
@@ -904,7 +972,7 @@ Model {
       Name		      "Pre-set Obstacle Data\n[y L]"
       SID		      44
       Position		      [155, 267, 230, 303]
-      Value		      "[25, 2]"
+      Value		      "[20, 2]"
       OutDataType	      "fixdt(1, 16)"
       OutScaling	      "2^0"
       SampleTime	      ".05"
@@ -914,7 +982,7 @@ Model {
       Name		      "Pulse\nGenerator"
       SID		      17
       Ports		      [0, 1]
-      Position		      [595, 469, 625, 501]
+      Position		      [600, 424, 630, 456]
       PulseType		      "Time based"
       Amplitude		      "1"
       Period		      "1"
@@ -927,7 +995,7 @@ Model {
       Name		      "ROAD"
       SID		      18
       Position		      [800, 353, 855, 397]
-      Value		      "[-3 3]"
+      Value		      "[-4 4]"
       VectorParams1D	      off
     }
     Block {
@@ -960,7 +1028,7 @@ Model {
       Position		      [620, 652, 730, 698]
       LibraryVersion	      "1.84"
       DialogController	      "instrumentcreatedialog"
-      DialogControllerArgs    "DataTag0"
+      DialogControllerArgs    "DataTag3"
       SourceBlock	      "instrumentlib/Serial Send"
       SourceType	      "Serial Send"
       ComPortMenu	      "COM3"
@@ -973,7 +1041,8 @@ Model {
       BlockType		      Step
       Name		      "Step"
       SID		      35
-      Position		      [595, 550, 625, 580]
+      Position		      [600, 505, 630, 535]
+      Time		      "1.5"
       SampleTime	      "0"
     }
     Block {
@@ -991,13 +1060,19 @@ Model {
       Position		      [285, 375, 305, 395]
     }
     Block {
+      BlockType		      Terminator
+      Name		      "Terminator1"
+      SID		      52
+      Position		      [450, 125, 470, 145]
+    }
+    Block {
       BlockType		      Scope
       Name		      "To PIC"
       SID		      27
       Ports		      [1]
       Position		      [620, 734, 650, 766]
       Floating		      off
-      Location		      [3, 371, 1008, 698]
+      Location		      [739, 438, 1555, 837]
       Open		      on
       NumInputPorts	      "1"
       List {
@@ -1005,7 +1080,7 @@ Model {
 	axes1			"%<SignalLabel>"
       }
       TimeRange		      "10"
-      YMin		      "60"
+      YMin		      "120"
       YMax		      "250"
       SaveName		      "ScopeData4"
       DataFormat	      "StructureWithTime"
@@ -1026,57 +1101,55 @@ Model {
       BlockType		      Constant
       Name		      "Vehicle"
       SID		      21
-      Position		      [800, 238, 855, 292]
-      Value		      "[2 0 0 2]"
+      Position		      [745, 778, 800, 832]
+      Value		      "[2.7 0 0 6]"
       VectorParams1D	      off
     }
     Block {
       BlockType		      Reference
       Name		      "Xiphos"
-      SID		      3
-      Ports		      []
-      Position		      [15, 155, 125, 201]
-      Priority		      "-200000"
-      LibraryVersion	      "1.84"
-      DialogController	      "instrumentcreatedialog"
-      DialogControllerArgs    "DataTag1"
-      SourceBlock	      "instrumentlib/Serial Configuration"
-      SourceType	      "Serial Configuration"
-      ComPortMenu	      "COM3"
-      ComPort		      "COM3"
-      ObjConstructor	      "serial('COM3');"
-      BaudRate		      "115200"
-      DataBits		      "8"
-      Parity		      "none"
-      StopBits		      "1"
-      FlowControl	      "none"
-      Timeout		      "10"
-      ByteOrder		      "LittleEndian"
-    }
-    Block {
-      BlockType		      Reference
-      Name		      "Xiphos Obstacle data"
-      SID		      4
+      SID		      51
       Ports		      [0, 2]
-      Position		      [120, 349, 230, 396]
+      Position		      [250, 129, 360, 176]
       LibraryVersion	      "1.84"
       DialogController	      "instrumentcreatedialog"
-      DialogControllerArgs    "DataTag2"
+      DialogControllerArgs    "DataTag4"
       SourceBlock	      "instrumentlib/Serial Receive"
       SourceType	      "Serial Receive"
-      ComPortMenu	      "COM3"
-      ComPort		      "COM3"
-      ObjConstructor	      "serial('COM3');"
+      ComPortMenu	      "COM5"
+      ComPort		      "COM5"
+      ObjConstructor	      "serial('COM5');"
       Terminator	      "CR ('\\r')"
-      DataSize		      "[1  2]"
-      DataType		      "uint8"
+      DataSize		      "[1  3]"
+      DataType		      "int8"
       EnableBlockingMode      off
       ActionDataUnavailable   "Output last received value"
       CustomValue	      "0"
       SampleTime	      "0.05"
     }
+    Block {
+      BlockType		      Scope
+      Name		      "Xiphos Obstacle"
+      SID		      54
+      Ports		      [1]
+      Position		      [535, 74, 565, 106]
+      Floating		      off
+      Location		      [6, 645, 822, 1044]
+      Open		      on
+      NumInputPorts	      "1"
+      ZoomMode		      "yonly"
+      List {
+	ListType		AxesTitles
+	axes1			"%<SignalLabel>"
+      }
+      TimeRange		      "10"
+      YMax		      "25"
+      SaveName		      "ScopeData1"
+      DataFormat	      "StructureWithTime"
+      SampleTime	      "0"
+    }
     Line {
-      SrcBlock		      "Xiphos Obstacle data"
+      SrcBlock		      "PIC Data"
       SrcPort		      2
       DstBlock		      "Terminator"
       DstPort		      1
@@ -1084,8 +1157,17 @@ Model {
     Line {
       SrcBlock		      "Vehicle"
       SrcPort		      1
-      DstBlock		      "Level-2 M-file\nS-Function"
-      DstPort		      1
+      Points		      [0, -45]
+      Branch {
+	Points			[0, -495]
+	DstBlock		"Level-2 M-file\nS-Function"
+	DstPort			1
+      }
+      Branch {
+	Points			[-570, 0]
+	DstBlock		"Get the necesary \nturn from \nlook-up table"
+	DstPort			3
+      }
     }
     Line {
       SrcBlock		      "ROAD"
@@ -1104,6 +1186,7 @@ Model {
       SrcPort		      1
       Points		      [55, 0]
       Branch {
+	Points			[70, 0]
 	DstBlock		"Get the necesary \nturn from \nlook-up table"
 	DstPort			1
       }
@@ -1145,13 +1228,14 @@ Model {
     Line {
       SrcBlock		      "Clock1"
       SrcPort		      1
+      Points		      [10, 0]
       DstBlock		      "Get the necesary \nturn from \nlook-up table"
       DstPort		      2
     }
     Line {
       SrcBlock		      "Step"
       SrcPort		      1
-      Points		      [20, 0; 0, -80]
+      Points		      [20, 0; 0, -35]
       DstBlock		      "Derivative"
       DstPort		      1
     }
@@ -1170,22 +1254,16 @@ Model {
       }
     }
     Line {
-      SrcBlock		      "Obstacle"
-      SrcPort		      1
-      Points		      [0, 115]
-      DstBlock		      "Level-2 M-file\nS-Function"
-      DstPort		      2
-    }
-    Line {
       SrcBlock		      "Pre-set Obstacle Data\n[y L]"
       SrcPort		      1
-      Points		      [65, 0; 0, 15]
+      Points		      [65, 0; 0, 10]
       DstBlock		      "Concatinate the \nObstacle Data"
       DstPort		      1
     }
     Line {
       SrcBlock		      "Convert\nto a float"
       SrcPort		      1
+      Points		      [20, 0]
       DstBlock		      "Concatinate the \nObstacle Data"
       DstPort		      2
     }
@@ -1202,11 +1280,40 @@ Model {
       DstPort		      1
     }
     Line {
-      SrcBlock		      "Xiphos Obstacle data"
+      SrcBlock		      "PIC Data"
       SrcPort		      1
       Points		      [10, 0; 0, 70]
       DstBlock		      "From PIC"
       DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Xiphos"
+      SrcPort		      1
+      Points		      [5, 0; 0, 10]
+      Branch {
+	Points			[0, 160; -50, 0]
+	DstBlock		"Convert\nto a float"
+	DstPort			1
+      }
+      Branch {
+	Points			[0, -60]
+	DstBlock		"Xiphos Obstacle"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "Xiphos"
+      SrcPort		      2
+      Points		      [60, 0; 0, -30]
+      DstBlock		      "Terminator1"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Obstacle"
+      SrcPort		      1
+      Points		      [5, 0; 0, 115]
+      DstBlock		      "Level-2 M-file\nS-Function"
+      DstPort		      2
     }
     Annotation {
       Name		      "[x y theta V]"
@@ -1230,7 +1337,7 @@ Model {
     }
     Annotation {
       Name		      "Trigger"
-      Position		      [612, 454]
+      Position		      [617, 409]
     }
     Annotation {
       Name		      "Degrees"
@@ -1240,23 +1347,36 @@ Model {
       Name		      "Runs Simulink\n in real-time"
       Position		      [71, 116]
     }
+    Annotation {
+      Position		      [275, 666]
+    }
   }
 }
 MatData {
-  NumRecords		  3
+  NumRecords		  5
   DataRecord {
-    Tag			    DataTag2
+    Tag			    DataTag4
     Data		    "  %)30     .    :     8    (     0         %    \"     $    !     0         .    .     8    (    !     "
     "     %    \"     $    (     0         0    \"    '-E<FEA;')B"
   }
   DataRecord {
-    Tag			    DataTag1
+    Tag			    DataTag3
+    Data		    "  %)30     .    :     8    (     0         %    \"     $    !     0         .    .     8    (    !     "
+    "     %    \"     $    (     0         0    \"    '-E<FEA;'-B"
+  }
+  DataRecord {
+    Tag			    DataTag2
     Data		    "  %)30     .    :     8    (     0         %    \"     $    !     0         .    .     8    (    !     "
     "     %    \"     $    (     0         0    \"    '-E<FEA;&-B"
   }
   DataRecord {
+    Tag			    DataTag1
+    Data		    "  %)30     .    :     8    (     0         %    \"     $    !     0         .    .     8    (    !     "
+    "     %    \"     $    (     0         0    \"    '-E<FEA;')B"
+  }
+  DataRecord {
     Tag			    DataTag0
     Data		    "  %)30     .    :     8    (     0         %    \"     $    !     0         .    .     8    (    !     "
-    "     %    \"     $    (     0         0    \"    '-E<FEA;'-B"
+    "     %    \"     $    (     0         0    \"    '-E<FEA;&-B"
   }
 }
