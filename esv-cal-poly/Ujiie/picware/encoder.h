@@ -22,9 +22,9 @@ void getEncoderStep( void );
 
 void updateEncoder( int );
 
-int getEncoderDel( int );
-int getEncoderNew( int );
-int getEncoderOld( int );
+unsigned int getEncoderDel( int );
+unsigned int getEncoderNew( int );
+unsigned int getEncoderOld( int );
 float getEncoderSpeed( int );
 
 void __attribute__((__interrupt__)) _INT0Interrupt(void);

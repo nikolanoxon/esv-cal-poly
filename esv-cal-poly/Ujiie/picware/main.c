@@ -39,10 +39,16 @@ extern unsigned int commandReady;
 char control = 0;
 char control2 = 0;
 
+unsigned int encoder1del = 0;
+unsigned int encoder2del = 0;
+unsigned int encoder3del = 0;
+unsigned int encoder4del = 0;
+
 float encoder1speed = 0.0;
 float encoder2speed = 0.0;
 float encoder3speed = 0.0;
 float encoder4speed = 0.0;
+
 
 int value = -120;
 int fwd = 0;
@@ -55,7 +61,7 @@ int main ( void )
 	initPPL();
 	setup();
     initTimer();
-	setEncoderWheelRadius( 0.5 );
+	setEncoderWheelRadius( 2.25 / 12.0 );
 	initEncoder();
 	initUART1(115200UL);
 	initUART2(115200UL);
@@ -123,21 +129,41 @@ while(1)
 			updateEncoder(3);
 			updateEncoder(4);
 			
+//			encoder1del = getEncoderDel(1);
+//			encoder2del = getEncoderDel(2);
+//			encoder3del = getEncoderDel(3);
+//			encoder4del = getEncoderDel(4);
+
 			encoder1speed = getEncoderSpeed(1);
 			encoder2speed = getEncoderSpeed(2);
 			encoder3speed = getEncoderSpeed(3);
 			encoder4speed = getEncoderSpeed(4);
 
-		//	putfUART1(encoder1speed);
-		//	putfUART1(encoder2speed);
-		//	putfUART1(encoder3speed);
-		//	putfUART1(encoder4speed);
-	//	printf("%.2f - %.2f\n", encoder1speed, encoder2speed);
-
+		//	sendUART1(encoder1del);
+		//	sendUART1(encoder2del);
+		//	sendUART1(encoder3del);
+		//	sendUART1(encoder4del);
+		//	sendUART1("\r");
+		//printf("Speed 1: %.2f\tSpeed 2: %.2f\tSpeed 3: %.2f\tSpeed 4: %.2f\n", encoder1speed, encoder2speed, encoder3speed, encoder4speed);
+		//printf("Del 1: %d\tDel 2: %d\tDel 3: %d\tDel 4: %d\n", encoder1del, encoder2del, encoder3del,encoder4del);
 			updateEncoderFlag = 0;
 			// get encoder speeds here getEncoderSpeed()
 		}
 	}
+setMotorPWM(1885);
+	if( commandReady ) {
+		
+		setServoAngleInt( command.steer );
+		setMotorSpeedInt( command.throttle );
+
+		// Debugging print statements
+	//	sendUART1( command.steer );
+	//	sendUART1( command.throttle );
+	//	sendUART1( '\r' );
+	
+		commandReady = 0;
+	}
+
 //
 //	if( commandReady ) {
 //		setServoAngle( command.steer );
@@ -197,16 +223,7 @@ while(1)
 //}
 
 
-if( commandReady ) {
-	
-	setServoAngleInt( command.steer );
-	setMotorSpeedInt( command.throttle );
-	sendUART1( command.steer );
-	sendUART1( command.throttle );
-	sendUART1( '\r' );
 
-	commandReady = 0;
-}
 
 //setMotorSpeedInt( controller );
 	//setMotorSpeed( motor_speed );
@@ -237,8 +254,11 @@ void setup( void ) {
 	TRISBbits.TRISB7 = 1;  
     TRISBbits.TRISB13 = 1; 
 
+	TRISBbits.TRISB9 = 1;		
+	TRISBbits.TRISB8 = 1;
+
     TRISBbits.TRISB5 = 1;   
-    TRISBbits.TRISB15 = 1; 
+    TRISBbits.TRISB15 = 1;
 	
 	AD1PCFGLbits.PCFG4 = 1;	
 	AD1PCFGLbits.PCFG5 = 1;	
@@ -254,8 +274,12 @@ void setup( void ) {
 	_U2RXR = 1;	
 	_RP0R = 0b00101;
 
-	_QEA1R = 7;			
-	_QEA2R = 13;		
+	_QEA1R = 7;	
+	_QEB1R = 8;
+		
+	_QEA2R = 13;		// working!		
+	_QEB2R = 9;
+
 
 	_INT1R = 5;			
 	_INT2R = 15;		

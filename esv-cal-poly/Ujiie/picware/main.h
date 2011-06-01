@@ -7,15 +7,9 @@
 #define FCY 	40000000ULL
 #define PI		3.14159
 
-typedef signed char		int8_t;
-typedef short int		int16_t;
-typedef int				int32_t;
-typedef long int		int64_t;
-
-typedef unsigned char		uint8_t;
+typedef unsigned int		uint8_t;
 typedef unsigned short int	uint16_t;
-typedef unsigned int		uint32_t;
-typedef unsigned long int	uint64_t;
+typedef unsigned long int	uint32_t;
 
 #include <p33Fxxxx.h>
 #include <libpic30.h>
@@ -40,10 +34,5 @@ typedef unsigned long int	uint64_t;
 
 int main ( void );			
 void setup ( void );
-
-
-
-void __attribute__((__interrupt__)) _T2Interrupt(void);
-
 
 #endif

@@ -123,7 +123,7 @@ void setServoAngleInt3( unsigned int angle ) {
 	float fangle;
 	float temp;
 	unsigned int duty;
-	angle = angle + 120;
+	angle = angle + 120 - 5; // 5 is a trim factor
 	fangle = (float)angle;
 	percent = fangle/240.0;
 	temp = percent*( 2100.0 - 1400.0) + 1400.0;

@@ -9,11 +9,11 @@ float totalTicks = 8.0; // number of ticks on encoder wheel
 unsigned int encoder1counter = 0;
 unsigned int encoder2counter = 0;
 
-unsigned int encoder1max = 60000;
-unsigned int encoder2max = 60000;
+unsigned int encoder1max = 250;
+unsigned int encoder2max = 250;
 
-unsigned int qei1max = 60000;
-unsigned int qei2max = 60000;
+unsigned int qei1max = 250;
+unsigned int qei2max = 250;
 
 unsigned int qei1counter = 0;
 unsigned int qei2counter = 0;
@@ -104,35 +104,45 @@ float getEncoderStepsize ( void ) {
 void updateEncoder( int _encoder ) {
 
 	encoderUnit = getEncoderStepsize();
+	float del = 0.0;
 
 	if( _encoder == 1 ) {
 		encoder1.new = encoder1counter;
 		encoder1.del = encoder1.new - encoder1.old;
-		encoder1.speed = (float)(encoder1.del * encoderUnit * (1.0 /5280.0) * (1.0 / delTime) * 3600.0);
+		del = (float)encoder1.del;
+		encoder1.speed = (del * encoderUnit * (1.0 /5280.0) * (1.0 / delTime) * 3600.0);
 
 	//	printf("New: %d\tOld: %d\tDel: %d\tUnit: %.2f\tTime: %.2f\tSpeed: %.2f\n",encoder1.new,encoder1.old,encoder1.del,encoderUnit,delTime,encoder1.speed); 
 		encoder1.old = encoder1.new;
 	}else if( _encoder == 2 ) {
 		encoder2.new = encoder2counter;
 		encoder2.del = encoder2.new - encoder2.old;
-		encoder2.speed = (float)(encoder2.del * encoderUnit * (1.0 /5280.0) * (1.0 / delTime) * 3600.0);
+		del = (float)encoder2.del;
+		encoder2.speed = (del * encoderUnit * (1.0 /5280.0) * (1.0 / delTime) * 3600.0);
+
+	//	printf("New: %d\tOld: %d\tDel: %d\tUnit: %.2f\tTime: %.2f\tSpeed: %.2f\n",encoder2.new,encoder2.old,encoder2.del,encoderUnit,delTime,encoder2.speed); 
 		encoder2.old = encoder2.new;
 	}else if( _encoder == 3 ) {
 		qei1.new = qei1counter;
 		qei1.del = qei1.new - qei1.old;
-		qei1.speed = (float)(qei1.del * encoderUnit * (1.0 / 5280.0) * (1.0 / delTime) * 3600.0);
+		del = (float)qei1.del;
+		qei1.speed = (del * encoderUnit * (1.0 / 5280.0) * (1.0 / delTime) * 3600.0);
+
+	//	printf("New: %d\tOld: %d\tDel: %d\tUnit: %.2f\tTime: %.2f\tSpeed: %.2f\n",qei1.new,qei1.old,qei1.del,encoderUnit,delTime, qei1.speed); 
 		qei1.old = qei1.new;
 	}else if( _encoder == 4 ) {
 		qei2.new = qei2counter;
 		qei2.del = qei2.new - qei2.old;
-		qei2.speed = (float)(qei2.del * encoderUnit * (1.0 / 5280.0) * (1.0 / delTime) * 3600.0);
+		del = (float)qei2.del;
+		qei2.speed = (del * encoderUnit * (1.0 / 5280.0) * (1.0 / delTime) * 3600.0);
+	// 	printf("New: %d\tOld: %d\tDel: %d\tUnit: %.2f\tTime: %.2f\tSpeed: %.2f\n",qei2.new,qei2.old, qei2.del,encoderUnit,delTime,qei2.speed); 
 		qei2.old = qei2.new;
 	}else{
 		// Do nothing
 	}
 }
 
-int getEncoderDel( int _encoder ) {
+unsigned int getEncoderDel( int _encoder ) {
 	
 	unsigned int temp = 0;
 
@@ -150,7 +160,7 @@ int getEncoderDel( int _encoder ) {
 	return temp;
 }
 
-int getEncoderNew( int _encoder ) {
+unsigned int getEncoderNew( int _encoder ) {
 
 	unsigned int temp = 0;
 
@@ -168,7 +178,7 @@ int getEncoderNew( int _encoder ) {
 	return temp;
 }
 
-int getEncoderOld( int _encoder ) {
+unsigned int getEncoderOld( int _encoder ) {
 
 	unsigned int temp = 0;
 
@@ -188,7 +198,7 @@ int getEncoderOld( int _encoder ) {
 
 float getEncoderSpeed( int _encoder ) {
 
-	unsigned int temp = 0;
+	float temp = 0;
 
 	if( _encoder == 1 ) {
 		temp = encoder1.speed;
