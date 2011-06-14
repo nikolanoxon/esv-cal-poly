@@ -85,7 +85,7 @@ void __attribute__( ( interrupt, no_auto_psv ) ) _U1RXInterrupt( void )
 
 
 		/* Notice Reciveddata pointer is post incremented */
-		//( *( Receiveddata )++ ) = U1RXREG;
+		( *( Receiveddata )++ ) = U1RXREG;
 
 		receivedValue = U1RXREG;
 

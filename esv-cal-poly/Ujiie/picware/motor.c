@@ -24,17 +24,22 @@ void setMotorPWM( unsigned int duty ) {
 }
 
 void setMotorSpeedInt( unsigned int speed ) {
-	float fThrottle = (float)speed;
-	float setThrottle = 0.0;
-	float fPercent = 0.0;
-	unsigned int duty;
+	if( speed == 120 ) {
+		float fThrottle = (float)speed;
+		float setThrottle = 0.0;
+		float fPercent = 0.0;
+		unsigned int duty;
+	
+		fPercent = fThrottle / 240.0;
+		setThrottle = fPercent*( 2370.0 - 1400.0 ) + 1400.0;
+	
+		duty = (unsigned int)setThrottle;
 
-	fPercent = fThrottle / 240.0;
-	setThrottle = fPercent*( 2370.0 - 1400.0 ) + 1400.0;
-
-	duty = (unsigned int)setThrottle;
-
-	setMotorPWM( duty );	
+	
+		setMotorPWM( duty );	
+	}else{
+		setMotorPWM( 1885 );
+	}
 }
 
 void setMotorSpeedInt2( int speed ) {

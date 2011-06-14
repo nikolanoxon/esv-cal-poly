@@ -39,16 +39,15 @@ extern unsigned int commandReady;
 char control = 0;
 char control2 = 0;
 
-unsigned int encoder1del = 0;
-unsigned int encoder2del = 0;
-unsigned int encoder3del = 0;
-unsigned int encoder4del = 0;
-
 float encoder1speed = 0.0;
 float encoder2speed = 0.0;
 float encoder3speed = 0.0;
 float encoder4speed = 0.0;
 
+unsigned int encoder1del = 0;
+unsigned int encoder2del = 0;
+unsigned int encoder3del = 0;
+unsigned int encoder4del = 0;
 
 int value = -120;
 int fwd = 0;
@@ -74,161 +73,96 @@ int main ( void )
 	/*	Begin servo setup */
 	initServo();
 
-	
-	/*	Contains integer value of signal from buffer. Used to check
-	 *	for start bit set at 125.
-	 */
-	int signal = 0;
-
-
-
-	float motor_speed = 0.0;
-	float servo_angle = 0.0;
-	int start_imu = 0;
-	float tempspeed;
-
-	int controller = 0;
-
-	// start IMU
-	//printf("#\n");
-
-	unsigned int qei_count = 0;
-	//putsUART1("Program Started again\r\n");
-	putsUART2("#");
-status_flag = 1;
-	putsUART1("Menu\r\n");
+	sendUART2("#");
 
 	setMotorPWM(1885);
 	setServoPWM( 1775 );
+	unsigned int motorPWM = 1885;
+	unsigned int servoPWM = 1775;
 while(1)
 {
 	control = *( Receiveddata - 1 );
 	control2 = *( Receiveddata2 - 1 );
 
+	switch( control ) {
+		case 'w':
+			putsUART1("W was pressed\n\r");
+			motorPWM++;
+			setMotorPWM(motorPWM);
+			Receiveddata = clearBuffer(Buf, &Buf[0], 80);
+			break;
+		case 's':
+			putsUART1("S was pressed\n\r");
+			motorPWM--;
+			setMotorPWM(motorPWM);
+			Receiveddata = clearBuffer(Buf, &Buf[0], 80);
+			break;
+		case 'a':
+			putsUART1("A was pressed\n\r");
+			servoPWM++;
+			setServoPWM(servoPWM);
+			Receiveddata = clearBuffer(Buf, &Buf[0], 80);
+			break;
+		case 'd':
+			putsUART1("D was pressed\n\r");
+			servoPWM--;
+			setServoPWM(servoPWM);
+			Receiveddata = clearBuffer(Buf, &Buf[0], 80);
+			break;
+		default:
+			break;
+	}
+
+//	putsUART1("HI THERE\n\r");
+//
+//if( commandReady ) {
+//
+//	if( updateEncoderFlag ) {
+//		updateEncoder(1);
+//		updateEncoder(2);
+//		updateEncoder(3);
+//		updateEncoder(4);
+//
+//		encoder1del = getEncoderDel(1);
+//		encoder2del = getEncoderDel(2);
+//		encoder3del = getEncoderDel(3);
+//		encoder4del = getEncoderDel(4);
+//
+//		sendUART1( encoder1del );
+//		sendUART1( encoder2del );
+//		sendUART1( encoder3del );
+//		sendUART1( encoder4del );
+//		sendUART1( "\r" ); 
+//
+//		updateEncoderFlag = 0;
+//	}
+//
 //	if( dataReady ) {
-//		putsUART1(imu.accelX.msb);
-//		putsUART1(imu.accelX.lsb);
-//		putsUART1(imu.accelY.msb);
-//		putsUART1(imu.accelY.lsb);
-//		putsUART1(imu.accelZ.msb);
-//		putsUART1(imu.accelZ.lsb);
-//		putsUART1(imu.pitch.msb);
-//		putsUART1(imu.pitch.lsb);
-//		putsUART1(imu.roll.msb);
-//		putsUART1(imu.roll.lsb);
-//		putsUART1(imu.yaw.msb);
-//		putsUART1(imu.yaw.lsb);
-//		putsUART1("\r");
+//		sendUART1(imu.accelX.msb);
+//		sendUART1(imu.accelX.lsb);
+//		sendUART1(imu.accelY.msb);
+//		sendUART1(imu.accelY.lsb);
+//		sendUART1(imu.accelZ.msb);
+//		sendUART1(imu.accelZ.lsb);
+//		sendUART1(imu.pitch.msb);
+//		sendUART1(imu.pitch.lsb);
+//		sendUART1(imu.roll.msb);
+//		sendUART1(imu.roll.lsb);
+//		sendUART1(imu.yaw.msb);
+//		sendUART1(imu.yaw.lsb);
+//		sendUART1("\r");
 //		dataReady = 0;		
 //	}
+//	
+//	setServoAngleInt( command.steer );
+//	setMotorSpeedInt( command.throttle );
+//	sendUART1( command.steer );
+//	sendUART1( command.throttle );
+//	sendUART1( '\r' );
 //
-	if( status_flag ) {
-		if( updateEncoderFlag ) {
-			updateEncoder(1);
-			updateEncoder(2);
-			updateEncoder(3);
-			updateEncoder(4);
-			
-//			encoder1del = getEncoderDel(1);
-//			encoder2del = getEncoderDel(2);
-//			encoder3del = getEncoderDel(3);
-//			encoder4del = getEncoderDel(4);
-
-			encoder1speed = getEncoderSpeed(1);
-			encoder2speed = getEncoderSpeed(2);
-			encoder3speed = getEncoderSpeed(3);
-			encoder4speed = getEncoderSpeed(4);
-
-		//	sendUART1(encoder1del);
-		//	sendUART1(encoder2del);
-		//	sendUART1(encoder3del);
-		//	sendUART1(encoder4del);
-		//	sendUART1("\r");
-		//printf("Speed 1: %.2f\tSpeed 2: %.2f\tSpeed 3: %.2f\tSpeed 4: %.2f\n", encoder1speed, encoder2speed, encoder3speed, encoder4speed);
-		//printf("Del 1: %d\tDel 2: %d\tDel 3: %d\tDel 4: %d\n", encoder1del, encoder2del, encoder3del,encoder4del);
-			updateEncoderFlag = 0;
-			// get encoder speeds here getEncoderSpeed()
-		}
-	}
-setMotorPWM(1885);
-	if( commandReady ) {
-		
-		setServoAngleInt( command.steer );
-		setMotorSpeedInt( command.throttle );
-
-		// Debugging print statements
-	//	sendUART1( command.steer );
-	//	sendUART1( command.throttle );
-	//	sendUART1( '\r' );
-	
-		commandReady = 0;
-	}
-
-//
-//	if( commandReady ) {
-//		setServoAngle( command.steer );
-//		setMotorSpeed( command.throttle );
-//	}
-
-	/**	===[Terminal controls]============================ */
-	
-//	switch ( control )
-//	{
-//		case 'w':
-//			motor_speed = motor_speed + 0.5;
-//			printf("Motor Speed: %f\n", motor_speed);
-//			Receiveddata = clearBuffer(Buf, &Buf[0], 80);
-//			break;
-//		case 's':
-//			motor_speed = motor_speed - 0.5;
-//			printf("Motor Speed: %f\n", motor_speed);
-//			Receiveddata = clearBuffer(Buf, &Buf[0], 80);
-//			break;
-//		case 'a':
-//			servo_angle = servo_angle - 5.0;
-//			printf("Servo Angle %f\n", servo_angle);
-//			Receiveddata = clearBuffer(Buf, &Buf[0], 80);
-//			break;
-//		case 'd':
-//			servo_angle = servo_angle + 5.0;
-//			printf("Servo Angle %f\n", servo_angle);
-//			Receiveddata = clearBuffer(Buf, &Buf[0], 80);
-//			break;
-//		default:
-//			// Do nothing
-//			break;			
-//	}
-
-//switch( control ) {
-//	case 'g':
-//		//setMotorPWM( 2100 );
-//		setMotorSpeedInt( 180 );
-//		printf("Motor at PWM 2100\n");
-//		Receiveddata = clearBuffer(Buf, &Buf[0], 80);
-//		break;
-//	case 's':
-//		//setMotorPWM( 1885 );
-//		setMotorSpeedInt( 120 );
-//		printf("Motor at PWM 1885\n");
-//		Receiveddata = clearBuffer(Buf, &Buf[0], 80);
-//		break;
-//	case 'm':
-//		//setMotorPWM( 2000 );
-//		setMotorSpeedInt( 160 );
-//		printf("Motor at PWM 1900\n");
-//		Receiveddata = clearBuffer(Buf, &Buf[0], 80);
-//		break;
-//	default:
-//		break;
+//	commandReady = 0;
 //}
-
-
-
-
-//setMotorSpeedInt( controller );
-	//setMotorSpeed( motor_speed );
-//	setServoAngle( servo_angle );
-	/**	===[End Terminal Controls]======================== */
+//
 }
 	CloseQEI1();
 	CloseQEI2();
@@ -254,11 +188,11 @@ void setup( void ) {
 	TRISBbits.TRISB7 = 1;  
     TRISBbits.TRISB13 = 1; 
 
-	TRISBbits.TRISB9 = 1;		
-	TRISBbits.TRISB8 = 1;
-
     TRISBbits.TRISB5 = 1;   
-    TRISBbits.TRISB15 = 1;
+    TRISBbits.TRISB15 = 1; 
+
+	TRISBbits.TRISB9 = 1;
+	TRISBbits.TRISB8 = 1;
 	
 	AD1PCFGLbits.PCFG4 = 1;	
 	AD1PCFGLbits.PCFG5 = 1;	
@@ -274,12 +208,13 @@ void setup( void ) {
 	_U2RXR = 1;	
 	_RP0R = 0b00101;
 
-	_QEA1R = 7;	
-	_QEB1R = 8;
-		
-	_QEA2R = 13;		// working!		
-	_QEB2R = 9;
+	_QEA1R = 7;			
+	_QEA2R = 13;
 
+	_QEB1R = 8;
+
+	_QEA2R = 13;		// working!
+	_QEB2R = 9;		
 
 	_INT1R = 5;			
 	_INT2R = 15;		

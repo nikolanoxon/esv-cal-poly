@@ -257,3 +257,7 @@ void initUART2( unsigned long baudrate )
 	 *	has been opened.
 	 */
 }
+
+void sendUART2( unsigned int _command ) {
+	U2TXREG = _command;
+}
