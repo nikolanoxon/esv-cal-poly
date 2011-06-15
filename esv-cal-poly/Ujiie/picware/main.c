@@ -127,6 +127,8 @@ if( updateEncoderFlag ) {
 
 	sendUART1( encoder1del );
 	sendUART1( encoder2del );
+	sendUART1( encoder3del );
+	sendUART1( encoder4del );
 	sendUART1( '\r' );
 	updateEncoderFlag = 0;
 }
@@ -236,7 +238,7 @@ void setup( void ) {
 	_RP0R = 0b00101;
 
 	_QEA1R = 7;			
-	_QEB1R = 8;
+	_QEB1R = 8;	// connect encoder to pin 8, not 7
 
 	_QEA2R = 13;		// working!
 	_QEB2R = 9;		

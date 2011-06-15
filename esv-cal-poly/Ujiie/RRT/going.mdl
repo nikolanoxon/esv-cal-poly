@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.93"
+    ComputedModelVersion    "1.94"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -25,9 +25,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "bujiie"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Jun 14 19:10:00 2011"
-  RTWModifiedTimeStamp	  229976475
-  ModelVersionFormat	  "1.%<AutoIncrement:93>"
+  LastModifiedDate	  "Tue Jun 14 19:58:13 2011"
+  RTWModifiedTimeStamp	  229980600
+  ModelVersionFormat	  "1.%<AutoIncrement:94>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -803,8 +803,8 @@ Model {
       Ports		      [1]
       Position		      [460, 74, 490, 106]
       Floating		      off
-      Location		      [3, 648, 819, 1047]
-      Open		      off
+      Location		      [3, 228, 819, 627]
+      Open		      on
       NumInputPorts	      "1"
       ZoomMode		      "yonly"
       List {
@@ -812,8 +812,8 @@ Model {
 	axes1			"%<SignalLabel>"
       }
       TimeRange		      "10"
-      YMin		      "-1"
-      YMax		      "1"
+      YMin		      "0"
+      YMax		      "55"
       DataFormat	      "StructureWithTime"
       SampleTime	      "0"
     }
@@ -898,7 +898,7 @@ Model {
       ComPort		      "COM4"
       ObjConstructor	      "serial('COM4');"
       Terminator	      "CR ('\\r')"
-      DataSize		      "[1  1]"
+      DataSize		      "[1  4]"
       DataType		      "uint8"
       EnableBlockingMode      off
       ActionDataUnavailable   "Output last received value"
@@ -1008,8 +1008,8 @@ Model {
       Ports		      [1]
       Position		      [1390, 184, 1420, 216]
       Floating		      off
-      Location		      [3, 206, 819, 616]
-      Open		      off
+      Location		      [3, 648, 819, 1047]
+      Open		      on
       NumInputPorts	      "1"
       List {
 	ListType		AxesTitles
