@@ -77,41 +77,50 @@ int main ( void )
 
 	setMotorPWM(1885);
 	setServoPWM( 1775 );
-	unsigned int motorPWM = 1885;
-	unsigned int servoPWM = 1775;
+//	unsigned int motorPWM = 1885;
+//	unsigned int servoPWM = 1775;
 while(1)
 {
 	control = *( Receiveddata - 1 );
 	control2 = *( Receiveddata2 - 1 );
 
-	switch( control ) {
-		case 'w':
-			putsUART1("W was pressed\n\r");
-			motorPWM++;
-			setMotorPWM(motorPWM);
-			Receiveddata = clearBuffer(Buf, &Buf[0], 80);
-			break;
-		case 's':
-			putsUART1("S was pressed\n\r");
-			motorPWM--;
-			setMotorPWM(motorPWM);
-			Receiveddata = clearBuffer(Buf, &Buf[0], 80);
-			break;
-		case 'a':
-			putsUART1("A was pressed\n\r");
-			servoPWM++;
-			setServoPWM(servoPWM);
-			Receiveddata = clearBuffer(Buf, &Buf[0], 80);
-			break;
-		case 'd':
-			putsUART1("D was pressed\n\r");
-			servoPWM--;
-			setServoPWM(servoPWM);
-			Receiveddata = clearBuffer(Buf, &Buf[0], 80);
-			break;
-		default:
-			break;
-	}
+//	switch( control ) {
+//		case 'w':
+//			putsUART1("W was pressed\n\r");
+//			motorPWM++;
+//			setMotorPWM(motorPWM);
+//			Receiveddata = clearBuffer(Buf, &Buf[0], 80);
+//			break;
+//		case 's':
+//			putsUART1("S was pressed\n\r");
+//			motorPWM--;
+//			setMotorPWM(motorPWM);
+//			Receiveddata = clearBuffer(Buf, &Buf[0], 80);
+//			break;
+//		case 'a':
+//			putsUART1("A was pressed\n\r");
+//			servoPWM++;
+//			setServoPWM(servoPWM);
+//			Receiveddata = clearBuffer(Buf, &Buf[0], 80);
+//			break;
+//		case 'd':
+//			putsUART1("D was pressed\n\r");
+//			servoPWM--;
+//			setServoPWM(servoPWM);
+//			Receiveddata = clearBuffer(Buf, &Buf[0], 80);
+//			break;
+//		default:
+//			break;
+//	}
+
+if( commandReady ) {
+	setServoAngleInt( command.steer );
+	setMotorSpeedInt( command.throttle );
+	sendUART1( command.steer );
+	sendUART1( command.throttle );
+	sendUART1( '\r' );
+	commandReady = 0;
+}
 
 //	putsUART1("HI THERE\n\r");
 //

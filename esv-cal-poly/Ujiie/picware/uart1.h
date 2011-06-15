@@ -35,6 +35,6 @@
 void __attribute__( ( interrupt, no_auto_psv ) ) _U1TXInterrupt( void );
 void __attribute__( ( interrupt, no_auto_psv ) ) _U1RXInterrupt( void );
 void initUART1( unsigned long baudrate );
-void sendUART1( int );
+void sendUART1( unsigned int );
 
 #endif

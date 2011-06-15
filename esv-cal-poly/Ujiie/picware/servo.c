@@ -105,7 +105,7 @@ void floater( int angle ) {
 }
 
 void setServoAngleInt( unsigned int angle ) {
-	if( angle == 120 ) {
+	if( angle != 120 ) {
 		float fAngle = (float)angle;
 		float setAngle = 0.0;
 		float fPercent = 0.0;

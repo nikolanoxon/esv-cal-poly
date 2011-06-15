@@ -24,7 +24,7 @@ void setMotorPWM( unsigned int duty ) {
 }
 
 void setMotorSpeedInt( unsigned int speed ) {
-	if( speed == 120 ) {
+	if( speed != 120 ) {
 		float fThrottle = (float)speed;
 		float setThrottle = 0.0;
 		float fPercent = 0.0;

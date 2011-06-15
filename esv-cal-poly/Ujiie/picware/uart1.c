@@ -85,29 +85,28 @@ void __attribute__( ( interrupt, no_auto_psv ) ) _U1RXInterrupt( void )
 
 
 		/* Notice Reciveddata pointer is post incremented */
-		( *( Receiveddata )++ ) = U1RXREG;
-
+		//( *( Receiveddata )++ ) = U1RXREG;
 		receivedValue = U1RXREG;
 
-	//	if( !commandReady ) {
-			if( receivedValue == 250 ) {
-				commandCount = 0;
-			}else{
-				switch( commandCount ) {
-					case 0:
-						command.steer = receivedValue;
-						commandCount++;	
-						break;
-					case 1:
-						command.throttle = receivedValue;
-						commandReady = 1;
-						break;
-					default:
-						break;
-				}
+	if( !commandReady ) {
+		if( receivedValue == 250 ) {
+			commandCount = 0;
+		}else {
+			switch( commandCount ) {
+				case 0:
+					command.steer = receivedValue;
+					commandCount++;
+					break;
+				case 1:
+					command.throttle = receivedValue;
+					commandReady = 1;
+					commandCount++;
+					break;
+				default:
+					break;
 			}
-	//	}
-		
+		}
+	}		
 			
 	
 		/*	In order to echo the right character we have to send the char
@@ -242,6 +241,6 @@ void initUART1( unsigned long baudrate )
 	//putsUART1("UART1 started!\r\n");
 }
 
-void sendUART1( int _command ) {
+void sendUART1( unsigned int _command ) {
 	U1TXREG = _command;
 }
