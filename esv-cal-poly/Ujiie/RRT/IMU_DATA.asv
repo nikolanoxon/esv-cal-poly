@@ -20,10 +20,10 @@ function setup(block)
   block.SetPreCompInpPortInfoToDynamic;
   block.SetPreCompOutPortInfoToDynamic;
  
-  block.InputPort(1).Dimensions        = [1 12];     %IMU data in 8 bit ints
+  block.InputPort(1).Dimensions        = [1 2];     %IMU data in 8 bit ints
   block.InputPort(1).DirectFeedthrough = false;
   
-  block.OutputPort(1).Dimensions       = [1 6];    %IMU data in 16 bit ints
+  block.OutputPort(1).Dimensions       = [1 1];    %IMU data in 16 bit ints
   
   %block.OutputPort(2).Dimensions       = 1;
   
@@ -59,18 +59,25 @@ function InitConditions(block)
 
 function Output(block)
 
-  IMUlarge= [0 0 0 0 0 0];  
+  
   %GET THE IMU ARRAY
   IMUsmall = block.InputPort(1).Data;
     
   %CONCATINATE DATA
   
-  IMUlarge(1) = bitor(bitshift(typecast(double(IMUsmall(1)), 'uint8'),8),typecast(double(IMUsmall(2), 'uint8');
-  IMUlarge(2) = bitor(bitshift(IMUsmall(3),8),IMUsmall(4));
-  IMUlarge(3) = bitor(bitshift(IMUsmall(5),8),IMUsmall(6));
-  IMUlarge(4) = bitor(bitshift(IMUsmall(7),8),IMUsmall(8));
-  IMUlarge(5) = bitor(bitshift(IMUsmall(9),8),IMUsmall(10));
-  IMUlarge(6) = bitor(bitshift(IMUsmall(11),8),IMUsmall(12)); 
+    IMUlarge = IMUsmall(1) * (2^8) + IMUsmall(2);
+%     IMUlarge(2) = IMUsmall(3) * (2^8) + IMUsmall(4);
+%     IMUlarge(3) = IMUsmall(5) * (2^8) + IMUsmall(6);
+%     IMUlarge(4) = IMUsmall(7) * (2^8) + IMUsmall(8);
+%     IMUlarge(5) = IMUsmall(9) * (2^8) + IMUsmall(10);
+%     IMUlarge(6) = IMUsmall(11) * (2^8) + IMUsmall(12);
+  
+%   IMUlarge(1) = bitor(bitshift(typecast(double(IMUsmall(1)), 'uint8'),8),typecast(double(IMUsmall(2)), 'uint8'));
+%   IMUlarge(2) = bitor(bitshift(typecast(double(IMUsmall(3)), 'uint8'),8),typecast(double(IMUsmall(4)), 'uint8'));
+%   IMUlarge(3) = bitor(bitshift(typecast(double(IMUsmall(5)), 'uint8'),8),typecast(double(IMUsmall(6)), 'uint8'));
+%   IMUlarge(4) = bitor(bitshift(typecast(double(IMUsmall(7)), 'uint8'),8),typecast(double(IMUsmall(8)), 'uint8'));
+%   IMUlarge(5) = bitor(bitshift(typecast(double(IMUsmall(9)), 'uint8'),8),typecast(double(IMUsmall(10)), 'uint8'));
+%   IMUlarge(6) = bitor(bitshift(typecast(double(IMUsmall(11)), 'uint8'),8),typecast(double(IMUsmall(12)), 'uint8')); 
   
 
     block.OutputPort(1).Data = IMUlarge;
