@@ -1,12 +1,12 @@
 Model {
-  Name			  "going"
+  Name			  "obstacle_holding_file"
   Version		  7.5
   MdlSubVersion		  0
   GraphicalInterface {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.91"
+    ComputedModelVersion    "1.1"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -19,15 +19,15 @@ Model {
   MinMaxOverflowLogging	  "UseLocalSettings"
   MinMaxOverflowArchiveMode "Overwrite"
   MaxMDLFileLineLength	  120
-  Created		  "Sat May 14 18:05:51 2011"
-  Creator		  "TCA"
+  Created		  "Mon Jun 13 20:41:48 2011"
+  Creator		  "bujiie"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "bujiie"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Jun 14 18:02:58 2011"
-  RTWModifiedTimeStamp	  229975318
-  ModelVersionFormat	  "1.%<AutoIncrement:91>"
+  LastModifiedDate	  "Mon Jun 13 20:42:01 2011"
+  RTWModifiedTimeStamp	  229898509
+  ModelVersionFormat	  "1.%<AutoIncrement:1>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -105,14 +105,14 @@ Model {
       Version		      "1.10.0"
       Array {
 	Type			"Handle"
-	Dimension		9
+	Dimension		8
 	Simulink.SolverCC {
 	  $ObjectID		  2
 	  Version		  "1.10.0"
 	  StartTime		  "0.0"
-	  StopTime		  "inf"
+	  StopTime		  "10.0"
 	  AbsTol		  "auto"
-	  FixedStep		  ".05"
+	  FixedStep		  "auto"
 	  InitialStep		  "auto"
 	  MaxNumMinSteps	  "-1"
 	  MaxOrder		  5
@@ -126,8 +126,8 @@ Model {
 	  MaxConsecutiveMinStep	  "1"
 	  RelTol		  "1e-3"
 	  SolverMode		  "Auto"
-	  Solver		  "ode3"
-	  SolverName		  "ode3"
+	  Solver		  "ode45"
+	  SolverName		  "ode45"
 	  SolverJacobianMethodControl "auto"
 	  ShapePreserveControl	  "DisableAll"
 	  ZeroCrossControl	  "UseLocalSettings"
@@ -175,15 +175,14 @@ Model {
 	  Version		  "1.10.0"
 	  Array {
 	    Type		    "Cell"
-	    Dimension		    8
-	    Cell		    "ZeroExternalMemoryAtStartup"
-	    Cell		    "ZeroInternalMemoryAtStartup"
-	    Cell		    "NoFixptDivByZeroProtection"
-	    Cell		    "OptimizeModelRefInitCode"
+	    Dimension		    7
 	    Cell		    "BooleansAsBitfields"
 	    Cell		    "PassReuseOutputArgsAs"
 	    Cell		    "PassReuseOutputArgsThreshold"
-	    Cell		    "UseSpecifiedMinMax"
+	    Cell		    "ZeroExternalMemoryAtStartup"
+	    Cell		    "ZeroInternalMemoryAtStartup"
+	    Cell		    "OptimizeModelRefInitCode"
+	    Cell		    "NoFixptDivByZeroProtection"
 	    PropName		    "DisabledProps"
 	  }
 	  BlockReduction	  on
@@ -213,7 +212,7 @@ Model {
 	  UseTempVars		  off
 	  ZeroExternalMemoryAtStartup on
 	  ZeroInternalMemoryAtStartup on
-	  InitFltsAndDblsToZero	  on
+	  InitFltsAndDblsToZero	  off
 	  NoFixptDivByZeroProtection off
 	  EfficientFloat2IntCast  off
 	  EfficientMapNaN2IntZero on
@@ -294,7 +293,7 @@ Model {
 	  ModelReferenceExtraNoncontSigs "error"
 	  StateNameClashWarn	  "warning"
 	  SimStateInterfaceChecksumMismatchMsg "warning"
-	  StrictBusMsg		  "Warning"
+	  StrictBusMsg		  "ErrorLevel1"
 	  BusNameAdapt		  "WarnAndRepair"
 	  NonBusSignalsTreatedAsBus "none"
 	  LoggingUnavailableSignals "error"
@@ -360,14 +359,13 @@ Model {
 	  Version		  "1.10.0"
 	  Array {
 	    Type		    "Cell"
-	    Dimension		    7
+	    Dimension		    6
 	    Cell		    "IncludeHyperlinkInReport"
 	    Cell		    "GenerateTraceInfo"
 	    Cell		    "GenerateTraceReport"
 	    Cell		    "GenerateTraceReportSl"
 	    Cell		    "GenerateTraceReportSf"
 	    Cell		    "GenerateTraceReportEml"
-	    Cell		    "GenerateSLWebview"
 	    PropName		    "DisabledProps"
 	  }
 	  SystemTargetFile	  "grt.tlc"
@@ -410,8 +408,9 @@ Model {
 	      Version		      "1.10.0"
 	      Array {
 		Type			"Cell"
-		Dimension		21
+		Dimension		19
 		Cell			"IgnoreCustomStorageClasses"
+		Cell			"IgnoreTestpoints"
 		Cell			"InsertBlockDesc"
 		Cell			"SFDataObjDesc"
 		Cell			"SimulinkDataObjDesc"
@@ -424,13 +423,10 @@ Model {
 		Cell			"CustomSymbolStrType"
 		Cell			"CustomSymbolStrField"
 		Cell			"CustomSymbolStrFcn"
+		Cell			"CustomSymbolStrFcnArg"
 		Cell			"CustomSymbolStrBlkIO"
 		Cell			"CustomSymbolStrTmpVar"
 		Cell			"CustomSymbolStrMacro"
-		Cell			"IgnoreTestpoints"
-		Cell			"InsertPolySpaceComments"
-		Cell			"MATLABFcnDesc"
-		Cell			"CustomSymbolStrFcnArg"
 		Cell			"ReqsInCode"
 		PropName		"DisabledProps"
 	      }
@@ -472,7 +468,8 @@ Model {
 	      Version		      "1.10.0"
 	      Array {
 		Type			"Cell"
-		Dimension		16
+		Dimension		17
+		Cell			"GeneratePreprocessorConditionals"
 		Cell			"IncludeMdlTerminateFcn"
 		Cell			"CombineOutputUpdateFcns"
 		Cell			"SuppressErrorStatus"
@@ -483,12 +480,12 @@ Model {
 		Cell			"CPPClassGenCompliant"
 		Cell			"MultiInstanceERTCode"
 		Cell			"PurelyIntegerCode"
-		Cell			"PortableWordSizes"
+		Cell			"SupportNonFinite"
 		Cell			"SupportComplex"
 		Cell			"SupportAbsoluteTime"
 		Cell			"SupportContinuousTime"
 		Cell			"SupportNonInlinedSFcns"
-		Cell			"GeneratePreprocessorConditionals"
+		Cell			"PortableWordSizes"
 		PropName		"DisabledProps"
 	      }
 	      TargetFcnLib	      "ansi_tfl_table_tmw.mat"
@@ -546,17 +543,11 @@ Model {
 	    PropName		    "Components"
 	  }
 	}
-	hdlcoderui.hdlcc {
-	  $ObjectID		  12
-	  Version		  "1.10.0"
-	  Description		  "HDL Coder custom configuration component"
-	  Name			  "HDL Coder"
-	}
 	PropName		"Components"
       }
       Name		      "Configuration"
       CurrentDlgPage	      "Solver"
-      ConfigPrmDlgPosition    " [ 200, 197, 1080, 827 ] "
+      ConfigPrmDlgPosition    " [ 400, 210, 1280, 840 ] "
     }
     PropName		    "ConfigurationSets"
   }
@@ -597,10 +588,6 @@ Model {
   }
   BlockParameterDefaults {
     Block {
-      BlockType		      Clock
-      DisplayTime	      off
-    }
-    Block {
       BlockType		      Constant
       Value		      "1"
       VectorParams1D	      on
@@ -618,35 +605,6 @@ Model {
       PreserveConstantTs      off
     }
     Block {
-      BlockType		      DataStoreMemory
-      ReadBeforeWriteMsg      "none"
-      WriteAfterWriteMsg      "none"
-      WriteAfterReadMsg	      "none"
-      InitialValue	      "0"
-      StateMustResolveToSignalObject off
-      ShowAdditionalParam     off
-      OutMin		      "[]"
-      OutMax		      "[]"
-      DataType		      "auto"
-      OutDataType	      "fixdt(1,16,0)"
-      OutScaling	      "[]"
-      OutDataTypeStr	      "Inherit: auto"
-      LockScale		      off
-      SignalType	      "auto"
-      DataLogging	      off
-      DataLoggingLimitDataPoints off
-      DataLoggingMaxPoints    "5000"
-      DataLoggingDecimateData off
-      DataLoggingDecimation   "2"
-      DataLoggingNameMode     "SignalName"
-    }
-    Block {
-      BlockType		      DataStoreRead
-    }
-    Block {
-      BlockType		      DataStoreWrite
-    }
-    Block {
       BlockType		      DataTypeConversion
       OutMin		      "[]"
       OutMax		      "[]"
@@ -659,16 +617,6 @@ Model {
       RndMeth		      "Zero"
       SaturateOnIntegerOverflow	on
       SampleTime	      "-1"
-    }
-    Block {
-      BlockType		      Derivative
-      LinearizePole	      "inf"
-    }
-    Block {
-      BlockType		      DiscretePulseGenerator
-      PulseType		      "Sample based"
-      TimeSource	      "Use simulation time"
-      VectorParams1D	      on
     }
     Block {
       BlockType		      "M-S-Function"
@@ -693,29 +641,12 @@ Model {
       SampleTime	      "-1"
     }
     Block {
-      BlockType		      Step
-      Time		      "1"
-      Before		      "0"
-      After		      "1"
-      SampleTime	      "-1"
-      VectorParams1D	      on
-      ZeroCross		      on
-    }
-    Block {
       BlockType		      Terminator
-    }
-    Block {
-      BlockType		      ToWorkspace
-      VariableName	      "simulink_output"
-      MaxDataPoints	      "1000"
-      Decimation	      "1"
-      SampleTime	      "0"
-      FixptAsFi		      off
     }
   }
   System {
-    Name		    "going"
-    Location		    [10, 82, 830, 974]
+    Name		    "obstacle_holding_file"
+    Location		    [484, 93, 1020, 365]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -727,155 +658,42 @@ Model {
     TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
     TiledPageScale	    1
     ShowPageBoundaries	    off
-    ZoomFactor		    "110"
+    ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    60
+    SIDHighWatermark	    7
     Block {
-      BlockType		      Clock
-      Name		      "Clock"
-      SID		      33
-      Position		      [910, 530, 930, 550]
-      Decimation	      "10"
-    }
-    Block {
-      BlockType		      Clock
-      Name		      "Clock1"
-      SID		      37
-      Position		      [960, 115, 980, 135]
-      Decimation	      "10"
-    }
-    Block {
-      BlockType		      Reference
-      Name		      "Compare\nTo Zero"
-      SID		      8
-      Ports		      [1, 1]
-      Position		      [790, 470, 820, 500]
-      LibraryVersion	      "1.216"
-      SourceBlock	      "simulink/Logic and Bit\nOperations/Compare\nTo Zero"
-      SourceType	      "Compare To Zero"
-      ShowPortLabels	      "FromPortIcon"
-      SystemSampleTime	      "-1"
-      FunctionWithSeparateData off
-      RTWMemSecFuncInitTerm   "Inherit from model"
-      RTWMemSecFuncExecute    "Inherit from model"
-      RTWMemSecDataConstants  "Inherit from model"
-      RTWMemSecDataInternal   "Inherit from model"
-      RTWMemSecDataParameters "Inherit from model"
-      relop		      ">"
-      LogicOutDataTypeMode    "uint8"
-      ZeroCross		      off
+      BlockType		      "M-S-Function"
+      Name		      "Concatinate the \nObstacle Data"
+      SID		      1
+      Ports		      [2, 1]
+      Position		      [465, 18, 540, 102]
+      FunctionName	      "OBSTACLE"
+      Parameters	      "2"
     }
     Block {
       BlockType		      DataTypeConversion
-      Name		      "Convert\nto a float1"
-      SID		      49
-      Position		      [545, 74, 600, 116]
+      Name		      "Convert\nto a float"
+      SID		      2
+      Position		      [370, 64, 425, 106]
       OutDataTypeMode	      "double"
       OutDataTypeStr	      "double"
     }
     Block {
-      BlockType		      DataTypeConversion
-      Name		      "Convert \nto a float1"
-      SID		      12
-      Position		      [845, 464, 900, 506]
-      OutDataTypeMode	      "double"
-      OutDataTypeStr	      "double"
-    }
-    Block {
-      BlockType		      DataTypeConversion
-      Name		      "Convert to an integer"
-      SID		      40
-      Position		      [1270, 104, 1325, 146]
-      OutDataTypeMode	      "uint8"
-      OutDataTypeStr	      "uint8"
-      SampleTime	      ".05"
-    }
-    Block {
-      BlockType		      Derivative
-      Name		      "Derivative"
-      SID		      13
-      Position		      [730, 470, 760, 500]
-    }
-    Block {
-      BlockType		      Scope
-      Name		      "From PIC"
-      SID		      46
-      Ports		      [1]
-      Position		      [460, 74, 490, 106]
-      Floating		      off
-      Location		      [3, 648, 819, 1047]
-      Open		      on
-      NumInputPorts	      "1"
-      ZoomMode		      "yonly"
-      List {
-	ListType		AxesTitles
-	axes1			"%<SignalLabel>"
-      }
-      TimeRange		      "10"
-      YMin		      "0"
-      YMax		      "180"
-      DataFormat	      "StructureWithTime"
-      SampleTime	      "0"
-    }
-    Block {
-      BlockType		      Constant
-      Name		      "GOAL"
-      SID		      14
-      Position		      [720, 411, 770, 449]
-      Value		      "[2, 50]"
-      VectorParams1D	      off
-    }
-    Block {
-      BlockType		      "M-S-Function"
-      Name		      "Get the necesary \nturn from \nlook-up table"
-      SID		      23
-      Ports		      [3, 1]
-      Position		      [1020, 86, 1105, 164]
-      FunctionName	      "TURN_OUT"
-      Parameters	      "3"
-    }
-    Block {
-      BlockType		      "M-S-Function"
-      Name		      "Level-2 M-file\nS-Function"
-      SID		      15
-      Ports		      [6, 1]
-      Position		      [960, 240, 1125, 565]
-      FunctionName	      "RRT_BLOCK"
-      Parameters	      "6"
-    }
-    Block {
-      BlockType		      "M-S-Function"
-      Name		      "Level-2 M-file\nS-Function1"
-      SID		      48
-      Ports		      [1, 1]
-      Position		      [625, 79, 680, 111]
-      FunctionName	      "IMU_DATA"
-      Parameters	      "1"
-    }
-    Block {
-      BlockType		      Constant
-      Name		      "Obstacle"
-      SID		      16
-      Position		      [580, 226, 650, 264]
-      Value		      "[1.7 20 3 3 0]"
-      VectorParams1D	      off
-    }
-    Block {
       BlockType		      Reference
-      Name		      "PIC"
+      Name		      "PIC1"
       SID		      3
       Ports		      []
-      Position		      [15, 155, 125, 201]
+      Position		      [15, 80, 125, 126]
       Priority		      "-200000"
       LibraryVersion	      "1.84"
       DialogController	      "instrumentcreatedialog"
       DialogControllerArgs    "DataTag0"
       SourceBlock	      "instrumentlib/Serial Configuration"
       SourceType	      "Serial Configuration"
-      ComPortMenu	      "COM4"
-      ComPort		      "COM4"
-      ObjConstructor	      "serial('COM4');"
-      BaudRate		      "115200"
+      ComPortMenu	      "<Please select a port...>"
+      ComPort		      "COM5"
+      ObjConstructor	      "serial('COM5');"
+      BaudRate		      "9600"
       DataBits		      "8"
       Parity		      "none"
       StopBits		      "1"
@@ -884,345 +702,100 @@ Model {
       ByteOrder		      "LittleEndian"
     }
     Block {
-      BlockType		      Reference
-      Name		      "PIC Data"
-      SID		      4
-      Ports		      [0, 2]
-      Position		      [300, 84, 410, 131]
-      LibraryVersion	      "1.84"
-      DialogController	      "instrumentcreatedialog"
-      DialogControllerArgs    "DataTag1"
-      SourceBlock	      "instrumentlib/Serial Receive"
-      SourceType	      "Serial Receive"
-      ComPortMenu	      "COM4"
-      ComPort		      "COM4"
-      ObjConstructor	      "serial('COM4');"
-      Terminator	      "CR ('\\r')"
-      DataSize		      "[1  2]"
-      DataType		      "uint8"
-      EnableBlockingMode      off
-      ActionDataUnavailable   "Output last received value"
-      CustomValue	      "0"
-      SampleTime	      "0.05"
-    }
-    Block {
-      BlockType		      DataStoreMemory
-      Name		      "Path look-up table"
-      SID		      9
-      Position		      [30, 230, 62, 260]
-      DataStoreName	      "Path"
-      ReadBeforeWriteMsg      "warning"
-      WriteAfterWriteMsg      "warning"
-      WriteAfterReadMsg	      "warning"
-      InitialValue	      "zeros(50, 6)"
-      RTWStateStorageClass    "Auto"
-      VectorParams1D	      off
-    }
-    Block {
-      BlockType		      DiscretePulseGenerator
-      Name		      "Pulse\nGenerator"
-      SID		      17
-      Ports		      [0, 1]
-      Position		      [600, 424, 630, 456]
-      PulseType		      "Time based"
-      Amplitude		      "1"
-      Period		      "1"
-      PulseWidth	      "5"
-      PhaseDelay	      "0"
-      SampleTime	      "1"
-    }
-    Block {
       BlockType		      Constant
-      Name		      "ROAD"
-      SID		      18
-      Position		      [800, 353, 855, 397]
-      Value		      "[-3 3]"
-      VectorParams1D	      off
-    }
-    Block {
-      BlockType		      DataStoreRead
-      Name		      "Read Look-up Table"
-      SID		      10
-      Position		      [845, 90, 875, 120]
-      DataStoreName	      "Path"
-      SampleTime	      "0"
-    }
-    Block {
-      BlockType		      Reference
-      Name		      "Real-Time Pacer"
-      SID		      31
-      Ports		      []
-      Position		      [20, 39, 122, 96]
-      BackgroundColor	      "yellow"
-      DropShadow	      on
-      ShowName		      off
-      LibraryVersion	      "1.9"
-      SourceBlock	      "realtime_pacer_lib/Real-Time Pacer"
-      SourceType	      "RealTime_Pacer"
-      simTimePerRealTime      "1"
-    }
-    Block {
-      BlockType		      Reference
-      Name		      "Send Steering Command\nto PIC"
-      SID		      42
-      Ports		      [1]
-      Position		      [1390, 102, 1500, 148]
-      LibraryVersion	      "1.84"
-      DialogController	      "instrumentcreatedialog"
-      DialogControllerArgs    "DataTag2"
-      SourceBlock	      "instrumentlib/Serial Send"
-      SourceType	      "Serial Send"
-      ComPortMenu	      "COM4"
-      ComPort		      "COM4"
-      ObjConstructor	      "serial('COM4');"
-      Header		      "250"
-      Terminator	      "<none>"
-      EnableBlockingMode      off
-    }
-    Block {
-      BlockType		      Step
-      Name		      "Step"
-      SID		      35
-      Position		      [600, 505, 630, 535]
-      Time		      "1.5"
-      SampleTime	      "0"
-    }
-    Block {
-      BlockType		      DataStoreWrite
-      Name		      "Store the path\nto a look-up table"
-      SID		      11
-      Position		      [1160, 390, 1190, 420]
-      DataStoreName	      "Path"
-      SampleTime	      "-1"
-    }
-    Block {
-      BlockType		      Terminator
-      Name		      "Terminator"
-      SID		      7
-      Position		      [465, 130, 485, 150]
+      Name		      "Pre-set Obstacle Data\n[y L]"
+      SID		      4
+      Position		      [190, 12, 265, 48]
+      Value		      "[20, 2]"
+      OutDataType	      "fixdt(1, 16)"
+      OutScaling	      "2^0"
+      SampleTime	      ".05"
     }
     Block {
       BlockType		      Scope
-      Name		      "To PIC"
-      SID		      27
+      Name		      "Scope"
+      SID		      5
       Ports		      [1]
-      Position		      [1390, 184, 1420, 216]
+      Position		      [365, 199, 395, 231]
       Floating		      off
-      Location		      [3, 228, 819, 627]
-      Open		      on
+      Location		      [188, 390, 512, 629]
+      Open		      off
       NumInputPorts	      "1"
       List {
 	ListType		AxesTitles
 	axes1			"%<SignalLabel>"
       }
-      TimeRange		      "10"
-      YMin		      "25"
-      YMax		      "250"
-      SaveName		      "ScopeData4"
+      YMin		      "-1"
+      YMax		      "1"
       DataFormat	      "StructureWithTime"
       SampleTime	      "0"
     }
     Block {
-      BlockType		      ToWorkspace
-      Name		      "To Workspace"
-      SID		      36
-      Ports		      [1]
-      Position		      [950, 15, 1010, 45]
-      VariableName	      "simout"
-      MaxDataPoints	      "inf"
-      SampleTime	      "-1"
-      SaveFormat	      "Array"
+      BlockType		      Terminator
+      Name		      "Terminator1"
+      SID		      6
+      Position		      [295, 125, 315, 145]
     }
     Block {
-      BlockType		      Constant
-      Name		      "Vehicle"
-      SID		      21
-      Position		      [755, 218, 810, 272]
-      Value		      "[1.7 0 0 2]"
-      VectorParams1D	      off
-    }
-    Block {
-      BlockType		      Constant
-      Name		      "Vehicle1"
-      SID		      59
-      Position		      [1140, 29, 1235, 81]
-      Value		      "[250 180 155]"
-      VectorParams1D	      off
+      BlockType		      Reference
+      Name		      "Xiphos"
+      SID		      7
+      Ports		      [0, 2]
+      Position		      [150, 99, 260, 146]
+      LibraryVersion	      "1.84"
+      DialogController	      "instrumentcreatedialog"
+      DialogControllerArgs    "DataTag1"
+      SourceBlock	      "instrumentlib/Serial Receive"
+      SourceType	      "Serial Receive"
+      ComPortMenu	      "<Please select a port...>"
+      ComPort		      "COM5"
+      ObjConstructor	      "serial('COM5');"
+      Terminator	      "CR ('\\r')"
+      DataSize		      "[1  3]"
+      DataType		      "int8"
+      EnableBlockingMode      off
+      ActionDataUnavailable   "Output last received value"
+      CustomValue	      "0"
+      SampleTime	      "0.05"
     }
     Line {
-      SrcBlock		      "PIC Data"
+      SrcBlock		      "Pre-set Obstacle Data\n[y L]"
+      SrcPort		      1
+      Points		      [65, 0; 0, 10]
+      DstBlock		      "Concatinate the \nObstacle Data"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Convert\nto a float"
+      SrcPort		      1
+      Points		      [20, 0]
+      DstBlock		      "Concatinate the \nObstacle Data"
+      DstPort		      2
+    }
+    Line {
+      SrcBlock		      "Xiphos"
       SrcPort		      2
-      Points		      [0, 20]
-      DstBlock		      "Terminator"
+      DstBlock		      "Terminator1"
       DstPort		      1
     }
     Line {
-      SrcBlock		      "Vehicle"
+      SrcBlock		      "Xiphos"
       SrcPort		      1
-      Points		      [0, 20; 50, 0]
+      Points		      [25, 0; 0, -25; 55, 0]
       Branch {
-	DstBlock		"Level-2 M-file\nS-Function"
+	DstBlock		"Convert\nto a float"
 	DstPort			1
       }
       Branch {
-	Points			[0, -115]
-	DstBlock		"Get the necesary \nturn from \nlook-up table"
-	DstPort			3
-      }
-    }
-    Line {
-      SrcBlock		      "ROAD"
-      SrcPort		      1
-      DstBlock		      "Level-2 M-file\nS-Function"
-      DstPort		      3
-    }
-    Line {
-      SrcBlock		      "GOAL"
-      SrcPort		      1
-      DstBlock		      "Level-2 M-file\nS-Function"
-      DstPort		      4
-    }
-    Line {
-      SrcBlock		      "Read Look-up Table"
-      SrcPort		      1
-      Points		      [55, 0]
-      Branch {
-	Points			[70, 0]
-	DstBlock		"Get the necesary \nturn from \nlook-up table"
+	Points			[0, 130]
+	DstBlock		"Scope"
 	DstPort			1
       }
-      Branch {
-	DstBlock		"To Workspace"
-	DstPort			1
-      }
-    }
-    Line {
-      SrcBlock		      "Compare\nTo Zero"
-      SrcPort		      1
-      DstBlock		      "Convert \nto a float1"
-      DstPort		      1
-    }
-    Line {
-      SrcBlock		      "Level-2 M-file\nS-Function"
-      SrcPort		      1
-      DstBlock		      "Store the path\nto a look-up table"
-      DstPort		      1
-    }
-    Line {
-      SrcBlock		      "Convert \nto a float1"
-      SrcPort		      1
-      DstBlock		      "Level-2 M-file\nS-Function"
-      DstPort		      5
-    }
-    Line {
-      SrcBlock		      "Derivative"
-      SrcPort		      1
-      DstBlock		      "Compare\nTo Zero"
-      DstPort		      1
-    }
-    Line {
-      SrcBlock		      "Clock"
-      SrcPort		      1
-      DstBlock		      "Level-2 M-file\nS-Function"
-      DstPort		      6
-    }
-    Line {
-      SrcBlock		      "Clock1"
-      SrcPort		      1
-      DstBlock		      "Get the necesary \nturn from \nlook-up table"
-      DstPort		      2
-    }
-    Line {
-      SrcBlock		      "Step"
-      SrcPort		      1
-      Points		      [20, 0; 0, -35]
-      DstBlock		      "Derivative"
-      DstPort		      1
-    }
-    Line {
-      SrcBlock		      "Convert to an integer"
-      SrcPort		      1
-      Points		      [30, 0]
-      Branch {
-	DstBlock		"Send Steering Command\nto PIC"
-	DstPort			1
-      }
-      Branch {
-	Points			[0, 75]
-	DstBlock		"To PIC"
-	DstPort			1
-      }
-    }
-    Line {
-      SrcBlock		      "Convert\nto a float1"
-      SrcPort		      1
-      DstBlock		      "Level-2 M-file\nS-Function1"
-      DstPort		      1
-    }
-    Line {
-      SrcBlock		      "PIC Data"
-      SrcPort		      1
-      Points		      [30, 0]
-      DstBlock		      "From PIC"
-      DstPort		      1
-    }
-    Line {
-      SrcBlock		      "Obstacle"
-      SrcPort		      1
-      Points		      [55, 0; 0, 75]
-      DstBlock		      "Level-2 M-file\nS-Function"
-      DstPort		      2
-    }
-    Line {
-      SrcBlock		      "Get the necesary \nturn from \nlook-up table"
-      SrcPort		      1
-      DstBlock		      "Convert to an integer"
-      DstPort		      1
-    }
-    Annotation {
-      Name		      "[x y theta V]"
-      Position		      [911, 251]
-    }
-    Annotation {
-      Name		      "[x y L W V]"
-      Position		      [912, 301]
-    }
-    Annotation {
-      Name		      "[left right]"
-      Position		      [917, 363]
-    }
-    Annotation {
-      Name		      "[x y]"
-      Position		      [935, 414]
-    }
-    Annotation {
-      Name		      "Units:  [ft, s, ft/s, rad]"
-      Position		      [62, 18]
-    }
-    Annotation {
-      Name		      "Trigger"
-      Position		      [617, 409]
-    }
-    Annotation {
-      Name		      "Degrees"
-      Position		      [1135, 104]
-    }
-    Annotation {
-      Name		      "Runs Simulink\n in real-time"
-      Position		      [71, 116]
-    }
-    Annotation {
-      Position		      [1045, 116]
     }
   }
 }
 MatData {
-  NumRecords		  3
-  DataRecord {
-    Tag			    DataTag2
-    Data		    "  %)30     .    :     8    (     0         %    \"     $    !     0         .    .     8    (    !     "
-    "     %    \"     $    (     0         0    \"    '-E<FEA;'-B"
-  }
+  NumRecords		  2
   DataRecord {
     Tag			    DataTag1
     Data		    "  %)30     .    :     8    (     0         %    \"     $    !     0         .    .     8    (    !     "

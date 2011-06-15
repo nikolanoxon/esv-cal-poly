@@ -85,7 +85,7 @@ function Output(block)
       end
   end
   
-    SEND(2) = -1*(SEND(2))*120/30+120;
+    SEND(2) = -1*(SEND(2))*120/20+120;
     
     
     
@@ -93,7 +93,8 @@ function Output(block)
     if (TIME > 8)
         SEND(3)= 120;
     else
-        SEND(3) = 3.7702*VEHICLE(4)+134.99;
+         SEND(3) = 145;
+        %SEND(3) = 3.7702*VEHICLE(4)+134.99;
     end
     block.OutputPort(1).Data = SEND;
     %block.OutputPort(1).Data = PATH(1, 4);

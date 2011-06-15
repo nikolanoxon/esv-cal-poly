@@ -97,7 +97,7 @@ while (DONE==0 && FAIL==0)
         hold on
     end
         
-    if (DONE==1)
+    if (DONE==1 && NOGOGO == 0)
         FINAL_PATH=PATH;
         
         CONNECTING_NODE=NODES;     %INITIALIZES THE CONNECTION NODE FROM THE GOAL
