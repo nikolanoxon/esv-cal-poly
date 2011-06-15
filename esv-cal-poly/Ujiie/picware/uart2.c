@@ -23,7 +23,10 @@ char * Receiveddata2 = Buf2;
 unsigned int dataReady = 0;
 unsigned int dataCount = 0;
 
-IMU imu;
+unsigned int receivedValue2;
+unsigned int aFound = 0;
+
+IMU imu = {0, 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0};
 
 /** ==========================================================================
  *	Function: _U1TXInterrupt
@@ -97,68 +100,84 @@ void __attribute__( ( interrupt, no_auto_psv ) ) _U2RXInterrupt( void )
 	 */
 	if(	U2STAbits.URXDA == 1 && U2STAbits.TRMT == 1 );
 	{
-		if( U2RXREG == 'A' ) {
-			dataCount = 0;
-		} else if( U2RXREG == 'Z' ) {
-			dataReady = 1;
-			dataCount = 0;
-		}
+
+		receivedValue2 = U2RXREG;
 
 		if( !dataReady ) {
-			switch( dataCount ) {
-				case 0:
-					// Idle
-					break;
-				case 1:
-					imu.accelX.msb = U2RXREG;
-					break;
-				case 2:	
-					imu.accelX.lsb = U2RXREG;
-					break;
-				case 3:
-					imu.accelY.msb = U2RXREG;
-					break;
-				case 4:
-					imu.accelY.lsb = U2RXREG;
-					break;
-				case 5:
-					imu.accelZ.msb = U2RXREG;
-					break;
-				case 6:	
-					imu.accelZ.lsb = U2RXREG;
-					break;
-				case 7:
-					imu.pitch.msb = U2RXREG;
-					break;
-				case 8:
-					imu.pitch.lsb = U2RXREG;
-					break;
-				case 9:
-					imu.roll.msb = U2RXREG;
-					break;
-				case 10:	
-					imu.roll.lsb = U2RXREG;
-					break;
-				case 11:
-					imu.yaw.msb = U2RXREG;
-					break;
-				case 12:
-					imu.yaw.lsb = U2RXREG;
-					break;
-				default:
-					break;
+			if( receivedValue2 == 'A' && !aFound ) {
+				aFound = 1;
+				dataCount = 1;
+			}else {
+				switch( dataCount ) {
+					case 1:
+						dataCount++;
+						break;
+					case 2:
+						dataCount++;
+						break;
+					case 3:
+						imu.accelX.msb = receivedValue2;
+						dataCount++;
+						break;
+					case 4:	
+						imu.accelX.lsb = receivedValue2;
+						dataCount++;
+						break;
+					case 5:
+						imu.accelZ.msb = receivedValue2;
+						dataCount++;
+						break;
+					case 6:
+						imu.accelZ.lsb = receivedValue2;
+						dataCount++;
+						break;
+					case 7:
+						imu.accelY.msb = receivedValue2;
+						dataCount++;
+						break;
+					case 8:	
+						imu.accelY.lsb = receivedValue2;
+						dataCount++;
+						break;
+					case 9:
+						imu.pitch.msb = receivedValue2;
+						dataCount++;
+						break;
+					case 10:
+						imu.pitch.lsb = receivedValue2;
+						dataCount++;
+						break;
+					case 11:
+						imu.yaw.msb = receivedValue2;
+						dataCount++;
+						break;
+					case 12:	
+						imu.yaw.lsb = receivedValue2;
+						dataCount++;
+						break;
+					case 13:
+						imu.roll.msb = receivedValue2;
+						dataCount++;
+						break;
+					case 14:
+						imu.roll.lsb = receivedValue2;
+						dataReady = 1;
+						aFound = 0;
+						dataCount++;
+						break;
+					default:
+						break;
+				}
 			}
 		}
-		
-		dataCount++;
 
 		/* Notice Reciveddata pointer is post incremented */
-		( *( Receiveddata2 )++ ) = U2RXREG;
+	//	( *( Receiveddata2 )++ ) = U2RXREG;
 
 		/*	In order to echo the right character we have to send the char
 		 *	at (pointer-1)
 		 */
-		U2TXREG = *( Receiveddata2 - 1 );
+	//	U2TXREG = *( Receiveddata2 - 1 );
 	}
 
     

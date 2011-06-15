@@ -242,5 +242,5 @@ void initUART1( unsigned long baudrate )
 }
 
 void sendUART1( unsigned int _command ) {
-	U1TXREG = _command;
+	U1TXREG = _command;	
 }

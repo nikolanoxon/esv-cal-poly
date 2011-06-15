@@ -73,17 +73,21 @@ int main ( void )
 	/*	Begin servo setup */
 	initServo();
 
-	sendUART2("#");
-
 	setMotorPWM(1885);
 	setServoPWM( 1775 );
 //	unsigned int motorPWM = 1885;
 //	unsigned int servoPWM = 1775;
-	putsUART1("Starting...\n\r");
+	unsigned int imuFlag = 1;
+	unsigned int dataSendCounter = 0;
 while(1)
 {
 	control = *( Receiveddata - 1 );
 	control2 = *( Receiveddata2 - 1 );
+
+	if( imuFlag ) {
+		sendUART2('#');
+		imuFlag = 0;
+	}
 
 //	switch( control ) {
 //		case 'w':
@@ -114,6 +118,64 @@ while(1)
 //			break;
 //	}
 
+
+
+
+//if( updateEncoderFlag ) {
+//sendUART1(25);
+//sendUART1(50);
+//sendUART1(75);
+//sendUART1(100);
+//sendUART1(125);
+//sendUART1(150);
+//sendUART1(175);
+//sendUART1(200);
+//sendUART1('\r');
+//updateEncoderFlag = 0;
+//}
+
+
+
+
+//if( updateEncoderFlag ) {
+//	if( dataReady ) {
+//		switch( dataSendCounter ) {
+//			case 0:
+//				sendUART1( imu.accelX.msb );
+//				sendUART1( imu.accelX.lsb );
+//				sendUART1( imu.accelY.msb );
+//				sendUART1( imu.accelY.lsb );
+//				sendUART1( imu.accelZ.msb );
+//				sendUART1( imu.accelZ.lsb );
+//				sendUART1( imu.pitch.msb );
+//				sendUART1( imu.pitch.lsb );
+//				sendUART1( '\r' );
+//				dataReady = 0;
+//				dataSendCounter = 0;
+//				//dataSendCounter++;
+//				break;
+//	//		case 2:
+//	//			sendUART1( imu.roll.msb );
+//	//			sendUART1( imu.roll.lsb );
+//	//			sendUART1( imu.yaw.msb );
+//	//			sendUART1( imu.yaw.lsb );
+//	//			dataSendCounter++;
+//	//			break;
+//	//		case 3:	
+//	//			sendUART1( '\r' );
+//	//			dataSendCounter = 0;
+//	//			dataReady = 0;
+//	//			break;
+//			default:
+//				break;
+//		}
+//	}
+//	updateEncoderFlag = 0;
+//}
+
+
+
+
 if( updateEncoderFlag ) {
 	updateEncoder(1);
 	updateEncoder(2);
@@ -133,14 +195,14 @@ if( updateEncoderFlag ) {
 	updateEncoderFlag = 0;
 }
 
-if( commandReady ) {
-	
-//	setServoAngleInt( command.steer );
-//	setMotorSpeedInt( command.throttle );
-	//sendUART1( command.steer );
-	//sendUART1( command.throttle );
-	commandReady = 0;
-}
+//if( commandReady ) {
+//	
+////	setServoAngleInt( command.steer );
+////	setMotorSpeedInt( command.throttle );
+//	//sendUART1( command.steer );
+//	//sendUART1( command.throttle );
+//	commandReady = 0;
+//}
 
 //	putsUART1("HI THERE\n\r");
 //
