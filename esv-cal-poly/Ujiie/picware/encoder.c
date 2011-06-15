@@ -9,11 +9,11 @@ float totalTicks = 8.0; // number of ticks on encoder wheel
 unsigned int encoder1counter = 0;
 unsigned int encoder2counter = 0;
 
-unsigned int encoder1max = 60000;
-unsigned int encoder2max = 60000;
+unsigned int encoder1max = 250;
+unsigned int encoder2max = 250;
 
-unsigned int qei1max = 60000;
-unsigned int qei2max = 60000;
+unsigned int qei1max = 250;
+unsigned int qei2max = 250;
 
 unsigned int qei1counter = 0;
 unsigned int qei2counter = 0;
@@ -108,24 +108,27 @@ void updateEncoder( int _encoder ) {
 	if( _encoder == 1 ) {
 		encoder1.new = encoder1counter;
 		encoder1.del = encoder1.new - encoder1.old;
-		encoder1.speed = (float)(encoder1.del * encoderUnit * (1.0 /5280.0) * (1.0 / delTime) * 3600.0);
+		encoder1.speed = (float)(encoder1.del) * encoderUnit * (1.0 /5280.0) * (1.0 / delTime) * 3600.0;
 
 	//	printf("New: %d\tOld: %d\tDel: %d\tUnit: %.2f\tTime: %.2f\tSpeed: %.2f\n",encoder1.new,encoder1.old,encoder1.del,encoderUnit,delTime,encoder1.speed); 
 		encoder1.old = encoder1.new;
 	}else if( _encoder == 2 ) {
 		encoder2.new = encoder2counter;
 		encoder2.del = encoder2.new - encoder2.old;
-		encoder2.speed = (float)(encoder2.del * encoderUnit * (1.0 /5280.0) * (1.0 / delTime) * 3600.0);
+		encoder2.speed = (float)(encoder2.del) * encoderUnit * (1.0 /5280.0) * (1.0 / delTime) * 3600.0;
+
 		encoder2.old = encoder2.new;
 	}else if( _encoder == 3 ) {
 		qei1.new = qei1counter;
 		qei1.del = qei1.new - qei1.old;
-		qei1.speed = (float)(qei1.del * encoderUnit * (1.0 / 5280.0) * (1.0 / delTime) * 3600.0);
+		qei1.speed = (float)(qei1.del) * encoderUnit * (1.0 / 5280.0) * (1.0 / delTime) * 3600.0;
+
+	//	printf("New: %d\tOld: %d\tDel: %d\tUnit: %.2f\tTime: %.2f\tSpeed: %.2f\n", qei1.new, qei1.old, qei1.del, encoderUnit, delTime, qei1.speed);
 		qei1.old = qei1.new;
 	}else if( _encoder == 4 ) {
 		qei2.new = qei2counter;
 		qei2.del = qei2.new - qei2.old;
-		qei2.speed = (float)(qei2.del * encoderUnit * (1.0 / 5280.0) * (1.0 / delTime) * 3600.0);
+		qei2.speed = (float)(qei2.del) * encoderUnit * (1.0 / 5280.0) * (1.0 / delTime) * 3600.0;
 		qei2.old = qei2.new;
 	}else{
 		// Do nothing
@@ -188,7 +191,7 @@ int getEncoderOld( int _encoder ) {
 
 float getEncoderSpeed( int _encoder ) {
 
-	unsigned int temp = 0;
+	float temp = 0;
 
 	if( _encoder == 1 ) {
 		temp = encoder1.speed;
@@ -211,6 +214,7 @@ void __attribute__((interrupt, no_auto_psv)) _INT1Interrupt(void)
 	} else {
    		encoder1counter++;
 	}
+	
     IFS1bits.INT1IF = 0;
 }
 
@@ -221,6 +225,7 @@ void __attribute__((interrupt, no_auto_psv)) _INT2Interrupt(void)
 	 } else {
 		encoder2counter++;
 	}
+	
     IFS1bits.INT2IF = 0;
 }
 
@@ -231,6 +236,7 @@ void __attribute__((__interrupt__)) _QEI1Interrupt(void)
 	} else {
    		qei1counter++;
 	}
+
    _QEI1IF = 0;
 } 
 
@@ -240,6 +246,7 @@ void __attribute__((__interrupt__)) _QEI2Interrupt(void) {
 	} else {
 		qei2counter++;
 	}
+	
 	_QEI2IF = 0;
 }
 

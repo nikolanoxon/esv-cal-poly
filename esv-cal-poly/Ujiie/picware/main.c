@@ -79,6 +79,7 @@ int main ( void )
 	setServoPWM( 1775 );
 //	unsigned int motorPWM = 1885;
 //	unsigned int servoPWM = 1775;
+	putsUART1("Starting...\n\r");
 while(1)
 {
 	control = *( Receiveddata - 1 );
@@ -113,12 +114,29 @@ while(1)
 //			break;
 //	}
 
-if( commandReady ) {
-	setServoAngleInt( command.steer );
-	setMotorSpeedInt( command.throttle );
-	sendUART1( command.steer );
-	sendUART1( command.throttle );
+if( updateEncoderFlag ) {
+	updateEncoder(1);
+	updateEncoder(2);
+	updateEncoder(3);
+	updateEncoder(4);
+
+	encoder1del = getEncoderDel(1);
+	encoder2del = getEncoderDel(2);
+	encoder3del = getEncoderDel(3);
+	encoder4del = getEncoderDel(4);
+
+	sendUART1( encoder1del );
+	sendUART1( encoder2del );
 	sendUART1( '\r' );
+	updateEncoderFlag = 0;
+}
+
+if( commandReady ) {
+	
+//	setServoAngleInt( command.steer );
+//	setMotorSpeedInt( command.throttle );
+	//sendUART1( command.steer );
+	//sendUART1( command.throttle );
 	commandReady = 0;
 }
 
@@ -218,8 +236,6 @@ void setup( void ) {
 	_RP0R = 0b00101;
 
 	_QEA1R = 7;			
-	_QEA2R = 13;
-
 	_QEB1R = 8;
 
 	_QEA2R = 13;		// working!
