@@ -20,10 +20,10 @@ function setup(block)
   block.SetPreCompInpPortInfoToDynamic;
   block.SetPreCompOutPortInfoToDynamic;
  
-  block.InputPort(1).Dimensions        = [1 2];     %IMU data in 8 bit ints
+  block.InputPort(1).Dimensions        = [1 8];     %IMU data in 8 bit ints
   block.InputPort(1).DirectFeedthrough = false;
   
-  block.OutputPort(1).Dimensions       = [1 1];    %IMU data in 16 bit ints
+  block.OutputPort(1).Dimensions       = [1 4];    %IMU data in 16 bit ints
   
   %block.OutputPort(2).Dimensions       = 1;
   
@@ -59,16 +59,16 @@ function InitConditions(block)
 
 function Output(block)
 
-  IMUlarge= [0];  
+  
   %GET THE IMU ARRAY
   IMUsmall = block.InputPort(1).Data;
     
   %CONCATINATE DATA
   
-    IMUlarge(1) = IMUsmall(1) * (2^8) + IMUsmall(2);
-%     IMUlarge(2) = IMUsmall(3) * (2^8) + IMUsmall(4);
-%     IMUlarge(3) = IMUsmall(5) * (2^8) + IMUsmall(6);
-%     IMUlarge(4) = IMUsmall(7) * (2^8) + IMUsmall(8);
+     IMUlarge(1) = IMUsmall(1) * (2^8) + IMUsmall(2);
+     IMUlarge(2) = IMUsmall(3) * (2^8) + IMUsmall(4);
+     IMUlarge(3) = IMUsmall(5) * (2^8) + IMUsmall(6);
+     IMUlarge(4) = IMUsmall(7) * (2^8) + IMUsmall(8);
 %     IMUlarge(5) = IMUsmall(9) * (2^8) + IMUsmall(10);
 %     IMUlarge(6) = IMUsmall(11) * (2^8) + IMUsmall(12);
   
