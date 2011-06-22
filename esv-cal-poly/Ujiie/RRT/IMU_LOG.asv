@@ -12,7 +12,7 @@ function setup(block)
   block.NumDialogPrms  = 1;
   
   %% Register number of input and output ports
-  block.NumInputPorts  = 1;
+  block.NumInputPorts  = 2;
   block.NumOutputPorts = 1;
 
   %% Setup functional port properties to dynamically
@@ -20,10 +20,13 @@ function setup(block)
   block.SetPreCompInpPortInfoToDynamic;
   block.SetPreCompOutPortInfoToDynamic;
  
-  block.InputPort(1).Dimensions        = [1 12];     %IMU data in 8 bit ints
+  block.InputPort(1).Dimensions        = [1 6];     %IMU data in 16 bit ints
   block.InputPort(1).DirectFeedthrough = false;
   
-  block.OutputPort(1).Dimensions       = [1 6];    %IMU data in 16 bit ints
+  block.InputPort(2).Dimensions        = [101 6];
+  block.InputPort(2).DirectFeedthrough = false;
+  
+  block.OutputPort(1).Dimensions       = [101 6];    %IMU data in 16 bit ints
   
   %block.OutputPort(2).Dimensions       = 1;
   
@@ -58,36 +61,34 @@ function InitConditions(block)
 %endfunction
 
 function Output(block)
-
   
-  %GET THE IMU ARRAY
-  IMUsmall = block.InputPort(1).Data;
-    
+  %GET THE INPUTS
+  NEW_DATA = block.InputPort(1).Data;
+  LOG = block.InputPort(2).Data;
+  
+  %GET INDEX
+  INDEX = LOG
+  
+  %INITIALIZE LOG ARRAY
+  if LOG(1, 1) == 0
+      LOG(1, 1) = 2;
+  end
+  
+  %OUTPUT LOG IF FILLED
+  if LOG(1, 1) > 101
+      block.OutputPort(1).Data = LOG;
+  else
+      
+  end
+  
   %CONCATINATE DATA
   
      IMUlarge(1) = IMUsmall(1) * (2^8) + IMUsmall(2);
-     IMUlarge(2) = IMUsmall(3) * (2^8) + IMUsmall(4);
-     IMUlarge(3) = IMUsmall(5) * (2^8) + IMUsmall(6);
-     IMUlarge(4) = IMUsmall(7) * (2^8) + IMUsmall(8);
-     IMUlarge(5) = IMUsmall(9) * (2^8) + IMUsmall(10);
-     IMUlarge(6) = IMUsmall(11) * (2^8) + IMUsmall(12);
-      
-  %SCALE DATA
-%   
-%        xshift = 487;
-%        yshift = 481;
-%        zshift = 541;
-%        xscale = .0416;
-%        yscale = .0404;
-%        zscale = .0403;
-%     
-%      IMUlarge(1) = xscale*(IMUlarge(1) - xshift);
-%      IMUlarge(2) = yscale*(IMUlarge(2) - yshift);
-%      IMUlarge(3) = zscale*(IMUlarge(3) - zshift);
-%      
-%      IMUlarge(4) = 0;
-%      IMUlarge(5) = 0;
-%      IMUlarge(6) = 0;
+      IMUlarge(2) = IMUsmall(3) * (2^8) + IMUsmall(4);
+      IMUlarge(3) = IMUsmall(5) * (2^8) + IMUsmall(6);
+      IMUlarge(4) = IMUsmall(7) * (2^8) + IMUsmall(8);
+      IMUlarge(5) = IMUsmall(9) * (2^8) + IMUsmall(10);
+      IMUlarge(6) = IMUsmall(11) * (2^8) + IMUsmall(12);
   
 %   IMUlarge(1) = bitor(bitshift(typecast(double(IMUsmall(1)), 'uint8'),8),typecast(double(IMUsmall(2)), 'uint8'));
 %   IMUlarge(2) = bitor(bitshift(typecast(double(IMUsmall(3)), 'uint8'),8),typecast(double(IMUsmall(4)), 'uint8'));

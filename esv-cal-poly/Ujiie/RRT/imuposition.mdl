@@ -1,12 +1,55 @@
 Model {
-  Name			  "going"
+  Name			  "imuposition"
   Version		  7.5
   MdlSubVersion		  0
   GraphicalInterface {
-    NumRootInports	    0
-    NumRootOutports	    0
+    NumRootInports	    1
+    Inport {
+      Name		      "Input"
+    }
+    NumRootOutports	    8
+    Outport {
+      BusObject		      ""
+      BusOutputAsStruct	      "off"
+      Name		      "X acceleration"
+    }
+    Outport {
+      BusObject		      ""
+      BusOutputAsStruct	      "off"
+      Name		      "Y acceleration"
+    }
+    Outport {
+      BusObject		      ""
+      BusOutputAsStruct	      "off"
+      Name		      "X position"
+    }
+    Outport {
+      BusObject		      ""
+      BusOutputAsStruct	      "off"
+      Name		      "Y position"
+    }
+    Outport {
+      BusObject		      ""
+      BusOutputAsStruct	      "off"
+      Name		      "Speed"
+    }
+    Outport {
+      BusObject		      ""
+      BusOutputAsStruct	      "off"
+      Name		      "Theta"
+    }
+    Outport {
+      BusObject		      ""
+      BusOutputAsStruct	      "off"
+      Name		      "Roll acceleration"
+    }
+    Outport {
+      BusObject		      ""
+      BusOutputAsStruct	      "off"
+      Name		      "Pitch acceleration"
+    }
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.102"
+    ComputedModelVersion    "1.112"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -25,9 +68,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "meuser"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Jun 21 18:01:05 2011"
-  RTWModifiedTimeStamp	  230579984
-  ModelVersionFormat	  "1.%<AutoIncrement:102>"
+  LastModifiedDate	  "Tue Jun 21 17:54:06 2011"
+  RTWModifiedTimeStamp	  230129627
+  ModelVersionFormat	  "1.%<AutoIncrement:112>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -597,10 +640,6 @@ Model {
   }
   BlockParameterDefaults {
     Block {
-      BlockType		      Clock
-      DisplayTime	      off
-    }
-    Block {
       BlockType		      Constant
       Value		      "1"
       VectorParams1D	      on
@@ -616,35 +655,6 @@ Model {
       SampleTime	      "inf"
       FramePeriod	      "inf"
       PreserveConstantTs      off
-    }
-    Block {
-      BlockType		      DataStoreMemory
-      ReadBeforeWriteMsg      "none"
-      WriteAfterWriteMsg      "none"
-      WriteAfterReadMsg	      "none"
-      InitialValue	      "0"
-      StateMustResolveToSignalObject off
-      ShowAdditionalParam     off
-      OutMin		      "[]"
-      OutMax		      "[]"
-      DataType		      "auto"
-      OutDataType	      "fixdt(1,16,0)"
-      OutScaling	      "[]"
-      OutDataTypeStr	      "Inherit: auto"
-      LockScale		      off
-      SignalType	      "auto"
-      DataLogging	      off
-      DataLoggingLimitDataPoints off
-      DataLoggingMaxPoints    "5000"
-      DataLoggingDecimateData off
-      DataLoggingDecimation   "2"
-      DataLoggingNameMode     "SignalName"
-    }
-    Block {
-      BlockType		      DataStoreRead
-    }
-    Block {
-      BlockType		      DataStoreWrite
     }
     Block {
       BlockType		      DataTypeConversion
@@ -665,16 +675,6 @@ Model {
       Outputs		      "4"
       DisplayOption	      "none"
       BusSelectionMode	      off
-    }
-    Block {
-      BlockType		      Derivative
-      LinearizePole	      "inf"
-    }
-    Block {
-      BlockType		      DiscretePulseGenerator
-      PulseType		      "Sample based"
-      TimeSource	      "Use simulation time"
-      VectorParams1D	      on
     }
     Block {
       BlockType		      DotProduct
@@ -731,6 +731,14 @@ Model {
       BlockType		      "M-S-Function"
       FunctionName	      "mlfile"
       DisplayMFileStacktrace  on
+    }
+    Block {
+      BlockType		      Mux
+      Inputs		      "4"
+      DisplayOption	      "none"
+      UseBusObject	      off
+      BusObject		      "BusObject"
+      NonVirtualBus	      off
     }
     Block {
       BlockType		      Outport
@@ -839,18 +847,10 @@ Model {
     Block {
       BlockType		      Terminator
     }
-    Block {
-      BlockType		      ToWorkspace
-      VariableName	      "simulink_output"
-      MaxDataPoints	      "1000"
-      Decimation	      "1"
-      SampleTime	      "0"
-      FixptAsFi		      off
-    }
   }
   System {
-    Name		    "going"
-    Location		    [2, 82, 1270, 961]
+    Name		    "imuposition"
+    Location		    [10, 82, 1206, 991]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -864,79 +864,40 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "110"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    96
+    SIDHighWatermark	    132
     Block {
-      BlockType		      Clock
-      Name		      "Clock"
-      SID		      33
-      Position		      [910, 530, 930, 550]
-      Decimation	      "10"
-    }
-    Block {
-      BlockType		      Clock
-      Name		      "Clock1"
-      SID		      37
-      Position		      [960, 115, 980, 135]
-      Decimation	      "10"
-    }
-    Block {
-      BlockType		      Reference
-      Name		      "Compare\nTo Zero"
-      SID		      8
-      Ports		      [1, 1]
-      Position		      [790, 470, 820, 500]
-      LibraryVersion	      "1.216"
-      SourceBlock	      "simulink/Logic and Bit\nOperations/Compare\nTo Zero"
-      SourceType	      "Compare To Zero"
-      ShowPortLabels	      "FromPortIcon"
-      SystemSampleTime	      "-1"
-      FunctionWithSeparateData off
-      RTWMemSecFuncInitTerm   "Inherit from model"
-      RTWMemSecFuncExecute    "Inherit from model"
-      RTWMemSecDataConstants  "Inherit from model"
-      RTWMemSecDataInternal   "Inherit from model"
-      RTWMemSecDataParameters "Inherit from model"
-      relop		      ">"
-      LogicOutDataTypeMode    "uint8"
-      ZeroCross		      off
+      BlockType		      Inport
+      Name		      "Input"
+      SID		      132
+      Position		      [285, 368, 315, 382]
+      IconDisplay	      "Port number"
+      OutDataType	      "fixdt(1, 16)"
+      OutScaling	      "2^0"
     }
     Block {
       BlockType		      DataTypeConversion
       Name		      "Convert\nto a float1"
       SID		      49
-      Position		      [545, 74, 600, 116]
+      Position		      [435, 74, 490, 116]
       OutDataTypeMode	      "double"
       OutDataTypeStr	      "double"
     }
     Block {
-      BlockType		      DataTypeConversion
-      Name		      "Convert \nto a float1"
-      SID		      12
-      Position		      [845, 464, 900, 506]
-      OutDataTypeMode	      "double"
-      OutDataTypeStr	      "double"
-    }
-    Block {
-      BlockType		      DataTypeConversion
-      Name		      "Convert to an integer"
-      SID		      40
-      Position		      [1270, 104, 1325, 146]
-      OutDataTypeMode	      "uint8"
-      OutDataTypeStr	      "uint8"
-      SampleTime	      ".05"
-    }
-    Block {
-      BlockType		      Derivative
-      Name		      "Derivative"
-      SID		      13
-      Position		      [730, 470, 760, 500]
+      BlockType		      Demux
+      Name		      "Demux"
+      SID		      65
+      Ports		      [1, 6]
+      Position		      [350, 218, 355, 532]
+      ShowName		      off
+      Outputs		      "6"
+      DisplayOption	      "bar"
     }
     Block {
       BlockType		      Scope
       Name		      "From PIC"
       SID		      46
       Ports		      [1]
-      Position		      [475, 14, 505, 46]
+      Position		      [365, 14, 395, 46]
       Floating		      off
       Location		      [459, 597, 1275, 996]
       Open		      off
@@ -952,68 +913,23 @@ Model {
       SampleTime	      "0"
     }
     Block {
-      BlockType		      Scope
-      Name		      "From PIC1"
-      SID		      61
-      Ports		      [1]
-      Position		      [740, 79, 770, 111]
-      Floating		      off
-      Location		      [418, 153, 1234, 552]
-      Open		      off
-      NumInputPorts	      "1"
-      List {
-	ListType		AxesTitles
-	axes1			"%<SignalLabel>"
-      }
-      TimeRange		      "10"
-      YMin		      "-22.5"
-      YMax		      "12.5"
-      SaveName		      "ScopeData1"
-      DataFormat	      "StructureWithTime"
-      SampleTime	      "0"
-    }
-    Block {
-      BlockType		      Constant
-      Name		      "GOAL"
-      SID		      14
-      Position		      [720, 411, 770, 449]
-      Value		      "[2, 50]"
-      VectorParams1D	      off
-    }
-    Block {
-      BlockType		      "M-S-Function"
-      Name		      "Get the necesary \nturn from \nlook-up table"
-      SID		      23
-      Ports		      [3, 1]
-      Position		      [1020, 86, 1105, 164]
-      FunctionName	      "TURN_OUT"
-      Parameters	      "3"
-    }
-    Block {
-      BlockType		      "M-S-Function"
-      Name		      "Level-2 M-file\nS-Function"
-      SID		      15
-      Ports		      [6, 1]
-      Position		      [960, 240, 1125, 565]
-      FunctionName	      "RRT_BLOCK"
-      Parameters	      "6"
-    }
-    Block {
       BlockType		      "M-S-Function"
       Name		      "Level-2 M-file\nS-Function1"
       SID		      48
       Ports		      [1, 1]
-      Position		      [625, 79, 680, 111]
+      Position		      [515, 79, 570, 111]
       FunctionName	      "IMU_DATA"
       Parameters	      "1"
     }
     Block {
-      BlockType		      Constant
-      Name		      "Obstacle"
-      SID		      16
-      Position		      [580, 301, 650, 339]
-      Value		      "[1.7 20 3 3 0]"
-      VectorParams1D	      off
+      BlockType		      Mux
+      Name		      "Mux"
+      SID		      85
+      Ports		      [6, 1]
+      Position		      [230, 217, 240, 533]
+      ShowName		      off
+      Inputs		      "6"
+      DisplayOption	      "bar"
     }
     Block {
       BlockType		      Reference
@@ -1043,7 +959,7 @@ Model {
       Name		      "PIC Data"
       SID		      4
       Ports		      [0, 2]
-      Position		      [300, 88, 410, 137]
+      Position		      [190, 88, 300, 137]
       LibraryVersion	      "1.84"
       DialogController	      "instrumentcreatedialog"
       DialogControllerArgs    "DataTag1"
@@ -1061,46 +977,12 @@ Model {
       SampleTime	      ".05"
     }
     Block {
-      BlockType		      DataStoreMemory
-      Name		      "Path look-up table"
-      SID		      9
-      Position		      [30, 230, 62, 260]
-      DataStoreName	      "Path"
-      ReadBeforeWriteMsg      "warning"
-      WriteAfterWriteMsg      "warning"
-      WriteAfterReadMsg	      "warning"
-      InitialValue	      "zeros(50, 6)"
-      RTWStateStorageClass    "Auto"
-      VectorParams1D	      off
-    }
-    Block {
-      BlockType		      DiscretePulseGenerator
-      Name		      "Pulse\nGenerator"
-      SID		      17
-      Ports		      [0, 1]
-      Position		      [600, 424, 630, 456]
-      PulseType		      "Time based"
-      Amplitude		      "1"
-      Period		      "1"
-      PulseWidth	      "5"
-      PhaseDelay	      "0"
-      SampleTime	      "1"
-    }
-    Block {
       BlockType		      Constant
-      Name		      "ROAD"
-      SID		      18
-      Position		      [800, 353, 855, 397]
-      Value		      "[-3 3]"
-      VectorParams1D	      off
-    }
-    Block {
-      BlockType		      DataStoreRead
-      Name		      "Read Look-up Table"
-      SID		      10
-      Position		      [845, 90, 875, 120]
-      DataStoreName	      "Path"
-      SampleTime	      "0"
+      Name		      "Pitch"
+      SID		      83
+      Position		      [150, 435, 180, 465]
+      OutDataType	      "fixdt(1, 16)"
+      OutScaling	      "2^0"
     }
     Block {
       BlockType		      Reference
@@ -1117,45 +999,87 @@ Model {
       simTimePerRealTime      "1"
     }
     Block {
-      BlockType		      Reference
-      Name		      "Send Steering Command\nto PIC"
-      SID		      42
-      Ports		      [1]
-      Position		      [1390, 102, 1500, 148]
-      LibraryVersion	      "1.84"
-      DialogController	      "instrumentcreatedialog"
-      DialogControllerArgs    "DataTag2"
-      SourceBlock	      "instrumentlib/Serial Send"
-      SourceType	      "Serial Send"
-      ComPortMenu	      "COM6"
-      ComPort		      "COM6"
-      ObjConstructor	      "serial('COM6');"
-      Header		      "250"
-      Terminator	      "<none>"
-      EnableBlockingMode      off
+      BlockType		      Constant
+      Name		      "Roll"
+      SID		      82
+      Position		      [150, 385, 180, 415]
+      OutDataType	      "fixdt(1, 16)"
+      OutScaling	      "2^0"
     }
     Block {
-      BlockType		      Step
-      Name		      "Step"
-      SID		      35
-      Position		      [600, 505, 630, 535]
-      Time		      "1.5"
-      SampleTime	      "0"
+      BlockType		      Sum
+      Name		      "Sum"
+      SID		      87
+      Ports		      [2, 1]
+      Position		      [750, 240, 770, 260]
+      ShowName		      off
+      IconShape		      "round"
+      Inputs		      "|++"
+      InputSameDT	      off
+      OutDataTypeMode	      "Inherit via internal rule"
+      OutDataType	      "fixdt(1, 16)"
+      OutScaling	      "2^0"
+      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
     }
     Block {
-      BlockType		      DataStoreWrite
-      Name		      "Store the path\nto a look-up table"
-      SID		      11
-      Position		      [1160, 390, 1190, 420]
-      DataStoreName	      "Path"
-      SampleTime	      "-1"
+      BlockType		      Sum
+      Name		      "Sum1"
+      SID		      88
+      Ports		      [2, 1]
+      Position		      [805, 290, 825, 310]
+      ShowName		      off
+      IconShape		      "round"
+      Inputs		      "|++"
+      InputSameDT	      off
+      OutDataTypeMode	      "Inherit via internal rule"
+      OutDataType	      "fixdt(1, 16)"
+      OutScaling	      "2^0"
+      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
+    }
+    Block {
+      BlockType		      Sum
+      Name		      "Sum3"
+      SID		      100
+      Ports		      [2, 1]
+      Position		      [860, 395, 880, 415]
+      ShowName		      off
+      IconShape		      "round"
+      Inputs		      "|++"
+      InputSameDT	      off
+      OutDataTypeMode	      "Inherit via internal rule"
+      OutDataType	      "fixdt(1, 16)"
+      OutScaling	      "2^0"
+      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
+    }
+    Block {
+      BlockType		      Terminator
+      Name		      "Terminator"
+      SID		      7
+      Position		      [355, 130, 375, 150]
+    }
+    Block {
+      BlockType		      Terminator
+      Name		      "Terminator1"
+      SID		      101
+      Position		      [520, 340, 540, 360]
+    }
+    Block {
+      BlockType		      Constant
+      Name		      "Thetainitial"
+      SID		      99
+      Position		      [630, 675, 660, 705]
+      OutDataType	      "fixdt(1, 16)"
+      OutScaling	      "2^0"
     }
     Block {
       BlockType		      SubSystem
-      Name		      "Subsystem"
-      SID		      65
-      Ports		      [1, 8]
-      Position		      [335, 311, 435, 469]
+      Name		      "Vector Mult"
+      SID		      115
+      Ports		      [2, 1]
+      Position		      [625, 332, 665, 378]
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
       RTWSystemCode	      "Auto"
@@ -1164,9 +1088,9 @@ Model {
       RequestExecContextInheritance off
       MaskHideContents	      off
       System {
-	Name			"Subsystem"
-	Location		[306, 286, 1065, 930]
-	Open			on
+	Name			"Vector Mult"
+	Location		[746, 126, 1120, 298]
+	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
@@ -1180,658 +1104,294 @@ Model {
 	ZoomFactor		"100"
 	Block {
 	  BlockType		  Inport
-	  Name			  "Input"
-	  SID			  66
-	  Position		  [25, 248, 55, 262]
+	  Name			  "X-vel"
+	  SID			  116
+	  Position		  [15, 28, 45, 42]
 	  IconDisplay		  "Port number"
 	}
 	Block {
-	  BlockType		  Demux
-	  Name			  "Demux"
-	  SID			  67
-	  Ports			  [1, 6]
-	  Position		  [80, 98, 85, 412]
-	  ShowName		  off
-	  Outputs		  "6"
-	  DisplayOption		  "bar"
-	}
-	Block {
-	  BlockType		  Sum
-	  Name			  "Sum"
-	  SID			  68
-	  Ports			  [2, 1]
-	  Position		  [480, 120, 500, 140]
-	  ShowName		  off
-	  IconShape		  "round"
-	  Inputs		  "|++"
-	  InputSameDT		  off
-	  OutDataTypeMode	  "Inherit via internal rule"
-	  OutDataType		  "fixdt(1, 16)"
-	  OutScaling		  "2^0"
-	  OutDataTypeStr	  "Inherit: Inherit via internal rule"
-	  SaturateOnIntegerOverflow off
-	}
-	Block {
-	  BlockType		  Sum
-	  Name			  "Sum1"
-	  SID			  69
-	  Ports			  [2, 1]
-	  Position		  [535, 170, 555, 190]
-	  ShowName		  off
-	  IconShape		  "round"
-	  Inputs		  "|++"
-	  InputSameDT		  off
-	  OutDataTypeMode	  "Inherit via internal rule"
-	  OutDataType		  "fixdt(1, 16)"
-	  OutScaling		  "2^0"
-	  OutDataTypeStr	  "Inherit: Inherit via internal rule"
-	  SaturateOnIntegerOverflow off
-	}
-	Block {
-	  BlockType		  Sum
-	  Name			  "Sum3"
-	  SID			  70
-	  Ports			  [2, 1]
-	  Position		  [590, 370, 610, 390]
-	  ShowName		  off
-	  IconShape		  "round"
-	  Inputs		  "|++"
-	  InputSameDT		  off
-	  OutDataTypeMode	  "Inherit via internal rule"
-	  OutDataType		  "fixdt(1, 16)"
-	  OutScaling		  "2^0"
-	  OutDataTypeStr	  "Inherit: Inherit via internal rule"
-	  SaturateOnIntegerOverflow off
-	}
-	Block {
-	  BlockType		  Terminator
-	  Name			  "Terminator1"
-	  SID			  71
-	  Position		  [250, 220, 270, 240]
-	}
-	Block {
-	  BlockType		  Constant
-	  Name			  "Thetainitial"
-	  SID			  72
-	  Position		  [360, 545, 390, 575]
-	  OutDataType		  "fixdt(1, 16)"
-	  OutScaling		  "2^0"
-	}
-	Block {
-	  BlockType		  SubSystem
-	  Name			  "Vector Mult"
-	  SID			  73
-	  Ports			  [2, 1]
-	  Position		  [355, 214, 395, 261]
-	  MinAlgLoopOccurrences	  off
-	  PropExecContextOutsideSubsystem off
-	  RTWSystemCode		  "Auto"
-	  FunctionWithSeparateData off
-	  Opaque		  off
-	  RequestExecContextInheritance	off
-	  MaskHideContents	  off
-	  System {
-	    Name		    "Vector Mult"
-	    Location		    [746, 126, 1120, 298]
-	    Open		    off
-	    ModelBrowserVisibility  off
-	    ModelBrowserWidth	    200
-	    ScreenColor		    "white"
-	    PaperOrientation	    "landscape"
-	    PaperPositionMode	    "auto"
-	    PaperType		    "usletter"
-	    PaperUnits		    "inches"
-	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
-	    TiledPageScale	    1
-	    ShowPageBoundaries	    off
-	    ZoomFactor		    "100"
-	    Block {
-	      BlockType		      Inport
-	      Name		      "X-vel"
-	      SID		      74
-	      Position		      [15, 28, 45, 42]
-	      IconDisplay	      "Port number"
-	    }
-	    Block {
-	      BlockType		      Inport
-	      Name		      "Y-vel"
-	      SID		      75
-	      Position		      [15, 93, 45, 107]
-	      Port		      "2"
-	      IconDisplay	      "Port number"
-	    }
-	    Block {
-	      BlockType		      DotProduct
-	      Name		      "Dot Product"
-	      SID		      76
-	      Position		      [80, 27, 110, 58]
-	      OutputDataTypeScalingMode	"Inherit via internal rule"
-	      OutDataType	      "fixdt(1, 16)"
-	      OutScaling	      "2^-10"
-	      OutDataTypeStr	      "Inherit: Inherit via internal rule"
-	    }
-	    Block {
-	      BlockType		      DotProduct
-	      Name		      "Dot Product1"
-	      SID		      77
-	      Position		      [80, 92, 110, 123]
-	      OutputDataTypeScalingMode	"Inherit via internal rule"
-	      OutDataType	      "fixdt(1, 16)"
-	      OutScaling	      "2^-10"
-	      OutDataTypeStr	      "Inherit: Inherit via internal rule"
-	    }
-	    Block {
-	      BlockType		      Sqrt
-	      Name		      "Sqrt"
-	      SID		      78
-	      Position		      [230, 30, 260, 60]
-	    }
-	    Block {
-	      BlockType		      Sum
-	      Name		      "Sum2"
-	      SID		      79
-	      Ports		      [2, 1]
-	      Position		      [165, 35, 185, 55]
-	      ShowName		      off
-	      IconShape		      "round"
-	      Inputs		      "|++"
-	      InputSameDT	      off
-	      OutDataTypeMode	      "Inherit via internal rule"
-	      OutDataType	      "fixdt(1, 16)"
-	      OutScaling	      "2^0"
-	      OutDataTypeStr	      "Inherit: Inherit via internal rule"
-	      SaturateOnIntegerOverflow	off
-	    }
-	    Block {
-	      BlockType		      Outport
-	      Name		      "Speed"
-	      SID		      80
-	      Position		      [285, 38, 315, 52]
-	      IconDisplay	      "Port number"
-	    }
-	    Line {
-	      SrcBlock		      "Dot Product1"
-	      SrcPort		      1
-	      Points		      [60, 0]
-	      DstBlock		      "Sum2"
-	      DstPort		      2
-	    }
-	    Line {
-	      SrcBlock		      "Dot Product"
-	      SrcPort		      1
-	      DstBlock		      "Sum2"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "Sum2"
-	      SrcPort		      1
-	      DstBlock		      "Sqrt"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "X-vel"
-	      SrcPort		      1
-	      Points		      [15, 0]
-	      Branch {
-		DstBlock		"Dot Product"
-		DstPort			1
-	      }
-	      Branch {
-		DstBlock		"Dot Product"
-		DstPort			2
-	      }
-	    }
-	    Line {
-	      SrcBlock		      "Sqrt"
-	      SrcPort		      1
-	      DstBlock		      "Speed"
-	      DstPort		      1
-	    }
-	    Line {
-	      SrcBlock		      "Y-vel"
-	      SrcPort		      1
-	      Points		      [10, 0]
-	      Branch {
-		DstBlock		"Dot Product1"
-		DstPort			1
-	      }
-	      Branch {
-		Points			[0, 15]
-		DstBlock		"Dot Product1"
-		DstPort			2
-	      }
-	    }
-	  }
-	}
-	Block {
-	  BlockType		  Integrator
-	  Name			  "X: accel to speed"
-	  SID			  81
-	  Ports			  [1, 1]
-	  Position		  [245, 115, 275, 145]
-	}
-	Block {
-	  BlockType		  Integrator
-	  Name			  "X: speed to pos"
-	  SID			  82
-	  Ports			  [1, 1]
-	  Position		  [360, 115, 390, 145]
-	}
-	Block {
-	  BlockType		  Constant
-	  Name			  "Xinitial"
-	  SID			  83
-	  Position		  [360, 435, 390, 465]
-	  OutDataType		  "fixdt(1, 16)"
-	  OutScaling		  "2^0"
-	}
-	Block {
-	  BlockType		  Integrator
-	  Name			  "Y: accel to speed"
-	  SID			  84
-	  Ports			  [1, 1]
-	  Position		  [245, 165, 275, 195]
-	}
-	Block {
-	  BlockType		  Integrator
-	  Name			  "Y: speed to pos"
-	  SID			  85
-	  Ports			  [1, 1]
-	  Position		  [360, 165, 390, 195]
-	}
-	Block {
-	  BlockType		  Integrator
-	  Name			  "Yaw: accel to speed"
-	  SID			  86
-	  Ports			  [1, 1]
-	  Position		  [245, 365, 275, 395]
-	}
-	Block {
-	  BlockType		  Integrator
-	  Name			  "Yaw: speed to pos"
-	  SID			  87
-	  Ports			  [1, 1]
-	  Position		  [360, 365, 390, 395]
-	}
-	Block {
-	  BlockType		  Constant
-	  Name			  "Yinitial"
-	  SID			  88
-	  Position		  [360, 490, 390, 520]
-	  Value			  "-3"
-	  OutDataType		  "fixdt(1, 16)"
-	  OutScaling		  "2^0"
-	}
-	Block {
-	  BlockType		  Outport
-	  Name			  "x acceleration"
-	  SID			  89
-	  Position		  [650, 38, 680, 52]
-	  IconDisplay		  "Port number"
-	}
-	Block {
-	  BlockType		  Outport
-	  Name			  "y acceleration"
-	  SID			  90
-	  Position		  [650, 78, 680, 92]
+	  BlockType		  Inport
+	  Name			  "Y-vel"
+	  SID			  119
+	  Position		  [15, 93, 45, 107]
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	}
 	Block {
-	  BlockType		  Outport
-	  Name			  "roll acceleration"
-	  SID			  94
-	  Position		  [650, 273, 680, 287]
-	  Port			  "3"
-	  IconDisplay		  "Port number"
+	  BlockType		  DotProduct
+	  Name			  "Dot Product"
+	  SID			  111
+	  Position		  [80, 27, 110, 58]
+	  OutputDataTypeScalingMode "Inherit via internal rule"
+	  OutDataType		  "fixdt(1, 16)"
+	  OutScaling		  "2^-10"
+	  OutDataTypeStr	  "Inherit: Inherit via internal rule"
+	}
+	Block {
+	  BlockType		  DotProduct
+	  Name			  "Dot Product1"
+	  SID			  112
+	  Position		  [80, 92, 110, 123]
+	  OutputDataTypeScalingMode "Inherit via internal rule"
+	  OutDataType		  "fixdt(1, 16)"
+	  OutScaling		  "2^-10"
+	  OutDataTypeStr	  "Inherit: Inherit via internal rule"
+	}
+	Block {
+	  BlockType		  Sqrt
+	  Name			  "Sqrt"
+	  SID			  114
+	  Position		  [230, 30, 260, 60]
+	}
+	Block {
+	  BlockType		  Sum
+	  Name			  "Sum2"
+	  SID			  113
+	  Ports			  [2, 1]
+	  Position		  [165, 35, 185, 55]
+	  ShowName		  off
+	  IconShape		  "round"
+	  Inputs		  "|++"
+	  InputSameDT		  off
+	  OutDataTypeMode	  "Inherit via internal rule"
+	  OutDataType		  "fixdt(1, 16)"
+	  OutScaling		  "2^0"
+	  OutDataTypeStr	  "Inherit: Inherit via internal rule"
+	  SaturateOnIntegerOverflow off
 	}
 	Block {
 	  BlockType		  Outport
-	  Name			  "pitch acceleration"
-	  SID			  95
-	  Position		  [650, 323, 680, 337]
-	  Port			  "4"
-	  IconDisplay		  "Port number"
-	}
-	Block {
-	  BlockType		  Outport
-	  Name			  "x position"
-	  SID			  91
-	  Position		  [650, 123, 680, 137]
-	  Port			  "5"
-	  IconDisplay		  "Port number"
-	}
-	Block {
-	  BlockType		  Outport
-	  Name			  "y position"
-	  SID			  92
-	  Position		  [650, 173, 680, 187]
-	  Port			  "6"
-	  IconDisplay		  "Port number"
-	}
-	Block {
-	  BlockType		  Outport
-	  Name			  "theta"
-	  SID			  96
-	  Position		  [650, 373, 680, 387]
-	  Port			  "7"
-	  IconDisplay		  "Port number"
-	}
-	Block {
-	  BlockType		  Outport
-	  Name			  "speed"
-	  SID			  93
-	  Position		  [650, 233, 680, 247]
-	  Port			  "8"
+	  Name			  "Speed"
+	  SID			  117
+	  Position		  [285, 38, 315, 52]
 	  IconDisplay		  "Port number"
 	}
 	Line {
-	  SrcBlock		  "Demux"
+	  SrcBlock		  "Dot Product1"
 	  SrcPort		  1
-	  Points		  [55, 0]
-	  Branch {
-	    DstBlock		    "X: accel to speed"
-	    DstPort		    1
-	  }
-	  Branch {
-	    Points		    [0, -85]
-	    DstBlock		    "x acceleration"
-	    DstPort		    1
-	  }
+	  Points		  [60, 0]
+	  DstBlock		  "Sum2"
+	  DstPort		  2
 	}
 	Line {
-	  SrcBlock		  "Demux"
-	  SrcPort		  2
-	  Points		  [95, 0]
-	  Branch {
-	    DstBlock		    "Y: accel to speed"
-	    DstPort		    1
-	  }
-	  Branch {
-	    Points		    [0, -95]
-	    DstBlock		    "y acceleration"
-	    DstPort		    1
-	  }
-	}
-	Line {
-	  SrcBlock		  "Demux"
-	  SrcPort		  3
-	  DstBlock		  "Terminator1"
+	  SrcBlock		  "Dot Product"
+	  SrcPort		  1
+	  DstBlock		  "Sum2"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "X: accel to speed"
+	  SrcBlock		  "Sum2"
 	  SrcPort		  1
-	  Points		  [45, 0]
-	  Branch {
-	    DstBlock		    "X: speed to pos"
-	    DstPort		    1
-	  }
-	  Branch {
-	    Points		    [0, 95]
-	    DstBlock		    "Vector Mult"
-	    DstPort		    1
-	  }
+	  DstBlock		  "Sqrt"
+	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "Y: accel to speed"
+	  SrcBlock		  "X-vel"
 	  SrcPort		  1
-	  Points		  [25, 0]
+	  Points		  [15, 0]
 	  Branch {
-	    DstBlock		    "Y: speed to pos"
+	    DstBlock		    "Dot Product"
 	    DstPort		    1
 	  }
 	  Branch {
-	    Points		    [0, 70]
-	    DstBlock		    "Vector Mult"
+	    DstBlock		    "Dot Product"
 	    DstPort		    2
 	  }
 	}
 	Line {
-	  SrcBlock		  "Y: speed to pos"
+	  SrcBlock		  "Sqrt"
 	  SrcPort		  1
-	  DstBlock		  "Sum1"
+	  DstBlock		  "Speed"
 	  DstPort		  1
 	}
 	Line {
-	  SrcBlock		  "X: speed to pos"
+	  SrcBlock		  "Y-vel"
 	  SrcPort		  1
-	  DstBlock		  "Sum"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Yaw: accel to speed"
-	  SrcPort		  1
-	  DstBlock		  "Yaw: speed to pos"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Demux"
-	  SrcPort		  6
-	  DstBlock		  "Yaw: accel to speed"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Xinitial"
-	  SrcPort		  1
-	  Points		  [95, 0]
-	  DstBlock		  "Sum"
-	  DstPort		  2
-	}
-	Line {
-	  SrcBlock		  "Yinitial"
-	  SrcPort		  1
-	  Points		  [150, 0]
-	  DstBlock		  "Sum1"
-	  DstPort		  2
-	}
-	Line {
-	  SrcBlock		  "Thetainitial"
-	  SrcPort		  1
-	  Points		  [205, 0]
-	  DstBlock		  "Sum3"
-	  DstPort		  2
-	}
-	Line {
-	  SrcBlock		  "Yaw: speed to pos"
-	  SrcPort		  1
-	  DstBlock		  "Sum3"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Sum"
-	  SrcPort		  1
-	  DstBlock		  "x position"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Sum1"
-	  SrcPort		  1
-	  DstBlock		  "y position"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Vector Mult"
-	  SrcPort		  1
-	  DstBlock		  "speed"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Input"
-	  SrcPort		  1
-	  DstBlock		  "Demux"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Demux"
-	  SrcPort		  4
-	  DstBlock		  "roll acceleration"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Sum3"
-	  SrcPort		  1
-	  DstBlock		  "theta"
-	  DstPort		  1
-	}
-	Line {
-	  SrcBlock		  "Demux"
-	  SrcPort		  5
-	  DstBlock		  "pitch acceleration"
-	  DstPort		  1
+	  Points		  [10, 0]
+	  Branch {
+	    DstBlock		    "Dot Product1"
+	    DstPort		    1
+	  }
+	  Branch {
+	    Points		    [0, 15]
+	    DstBlock		    "Dot Product1"
+	    DstPort		    2
+	  }
 	}
       }
     }
     Block {
-      BlockType		      Terminator
-      Name		      "Terminator"
-      SID		      7
-      Position		      [465, 130, 485, 150]
+      BlockType		      Constant
+      Name		      "X"
+      SID		      79
+      Position		      [150, 235, 180, 265]
+      Value		      "0"
+      OutDataType	      "fixdt(1, 16)"
+      OutScaling	      "2^0"
     }
     Block {
-      BlockType		      Scope
-      Name		      "To PIC"
-      SID		      27
-      Ports		      [1]
-      Position		      [1390, 184, 1420, 216]
-      Floating		      off
-      Location		      [371, 87, 1187, 486]
-      Open		      off
-      NumInputPorts	      "1"
-      List {
-	ListType		AxesTitles
-	axes1			"%<SignalLabel>"
-      }
-      TimeRange		      "10"
-      YMin		      "75"
-      YMax		      "250"
-      SaveName		      "ScopeData4"
-      DataFormat	      "StructureWithTime"
+      BlockType		      Integrator
+      Name		      "X: accel to speed"
+      SID		      70
+      Ports		      [1, 1]
+      Position		      [515, 235, 545, 265]
+    }
+    Block {
+      BlockType		      Integrator
+      Name		      "X: speed to pos"
+      SID		      73
+      Ports		      [1, 1]
+      Position		      [630, 235, 660, 265]
+    }
+    Block {
+      BlockType		      Constant
+      Name		      "Xinitial"
+      SID		      90
+      Position		      [630, 555, 660, 585]
+      OutDataType	      "fixdt(1, 16)"
+      OutScaling	      "2^0"
+    }
+    Block {
+      BlockType		      Step
+      Name		      "Y"
+      SID		      80
+      Position		      [150, 285, 180, 315]
+      Time		      "3"
+      After		      "2"
       SampleTime	      "0"
     }
     Block {
-      BlockType		      ToWorkspace
-      Name		      "To Workspace"
-      SID		      36
-      Ports		      [1]
-      Position		      [950, 15, 1010, 45]
-      VariableName	      "simout"
-      MaxDataPoints	      "inf"
-      SampleTime	      "-1"
-      SaveFormat	      "Array"
+      BlockType		      Integrator
+      Name		      "Y: accel to speed"
+      SID		      71
+      Ports		      [1, 1]
+      Position		      [515, 285, 545, 315]
+    }
+    Block {
+      BlockType		      Integrator
+      Name		      "Y: speed to pos"
+      SID		      74
+      Ports		      [1, 1]
+      Position		      [630, 285, 660, 315]
     }
     Block {
       BlockType		      Constant
-      Name		      "Vehicle"
-      SID		      21
-      Position		      [695, 238, 750, 292]
-      Value		      "[1.7 0 0 2]"
-      VectorParams1D	      off
+      Name		      "Yaw"
+      SID		      84
+      Position		      [150, 485, 180, 515]
+      OutDataType	      "fixdt(1, 16)"
+      OutScaling	      "2^0"
+    }
+    Block {
+      BlockType		      Integrator
+      Name		      "Yaw: accel to speed"
+      SID		      97
+      Ports		      [1, 1]
+      Position		      [515, 485, 545, 515]
+    }
+    Block {
+      BlockType		      Integrator
+      Name		      "Yaw: speed to pos"
+      SID		      98
+      Ports		      [1, 1]
+      Position		      [630, 485, 660, 515]
     }
     Block {
       BlockType		      Constant
-      Name		      "Vehicle1"
-      SID		      59
-      Position		      [1140, 29, 1235, 81]
-      Value		      "[250 180 155]"
-      VectorParams1D	      off
+      Name		      "Yinitial"
+      SID		      91
+      Position		      [630, 610, 660, 640]
+      Value		      "-3"
+      OutDataType	      "fixdt(1, 16)"
+      OutScaling	      "2^0"
     }
-    Line {
-      SrcBlock		      "Vehicle"
-      SrcPort		      1
-      Points		      [110, 0]
-      Branch {
-	DstBlock		"Level-2 M-file\nS-Function"
-	DstPort			1
-      }
-      Branch {
-	Points			[0, -115]
-	DstBlock		"Get the necesary \nturn from \nlook-up table"
-	DstPort			3
-      }
+    Block {
+      BlockType		      Constant
+      Name		      "Z"
+      SID		      81
+      Position		      [150, 335, 180, 365]
+      Value		      "-1"
+      OutDataType	      "fixdt(1, 16)"
+      OutScaling	      "2^0"
     }
-    Line {
-      SrcBlock		      "ROAD"
-      SrcPort		      1
-      DstBlock		      "Level-2 M-file\nS-Function"
-      DstPort		      3
+    Block {
+      BlockType		      Outport
+      Name		      "X acceleration"
+      SID		      124
+      Position		      [515, 168, 545, 182]
+      IconDisplay	      "Port number"
+      OutDataType	      "fixdt(1, 16)"
+      OutScaling	      "2^0"
     }
-    Line {
-      SrcBlock		      "GOAL"
-      SrcPort		      1
-      DstBlock		      "Level-2 M-file\nS-Function"
-      DstPort		      4
+    Block {
+      BlockType		      Outport
+      Name		      "Y acceleration"
+      SID		      125
+      Position		      [515, 203, 545, 217]
+      Port		      "2"
+      IconDisplay	      "Port number"
+      OutDataType	      "fixdt(1, 16)"
+      OutScaling	      "2^0"
     }
-    Line {
-      SrcBlock		      "Read Look-up Table"
-      SrcPort		      1
-      Points		      [55, 0]
-      Branch {
-	Points			[70, 0]
-	DstBlock		"Get the necesary \nturn from \nlook-up table"
-	DstPort			1
-      }
-      Branch {
-	DstBlock		"To Workspace"
-	DstPort			1
-      }
+    Block {
+      BlockType		      Outport
+      Name		      "X position"
+      SID		      126
+      Position		      [1005, 243, 1035, 257]
+      Port		      "3"
+      IconDisplay	      "Port number"
+      OutDataType	      "fixdt(1, 16)"
+      OutScaling	      "2^0"
     }
-    Line {
-      SrcBlock		      "Compare\nTo Zero"
-      SrcPort		      1
-      DstBlock		      "Convert \nto a float1"
-      DstPort		      1
+    Block {
+      BlockType		      Outport
+      Name		      "Y position"
+      SID		      127
+      Position		      [1005, 293, 1035, 307]
+      Port		      "4"
+      IconDisplay	      "Port number"
+      OutDataType	      "fixdt(1, 16)"
+      OutScaling	      "2^0"
     }
-    Line {
-      SrcBlock		      "Level-2 M-file\nS-Function"
-      SrcPort		      1
-      DstBlock		      "Store the path\nto a look-up table"
-      DstPort		      1
+    Block {
+      BlockType		      Outport
+      Name		      "Speed"
+      SID		      128
+      Position		      [1005, 348, 1035, 362]
+      Port		      "5"
+      IconDisplay	      "Port number"
+      OutDataType	      "fixdt(1, 16)"
+      OutScaling	      "2^0"
     }
-    Line {
-      SrcBlock		      "Convert \nto a float1"
-      SrcPort		      1
-      DstBlock		      "Level-2 M-file\nS-Function"
-      DstPort		      5
+    Block {
+      BlockType		      Outport
+      Name		      "Theta"
+      SID		      129
+      Position		      [1005, 398, 1035, 412]
+      Port		      "6"
+      IconDisplay	      "Port number"
+      OutDataType	      "fixdt(1, 16)"
+      OutScaling	      "2^0"
     }
-    Line {
-      SrcBlock		      "Derivative"
-      SrcPort		      1
-      DstBlock		      "Compare\nTo Zero"
-      DstPort		      1
+    Block {
+      BlockType		      Outport
+      Name		      "Roll acceleration"
+      SID		      130
+      Position		      [520, 393, 550, 407]
+      Port		      "7"
+      IconDisplay	      "Port number"
+      OutDataType	      "fixdt(1, 16)"
+      OutScaling	      "2^0"
     }
-    Line {
-      SrcBlock		      "Clock"
-      SrcPort		      1
-      DstBlock		      "Level-2 M-file\nS-Function"
-      DstPort		      6
-    }
-    Line {
-      SrcBlock		      "Clock1"
-      SrcPort		      1
-      DstBlock		      "Get the necesary \nturn from \nlook-up table"
-      DstPort		      2
-    }
-    Line {
-      SrcBlock		      "Step"
-      SrcPort		      1
-      Points		      [20, 0; 0, -35]
-      DstBlock		      "Derivative"
-      DstPort		      1
-    }
-    Line {
-      SrcBlock		      "Convert to an integer"
-      SrcPort		      1
-      Points		      [30, 0]
-      Branch {
-	DstBlock		"Send Steering Command\nto PIC"
-	DstPort			1
-      }
-      Branch {
-	Points			[0, 75]
-	DstBlock		"To PIC"
-	DstPort			1
-      }
+    Block {
+      BlockType		      Outport
+      Name		      "Pitch acceleration"
+      SID		      131
+      Position		      [520, 443, 550, 457]
+      Port		      "8"
+      IconDisplay	      "Port number"
+      OutDataType	      "fixdt(1, 16)"
+      OutScaling	      "2^0"
     }
     Line {
       SrcBlock		      "Convert\nto a float1"
@@ -1854,59 +1414,206 @@ Model {
       }
     }
     Line {
-      SrcBlock		      "Obstacle"
-      SrcPort		      1
-      DstBlock		      "Level-2 M-file\nS-Function"
-      DstPort		      2
-    }
-    Line {
-      SrcBlock		      "Get the necesary \nturn from \nlook-up table"
-      SrcPort		      1
-      DstBlock		      "Convert to an integer"
-      DstPort		      1
-    }
-    Line {
-      SrcBlock		      "Level-2 M-file\nS-Function1"
-      SrcPort		      1
-      DstBlock		      "From PIC1"
-      DstPort		      1
-    }
-    Line {
       SrcBlock		      "PIC Data"
       SrcPort		      2
       Points		      [0, 15]
       DstBlock		      "Terminator"
       DstPort		      1
     }
-    Annotation {
-      Name		      "[x y theta V]"
-      Position		      [911, 251]
+    Line {
+      SrcBlock		      "X"
+      SrcPort		      1
+      DstBlock		      "Mux"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Y"
+      SrcPort		      1
+      DstBlock		      "Mux"
+      DstPort		      2
+    }
+    Line {
+      SrcBlock		      "Z"
+      SrcPort		      1
+      DstBlock		      "Mux"
+      DstPort		      3
+    }
+    Line {
+      SrcBlock		      "Roll"
+      SrcPort		      1
+      DstBlock		      "Mux"
+      DstPort		      4
+    }
+    Line {
+      SrcBlock		      "Pitch"
+      SrcPort		      1
+      DstBlock		      "Mux"
+      DstPort		      5
+    }
+    Line {
+      SrcBlock		      "Yaw"
+      SrcPort		      1
+      DstBlock		      "Mux"
+      DstPort		      6
+    }
+    Line {
+      SrcBlock		      "Vector Mult"
+      SrcPort		      1
+      DstBlock		      "Speed"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Sum3"
+      SrcPort		      1
+      DstBlock		      "Theta"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Yaw: speed to pos"
+      SrcPort		      1
+      Points		      [45, 0; 0, -95]
+      DstBlock		      "Sum3"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Thetainitial"
+      SrcPort		      1
+      Points		      [205, 0]
+      DstBlock		      "Sum3"
+      DstPort		      2
+    }
+    Line {
+      SrcBlock		      "Yinitial"
+      SrcPort		      1
+      Points		      [150, 0]
+      DstBlock		      "Sum1"
+      DstPort		      2
+    }
+    Line {
+      SrcBlock		      "Xinitial"
+      SrcPort		      1
+      Points		      [95, 0]
+      DstBlock		      "Sum"
+      DstPort		      2
+    }
+    Line {
+      SrcBlock		      "Demux"
+      SrcPort		      6
+      DstBlock		      "Yaw: accel to speed"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Demux"
+      SrcPort		      5
+      DstBlock		      "Pitch acceleration"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Demux"
+      SrcPort		      4
+      DstBlock		      "Roll acceleration"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Yaw: accel to speed"
+      SrcPort		      1
+      DstBlock		      "Yaw: speed to pos"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Sum1"
+      SrcPort		      1
+      DstBlock		      "Y position"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Sum"
+      SrcPort		      1
+      DstBlock		      "X position"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "X: speed to pos"
+      SrcPort		      1
+      DstBlock		      "Sum"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Y: speed to pos"
+      SrcPort		      1
+      DstBlock		      "Sum1"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Y: accel to speed"
+      SrcPort		      1
+      Points		      [25, 0]
+      Branch {
+	DstBlock		"Y: speed to pos"
+	DstPort			1
+      }
+      Branch {
+	Points			[0, 65]
+	DstBlock		"Vector Mult"
+	DstPort			2
+      }
+    }
+    Line {
+      SrcBlock		      "X: accel to speed"
+      SrcPort		      1
+      Points		      [45, 0]
+      Branch {
+	DstBlock		"X: speed to pos"
+	DstPort			1
+      }
+      Branch {
+	Points			[0, 95]
+	DstBlock		"Vector Mult"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "Demux"
+      SrcPort		      3
+      DstBlock		      "Terminator1"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Demux"
+      SrcPort		      2
+      Points		      [95, 0]
+      Branch {
+	DstBlock		"Y: accel to speed"
+	DstPort			1
+      }
+      Branch {
+	Points			[0, -90]
+	DstBlock		"Y acceleration"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "Demux"
+      SrcPort		      1
+      Points		      [55, 0]
+      Branch {
+	DstBlock		"X: accel to speed"
+	DstPort			1
+      }
+      Branch {
+	Points			[0, -75]
+	DstBlock		"X acceleration"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "Input"
+      SrcPort		      1
+      DstBlock		      "Demux"
+      DstPort		      1
     }
     Annotation {
-      Name		      "[x y L W V]"
-      Position		      [912, 301]
-    }
-    Annotation {
-      Name		      "[left right]"
-      Position		      [917, 363]
-    }
-    Annotation {
-      Name		      "[x y]"
-      Position		      [935, 414]
-    }
-    Annotation {
-      Name		      "Trigger"
-      Position		      [617, 409]
-    }
-    Annotation {
-      Name		      "Degrees"
-      Position		      [1135, 104]
-    }
-    Annotation {
-      Position		      [1045, 116]
-    }
-    Annotation {
-      Position		      [333, 83]
+      Position		      [223, 83]
     }
     Annotation {
       Name		      "Runs Simulink\n in real-time"
@@ -1919,12 +1626,7 @@ Model {
   }
 }
 MatData {
-  NumRecords		  3
-  DataRecord {
-    Tag			    DataTag2
-    Data		    "  %)30     .    :     8    (     0         %    \"     $    !     0         .    .     8    (    !     "
-    "     %    \"     $    (     0         0    \"    '-E<FEA;'-B"
-  }
+  NumRecords		  2
   DataRecord {
     Tag			    DataTag1
     Data		    "  %)30     .    :     8    (     0         %    \"     $    !     0         .    .     8    (    !     "
