@@ -242,5 +242,7 @@ void initUART1( unsigned long baudrate )
 }
 
 void sendUART1( unsigned int _command ) {
-	U1TXREG = _command;	
+	while( U1STAbits.UTXBF ){}
+	U1TXREG = _command;
+//	__delay_ms(1);	
 }

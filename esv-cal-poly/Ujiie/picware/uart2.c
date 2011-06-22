@@ -109,58 +109,59 @@ void __attribute__( ( interrupt, no_auto_psv ) ) _U2RXInterrupt( void )
 				dataCount = 1;
 			}else {
 				switch( dataCount ) {
-					case 1:
+					case 1:		// Counter
 						dataCount++;
 						break;
 					case 2:
 						dataCount++;
 						break;
-					case 3:
+					case 3:		// X
 						imu.accelX.msb = receivedValue2;
 						dataCount++;
 						break;
 					case 4:	
 						imu.accelX.lsb = receivedValue2;
+						//imu.accelX.lsb = 49;
 						dataCount++;
 						break;
-					case 5:
-						imu.accelZ.msb = receivedValue2;
-						dataCount++;
-						break;
-					case 6:
-						imu.accelZ.lsb = receivedValue2;
-						dataCount++;
-						break;
-					case 7:
+					case 5:		// 
 						imu.accelY.msb = receivedValue2;
 						dataCount++;
 						break;
-					case 8:	
+					case 6:
 						imu.accelY.lsb = receivedValue2;
 						dataCount++;
 						break;
-					case 9:
-						imu.pitch.msb = receivedValue2;
+					case 7:		// Roll?
+						imu.accelZ.msb = receivedValue2;
 						dataCount++;
 						break;
-					case 10:
-						imu.pitch.lsb = receivedValue2;
+					case 8:	
+						imu.accelZ.lsb = receivedValue2;
 						dataCount++;
 						break;
-					case 11:
-						imu.yaw.msb = receivedValue2;
-						dataCount++;
-						break;
-					case 12:	
-						imu.yaw.lsb = receivedValue2;
-						dataCount++;
-						break;
-					case 13:
+					case 9:		//
 						imu.roll.msb = receivedValue2;
 						dataCount++;
 						break;
-					case 14:
+					case 10:
 						imu.roll.lsb = receivedValue2;
+						dataCount++;
+						break;
+					case 11:	//
+						imu.pitch.msb = receivedValue2;
+						dataCount++;
+						break;
+					case 12:	
+						imu.pitch.lsb = receivedValue2;
+						dataCount++;
+						break;
+					case 13:	//
+						imu.yaw.msb = receivedValue2;
+						dataCount++;
+						break;
+					case 14:
+						imu.yaw.lsb = receivedValue2;
 						dataReady = 1;
 						aFound = 0;
 						dataCount++;

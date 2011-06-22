@@ -62,8 +62,11 @@ int main ( void )
     initTimer();
 	setEncoderWheelRadius( 2.25 / 12.0 );
 	initEncoder();
-	initUART1(115200UL);
+//	initUART1(115200UL);
 	initUART2(115200UL);
+
+	initUART1(9600UL);
+//	initUART2(9600UL);
 
 	
 
@@ -120,20 +123,47 @@ while(1)
 
 
 
-
 //if( updateEncoderFlag ) {
-//sendUART1(25);
-//sendUART1(50);
-//sendUART1(75);
-//sendUART1(100);
-//sendUART1(125);
-//sendUART1(150);
-//sendUART1(175);
-//sendUART1(200);
-//sendUART1('\r');
-//updateEncoderFlag = 0;
+//	sendUART1(50);
+//	sendUART1(51);
+//	sendUART1(52);
+//	sendUART1(53);
+//	sendUART1(54);
+//	sendUART1(55);
+//	sendUART1(56);
+//	sendUART1(57);
+//	sendUART1(65);
+//	sendUART1(66);
+//	sendUART1(67);
+//	sendUART1(68);
+//	sendUART1(69);
+//	sendUART1(70);
+//	sendUART1(71);
+//	sendUART1('\r');
+//	updateEncoderFlag = 0;
 //}
 
+if( updateEncoderFlag ) {
+	
+	if( dataReady ) {
+		sendUART1(imu.accelX.msb);
+		sendUART1(imu.accelX.lsb);
+		sendUART1(imu.accelY.msb);
+		sendUART1(imu.accelY.lsb);
+		sendUART1(imu.accelZ.msb);
+		sendUART1(imu.accelZ.lsb);
+		sendUART1(imu.roll.msb);
+		sendUART1(imu.roll.lsb);
+		sendUART1(imu.pitch.msb);
+		sendUART1(imu.pitch.lsb);
+		sendUART1(imu.yaw.msb);
+		sendUART1(imu.yaw.lsb);
+		sendUART1( '\r' );
+		dataReady = 0;
+		dataSendCounter = 0;
+	}
+	updateEncoderFlag = 0;
+}
 
 
 
@@ -176,24 +206,24 @@ while(1)
 
 
 
-if( updateEncoderFlag ) {
-	updateEncoder(1);
-	updateEncoder(2);
-	updateEncoder(3);
-	updateEncoder(4);
-
-	encoder1del = getEncoderDel(1);
-	encoder2del = getEncoderDel(2);
-	encoder3del = getEncoderDel(3);
-	encoder4del = getEncoderDel(4);
-
-	sendUART1( encoder1del );
-	sendUART1( encoder2del );
-	sendUART1( encoder3del );
-	sendUART1( encoder4del );
-	sendUART1( '\r' );
-	updateEncoderFlag = 0;
-}
+//if( updateEncoderFlag ) {
+//	updateEncoder(1);
+//	updateEncoder(2);
+//	updateEncoder(3);
+//	updateEncoder(4);
+//
+//	encoder1del = getEncoderDel(1);
+//	encoder2del = getEncoderDel(2);
+//	encoder3del = getEncoderDel(3);
+//	encoder4del = getEncoderDel(4);
+//
+//	sendUART1( encoder1del );
+//	sendUART1( encoder2del );
+//	sendUART1( encoder3del );
+//	sendUART1( encoder4del );
+//	sendUART1( '\r' );
+//	updateEncoderFlag = 0;
+//}
 
 //if( commandReady ) {
 //	
