@@ -158,7 +158,7 @@ for i=TESTS:(-1):1
            % PATH(NN-1,6)= RAGE;
             
             
-               if (abs(DUMB)>50)
+               if (abs(DUMB)>20)
                    nogogo=1;
                end
             

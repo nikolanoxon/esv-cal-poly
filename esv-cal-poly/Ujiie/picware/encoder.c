@@ -19,7 +19,7 @@ unsigned int qei1counter = 0;
 unsigned int qei2counter = 0;
 
 float encoderUnit;
-float delTime = 0.0086 * 116.0;
+float delTime = 0.0043 * 23.0;
 
 typedef struct {
 	uint8_t new;
@@ -60,6 +60,8 @@ void initEncoder ( void )
 
             QEI_IDLE_CON, 0);
 
+	QEI1CONbits.SWPAB = 0;
+
 	//This QEI config bit needs separate line because it's not
 	//included in OpenQEI1 function. Need to explain...
     QEI1CONbits.UPDN = 1;
@@ -82,6 +84,8 @@ void initEncoder ( void )
             QEI_MODE_x4_MATCH & QEI_DIR_SEL_CNTRL &  
 
             QEI_IDLE_CON, 0);
+
+	QEI2CONbits.SWPAB = 0;
 
 	//This QEI config bit needs separate line because it's not
 	//included in OpenQEI1 function. Need to explain...

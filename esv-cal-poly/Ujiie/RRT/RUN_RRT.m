@@ -18,7 +18,7 @@ TREE(1,3)=0;
 FAIL=0;
 ITERATIONS=0;
 VEHICLE_GEO=[1.5,1];
-
+FINAL_PATH=zeros(50,6);
 %RANDOM NODES ARE SEARCHED FOR IN THE FOLLOING RECTANGLE
 X1=-6;                  %LOWER LIMIT ON THE X AXIS  [ft]
 X2=6;                   %UPPER LIMIT ON THE X AXIS  [ft]
@@ -98,7 +98,9 @@ while (DONE==0 && FAIL==0)
 end
 
 
-
+if (FAIL >0 )
+    FINAL_PATH(1,1) = 9001;
+end
 
 
 

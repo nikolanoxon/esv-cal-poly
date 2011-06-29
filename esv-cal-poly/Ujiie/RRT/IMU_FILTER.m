@@ -1,4 +1,4 @@
-function RRT_BLOCK(block)
+function IMU_FILTER(block)
 % Level-2 M file S-Function for unit delay demo.
 %   Copyright 1990-2004 The MathWorks, Inc.
 %   $Revision: 1.1.6.1 $ 
@@ -12,7 +12,7 @@ function setup(block)
   block.NumDialogPrms  = 1;
   
   %% Register number of input and output ports
-  block.NumInputPorts  = 6;
+  block.NumInputPorts  = 3;
   block.NumOutputPorts = 1;
 
   %% Setup functional port properties to dynamically
@@ -20,25 +20,16 @@ function setup(block)
   block.SetPreCompInpPortInfoToDynamic;
   block.SetPreCompOutPortInfoToDynamic;
  
-  block.InputPort(1).Dimensions        = 4;     %VEHICLE
+  block.InputPort(1).Dimensions        = [1 16];     %IMU data in 8 bit ints
   block.InputPort(1).DirectFeedthrough = false;
   
-  block.InputPort(2).Dimensions        = 5;     %OBSTACLE
+  block.InputPort(2).Dimensions        = [1 10];      %OLD DATA
   block.InputPort(2).DirectFeedthrough = false;
   
-  block.InputPort(3).Dimensions        = 2;     %ROAD
+  block.InputPort(3).Dimensions        = [1 1];      %GO FLAG
   block.InputPort(3).DirectFeedthrough = false;
   
-  block.InputPort(4).Dimensions        = 2;     %GOAL
-  block.InputPort(4).DirectFeedthrough = false;
-  
-  block.InputPort(5).Dimensions        = 1;     %GOGO FLAG
-  block.InputPort(5).DirectFeedthrough = false;
-  
-    block.InputPort(6).Dimensions        = 1;     %CLOCK
-  block.InputPort(6).DirectFeedthrough = false;
-  
-  block.OutputPort(1).Dimensions       = [50 6];
+  block.OutputPort(1).Dimensions       = [1 10];    %IMU data in 16 bit ints
   
   %block.OutputPort(2).Dimensions       = 1;
   
@@ -74,32 +65,44 @@ function InitConditions(block)
 
 function Output(block)
 
+    %GET GO FLAG
+    GOFLAG = block.InputPort(3).Data;
 
-  GOGO = block.InputPort(5).Data;
+  %GET THE IMU ARRAY
+  IMUsmall = block.InputPort(1).Data;
   
-  %block.OutputPort(1).Data = GOGO;
+   %CONCATINATE DATA
   
-  if GOGO>0
-    VEHICLE=block.InputPort(1).Data;
-    OBSTACLE=block.InputPort(2).Data;
-    ROAD(1)=block.InputPort(3).Data(1);
-    ROAD(2)=block.InputPort(3).Data(2);
-    GOAL(1:2)=block.InputPort(4).Data(1:2);
-    CLOCK=block.InputPort(6).Data;
-    
-    if VEHICLE(4) > 0   
-    FINAL_PATH = RUN_RRT(VEHICLE, OBSTACLE, ROAD, GOAL);
-    
-    if (FINAL_PATH (1,1)<9000)
-    
-        FINAL_PATH(:,5) = FINAL_PATH( : , 5) +CLOCK;
-    end
-    
-    block.OutputPort(1).Data = FINAL_PATH;
-    end
+     IMUlarge(1) = IMUsmall(1) * (2^8) + IMUsmall(2);
+     IMUlarge(2) = IMUsmall(3) * (2^8) + IMUsmall(4);
+     IMUlarge(3) = IMUsmall(5) * (2^8) + IMUsmall(6);
+     IMUlarge(4) = IMUsmall(7) * (2^8) + IMUsmall(8);
+     IMUlarge(5) = IMUsmall(9) * (2^8) + IMUsmall(10);
+     IMUlarge(6) = IMUsmall(11) * (2^8) + IMUsmall(12);
+     IMUlarge(7) = IMUsmall(13);    %Encoder 1
+     IMUlarge(8) = IMUsmall(14);    %Encoder 2
+     IMUlarge(9) = IMUsmall(15);    %Encoder 3
+     IMUlarge(10) = IMUsmall(16);   %Encoder 4
+     
+   %GET OLD DATA
+  if GOFLAG > 0
+   IMUold = block.InputPort(2).Data;
+  else
+      IMUold = IMUlarge;
   end
-  %block.OutputPort(1).Data = block.InputPort(4).Data(1);
-  %FINAL_PATH = RUN_RRT(VEHICLE, OBSTACLE, ROAD, GOAL)
+      
+    %COMPARE SIGNALS
+%     x = 1;
+%     
+%     while x <= 10
+%         if abs(IMUlarge(x) - IMUold(x)) > 150
+%             IMUlarge(x) = IMUold(x);
+%         end
+%         x = x + 1;
+%     end
+  
+    block.OutputPort(1).Data = IMUlarge;
+ 
 %endfunction
 
 function Update(block)

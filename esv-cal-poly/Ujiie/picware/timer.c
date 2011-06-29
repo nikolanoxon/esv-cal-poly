@@ -20,7 +20,7 @@ void initTimer( void ) {
 
 void __attribute__((__interrupt__)) _T2Interrupt( void )
 {
-	if( delayCounter == 116 && !updateEncoderFlag ) {
+	if( delayCounter == 23 && !updateEncoderFlag ) {
 		updateEncoderFlag = 1;
 		delayCounter = 0;	
 	} else if( !updateEncoderFlag ){

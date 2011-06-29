@@ -65,9 +65,15 @@ int main ( void )
 //	initUART1(115200UL);
 	initUART2(115200UL);
 
+<<<<<<< .mine
+//	initUART1(9600UL);
+//	initUART2(9600UL);
+
+=======
 	initUART1(9600UL);
 //	initUART2(9600UL);
 
+>>>>>>> .r107
 	
 
 	/*	Begin motor setup */
@@ -143,6 +149,14 @@ while(1)
 //	updateEncoderFlag = 0;
 //}
 
+<<<<<<< .mine
+if( updateEncoderFlag ) {
+	
+	updateEncoder(1);
+	updateEncoder(2);
+	updateEncoder(3);
+	updateEncoder(4);
+=======
 if( updateEncoderFlag ) {
 	
 	if( dataReady ) {
@@ -163,6 +177,47 @@ if( updateEncoderFlag ) {
 		dataSendCounter = 0;
 	}
 	updateEncoderFlag = 0;
+}
+>>>>>>> .r107
+
+	encoder1del = getEncoderDel(1);
+	encoder2del = getEncoderDel(2);
+	encoder3del = getEncoderDel(3);
+	encoder4del = getEncoderDel(4);
+
+//	if( dataReady ) {
+// send IMU data
+		sendUART1(imu.accelX.msb);
+		sendUART1(imu.accelX.lsb);
+		sendUART1(imu.accelY.msb);
+		sendUART1(imu.accelY.lsb);
+		sendUART1(imu.accelZ.msb);
+		sendUART1(imu.accelZ.lsb);
+		sendUART1(imu.roll.msb);
+		sendUART1(imu.roll.lsb);
+		sendUART1(imu.pitch.msb);
+		sendUART1(imu.pitch.lsb);
+		sendUART1(imu.yaw.msb);
+		sendUART1(imu.yaw.lsb);
+	//	sendUART1( '\r' );
+		dataReady = 0;
+		dataSendCounter = 0;
+//	}
+
+	//send change in encoder ticks
+	sendUART1( encoder1del );
+	sendUART1( encoder2del );
+	sendUART1( encoder3del );
+	sendUART1( encoder4del );
+	sendUART1( '\r' );
+	updateEncoderFlag = 0;	
+}
+
+if( commandReady ) {
+	setServoAngleInt( command.steer );
+	setMotorSpeedInt( command.throttle );
+
+	commandReady = 0;
 }
 
 
