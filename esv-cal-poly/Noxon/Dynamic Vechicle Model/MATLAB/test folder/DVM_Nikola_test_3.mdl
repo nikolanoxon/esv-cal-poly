@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.109"
+    ComputedModelVersion    "1.110"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -26,9 +26,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "Nikola"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Feb 07 18:23:43 2012"
-  RTWModifiedTimeStamp	  250539513
-  ModelVersionFormat	  "1.%<AutoIncrement:109>"
+  LastModifiedDate	  "Thu Feb 09 16:28:27 2012"
+  RTWModifiedTimeStamp	  250702020
+  ModelVersionFormat	  "1.%<AutoIncrement:110>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -789,7 +789,7 @@ Model {
   }
   System {
     Name		    "DVM_Nikola_test_3"
-    Location		    [-1678, -18, -2, 937]
+    Location		    [-781, 271, 895, 1210]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -1162,7 +1162,7 @@ Model {
       Ports		      [1]
       Position		      [1055, 389, 1085, 421]
       Floating		      off
-      Location		      [-1582, 47, -958, 782]
+      Location		      [-451, 434, 173, 1169]
       Open		      on
       NumInputPorts	      "1"
       List {
@@ -1183,7 +1183,7 @@ Model {
       Ports		      [1]
       Position		      [1055, 474, 1085, 506]
       Floating		      off
-      Location		      [-959, 136, -335, 871]
+      Location		      [-723, 240, -99, 975]
       Open		      on
       NumInputPorts	      "1"
       List {
@@ -1254,7 +1254,7 @@ Model {
       Ports		      [1]
       Position		      [1055, 574, 1085, 606]
       Floating		      off
-      Location		      [-839, 356, -216, 1049]
+      Location		      [-1228, 60, -605, 753]
       Open		      on
       NumInputPorts	      "1"
       List {
@@ -1271,7 +1271,7 @@ Model {
       Ports		      [1]
       Position		      [1055, 789, 1085, 821]
       Floating		      off
-      Location		      [-1249, -21, -425, 924]
+      Location		      [-1679, -44, 1, 957]
       Open		      on
       NumInputPorts	      "1"
       List {
@@ -1298,8 +1298,8 @@ Model {
       Ports		      [1]
       Position		      [1055, 234, 1085, 266]
       Floating		      off
-      Location		      [-1025, 395, -201, 1380]
-      Open		      on
+      Location		      [-814, 308, 10, 1293]
+      Open		      off
       NumInputPorts	      "1"
       List {
 	ListType		AxesTitles
@@ -1316,7 +1316,7 @@ Model {
       Ports		      [1]
       Position		      [1055, 304, 1085, 336]
       Floating		      off
-      Location		      [-1446, 200, -622, 1145]
+      Location		      [-1007, 152, -183, 1097]
       Open		      on
       NumInputPorts	      "1"
       List {
@@ -1677,88 +1677,88 @@ Stateflow {
       "1, 0.0005;...\n    0.3, 0.00025;...\n    1.0, 0.0]; %slip angle (slip-angle, Moment-arm)\n \n \n%tire properties"
       "\nt_wid = 0.175;\nt_rad = 0.292;\nt_pressure = 275000;\n \n%---------------------%\n \n%==steering inputs==%\nd_"
       "steer = steer;\ndelta = d_steer/(180*K_sr)*pi; %radians\n%-------------------%\n \n%==calculate internal acceler"
-      "ations==%\na_sx = a_x ...\n     - psi_d*v_y ...\n     - 2*h_s*phi_d*psi_d*cos(phi) ...\n     - l_cgs*psi_d^2;\na"
-      "_sy = psi_d*v_x ...\n     + l_cgs*psi_dd ...\n     + h_s*cos(phi)*phi_dd ...\n     - h_s*phi_d^2*sin(phi) ...\n "
-      "    - h_s*psi_d^2*sin(phi);\na_ufx = a_x - l_f*psi_d^2;\na_ufy = a_y + l_f*psi_dd;\na_urx = a_x + l_r*psi_d^2;\n"
-      "a_ury = a_y - l_r*psi_dd;\n%-------------------------------------%\n \n%==rotation Matrix==%\nROT = [1,0,0;\n   "
-      "    0,cos(phi),sin(phi);\n       0,-sin(phi),cos(phi)];\n \nI_b = [I_xxs+M_s*h_s^2,I_xys,I_xzs+M_s*h_s*l_cgs;..."
-      "\n       I_xys,I_yys+M_s*(h_s^2+l_cgs^2),I_yzs;...\n       I_xzs+M_s*h_s*l_cgs,I_yzs,I_zzs+M_s*l_cgs^2];\n   \nI"
-      "_c = ROT*I_b*ROT'; %chassis M.o.I. tensor\n \nI_zzus = M_uf*l_f^2 + ...\n         M_ur*l_r^2 + ...\n         I_z"
-      "zuf + I_zzur;\n \nI_zzo = I_c(3,3) + I_zzus; %effective I_zz\n%---------------------------------------------%\n "
-      "\n%==Dynamic Weight Transfer Forces==%\nFzax = (M_s*h_s*a_sx + M_uf*h_uf*a_ufx + M_ur*h_ur*a_urx)/(2*L);\n\nFzay"
-      "f = 1/t_f*(M_s*l_r*h_f/L*a_sy + M_uf*h_uf*a_ufy);\nFzayr = 1/t_r*(M_s*l_f*h_r/L*a_sy + M_ur*h_ur*a_ury);\n\nFzph"
-      "if = -1/t_f*(K_phif*phi + B_phif*phi_d);\nFzphir = -1/t_r*(K_phir*phi + B_phir*phi_d);\n%-----------------------"
-      "-----------%\n \n%==Tire Normal Forces==% \n% Fzlf = M*g*l_r/(2*L) - Fzax - Fzayf + Fzphif;\n% Fzrf = M*g*l_r/(2"
-      "*L) - Fzax + Fzayf - Fzphif;\n% Fzlr = M*g*l_f/(2*L) + Fzax - Fzayr + Fzphir;\n% Fzrr = M*g*l_f/(2*L) + Fzax + F"
-      "zayr - Fzphir;\n\nFzlf = M*g*l_r/(2*L);\nFzrf = M*g*l_r/(2*L);\nFzlr = M*g*l_f/(2*L);\nFzrr = M*g*l_f/(2*L);\n%-"
-      "---------------------%\n \n%==Tire Longitudinal/Lateral Forces==%\n%left front wheel velocity\nvx_lf = v_x + psi"
-      "_d*t_f/2;\nvy_lf = v_y + psi_d*l_f;\n \n%right front wheel velocity\nvx_rf = v_x - psi_d*t_f/2;\nvy_rf = v_y + p"
-      "si_d*l_f;\n \n%left rear wheel velocity\nvx_lr = v_x + psi_d*t_r/2;\nvy_lr = v_y - psi_d*l_r;\n \n%right rear wh"
-      "eel velocity\nvx_rr = v_x - psi_d*t_r/2;\nvy_rr = v_y - psi_d*l_r;  \n\n% %-------------------------------------"
-      "--%\n% %SLIP ANGLES HIRTLE\n% %---------------------------------------%\n% beta_lf = atan(vy_lf/vx_lf);\n% beta_"
-      "rf = atan(vy_rf/vx_rf);\n% beta_lr = atan(vy_lr/vx_lr);\n% beta_rr = atan(vy_rr/vx_rr);\n%  \n% a_lf = beta_lf -"
-      " delta;\n% a_rf = beta_rf - delta;\n% a_lr = beta_lr;\n% a_rr = beta_rr;\n%  \n% slp_ang = [a_lf,a_rf,a_lr,a_rr]"
-      ";\n% %---------------------------------------%\n% %END SLIP ANGLES HIRTLE\n% %----------------------------------"
-      "-----%\n\n%---------------------------------------%\n%SLIP ANGLES NIKOLA\n%-------------------------------------"
-      "--%\n% Tire longitudinal and cornering velocities\nvc_lf = vy_lf*cos(delta) - vx_lf*sin(delta);\nvc_rf = vy_rf*c"
-      "os(delta) - vx_rf*sin(delta);\nvc_lr = vy_lr;\nvc_rr = vy_rr;\n\nvl_lf = vy_lf*sin(delta) + vx_lf*cos(delta);\nv"
-      "l_rf = vy_rf*sin(delta) + vx_rf*cos(delta);\nvl_lr = vx_lr;\nvl_rr = vx_rr;\n\n% Slip angles\na_lf = atan(vc_lf/"
-      "vl_lf);\na_rf = atan(vc_rf/vl_rf);\na_lr = atan(vc_lr/vl_lr);\na_rr = atan(vc_rr/vl_rr);\n\nslp_ang = [a_lf,a_rf"
-      ",a_lr,a_rr];\n%---------------------------------------%\n%END SLIP ANGLES NIKOLA\n%-----------------------------"
-      "----------%\n\n%Linearized Force Coefficients (C_alpha)\nC_alf = vary(2,2)/vary(2,1)*Fzlf;\nC_arf = vary(2,2)/va"
-      "ry(2,1)*Fzrf;\nC_alr = vary(2,2)/vary(2,1)*Fzlr;\nC_arr = vary(2,2)/vary(2,1)*Fzrr;\n\nFxtlf = 0;\nFxtrf = 0;\nF"
-      "xtlr = 0;\nFxtrr = 0;\n \nFytlf = -a_lf*C_alf;\nFytrf = -a_rf*C_arf;\nFytlr = -a_lr*C_alr;\nFytrr = -a_rr*C_arr;"
-      "\n \nFxlf = Fxtlf*cos(delta) - Fytlf*sin(delta);\nFxrf = Fxtrf*cos(delta) - Fytrf*sin(delta);\nFxlr = Fxtlr;\nFx"
-      "rr = Fxtrr;\n \nFylf = Fytlf*cos(delta) + Fxtlf*sin(delta);\nFyrf = Fytrf*cos(delta) + Fxtrf*sin(delta);\nFylr ="
-      " Fytlr;\nFyrr = Fytrr;\n \nFout = [Fylf,Fyrf,Fylr,Fyrr];\n%---------------------------------------%\n\n%==Tire M"
-      "oments==%\nMzlf = 0;\nMzrf = 0;\nMzlr = 0;\nMzrr = 0;\n\n%==Torques==%\nT_phif = -K_phif*phi - B_phif*phi_d;\nT_"
-      "phir = -K_phir*phi - B_phir*phi_d;\n%-----------%\n \n%==Sum forces and torques==%\nsigFx   = Fxlf + Fxrf + Fxlr"
-      " + Fxrr;\nsigFy   = Fylf + Fyrf + Fylr + Fyrr;\nsigTxs  = T_phif + T_phir - ...\n          M_s*g*h_s*sin(phi);\n"
-      "% sigTxs  = T_phif + T_phir - ...\n%           M_s*g*h_s*sin(phi) + M_s*h_s*a_sy*cos(phi);\nsigTz   = (Fylf + Fy"
-      "rf)*l_f - (Fylr + Fyrr)*l_r + ...\n          t_f/2*(Fxlf - Fxrf) + t_r/2*(Fxlr - Fxrr) + ...\n          Mzlf + M"
-      "zrf + Mzlr + Mzrr;\n%--------------------------%\n\n% %---------------------------------------%\n% %EoM HIRTLE\n"
-      "% %---------------------------------------%\n% a_x_new =  psi_d*v_y + (sigFx + ...\n%            M_s.*(-2*h_s.*p"
-      "hi_d.*psi_d.*cos(phi) - ...\n%            h_s.*psi_dd.*sin(phi)))./M;\n% a_y_new = -psi_d*v_x + (sigFy - ...\n% "
-      "           M_s*(-h_s*phi_dd*cos(phi) + ...\n%            h_s*phi_d^2*sin(phi) + ...\n%            h_s*psi_d^2*si"
-      "n(phi)))./M;\n% phi_dd_new = (sigTxs - ...\n%            (I_xzs+M_s*h_s*l_cgs)*cos(phi)*psi_dd + ...\n%         "
-      "   (I_xzs+M_s*h_s*l_cgs)*sin(phi)*phi_d*psi_d + ...\n%            (I_zzs - I_yys - M_s*h_s^2)*sin(phi)*cos(phi)*"
-      "psi_d^2)./ ...\n%            (I_xxs+M_s*h_s^2);\n% psi_dd_new = (sigTz - ...\n%            (I_xzs+M_s*h_s*l_cgs)"
-      "*cos(phi)*phi_dd - ...\n%            (I_xzs+M_s*h_s*l_cgs)*sin(phi)*phi_d^2 - ...\n%             M_s*h_s*a_x*sin"
-      "(phi) - ...\n%            (I_zzs - I_yys - M_s*h_s^2)*sin(phi)*cos(phi)*psi_d*phi_d)./ ...\n%             I_zzo;"
-      "\n% %---------------------------------------%\n% %EoM HIRTLE END\n% %---------------------------------------%\n\n"
-      "% %---------------------------------------%\n% %EoM NOXON\n% %---------------------------------------%\n% %==Equ"
-      "ations of Motion==%\n% \n% % mass matrix for coupled equations of motion\n% Am  = M_s*h_s*sin(phi);\n% Bm  = -M_"
-      "s*h_s*cos(phi);\n% Cm  = (I_xzs+M_s*h_s*l_cgs)*cos(phi);\n% Dm1 = M_s*h_s*sin(phi);\n% Dm2 = (I_xzs+M_s*h_s*l_cg"
-      "s)*cos(phi);\n% \n% Mass_Matrix =   [M                  0     0                                 M_s*h_s*sin(phi)"
-      "\n%                  0                  M     -M_s*h_s*cos(phi)                 0\n%                  0         "
-      "         0     (I_xxs+M_s*h_s^2)                 (I_xzs+M_s*h_s*l_cgs)*cos(phi)\n%                  M_s*h_s*sin("
-      "phi)   0     (I_xzs+M_s*h_s*l_cgs)*cos(phi)    I_zzo];\n% \n% % coupled equations of motion\n% A1 = -2*M_s*h_s*c"
-      "os(phi);\n% B1 = -M_s*h_s*sin(phi);\n% C1 = (I_xzs+M_s*h_s*l_cgs)*sin(phi);\n% C2 = (I_zzs - I_yys - M_s*h_s^2)*"
-      "sin(phi)*cos(phi);\n% D1 = -(I_xzs+M_s*h_s*l_cgs)*sin(phi);\n% D2 = -(I_zzs - I_yys - M_s*h_s^2)*sin(phi)*cos(ph"
-      "i);\n% \n% F_c = zeros(4,1);             \n% \n% F_c(1) = sigFx  + A1*phi_d*psi_d;\n% F_c(2) = sigFy  + B1*(phi_"
-      "d^2 + psi_d^2);\n% F_c(3) = sigTxs + C1*phi_d*psi_d + C2*psi_d^2;\n% F_c(4) = sigTz  + D1*phi_d^2     + D2*psi_d"
-      "*phi_d;\n% \n% % decouple the EoM\n% F_u = Mass_Matrix^-1*F_c; \n% \n% % extract the left hand side of the EoM\n"
-      "% a_x_new = F_u(1);\n% a_y_new = F_u(2);\n% phi_dd_new = F_u(3);\n% psi_dd_new = F_u(4);\n% %-------------------"
-      "--------------------%\n% %EoM NOXON END\n% %---------------------------------------%\n\n%-----------------------"
-      "----------------%\n%EoM NOXON NEW\n%---------------------------------------%\n%==Equations of Motion==%\n\n% mas"
-      "s matrix for coupled equations of motion\nAm  = M_s*h_s*sin(phi);\nBm  = -M_s*h_s*cos(phi);\nCm  = (I_xzs+M_s*h_"
-      "s*l_cgs)*cos(phi);\nDm1 = M_s*h_s*sin(phi);\nDm2 = (I_xzs+M_s*h_s*l_cgs)*cos(phi);\n\nMass_Matrix =   [M        "
-      "          0     0                                 M_s*h_s*sin(phi)\n                 0                  M     -M"
-      "_s*h_s*cos(phi)                 0\n                 0                  0     (I_xxs+M_s*h_s^2*sin(phi)^2)      I"
-      "_xzs*cos(phi)\n                 M_s*h_s*sin(phi)   0     (I_xzs+M_s*h_s*l_cgs)*cos(phi)    I_zzo];\n\n% coupled "
-      "equations of motion\nA1 = -2*M_s*h_s*cos(phi);\nB1 = -M_s*h_s*sin(phi);\nC1 = (I_xzs+M_s*h_s*l_cgs)*sin(phi);\nC"
-      "2 = (I_zzs - I_yys - M_s*h_s^2)*sin(phi)*cos(phi);\nD1 = -(I_xzs+M_s*h_s*l_cgs)*sin(phi);\nD2 = -(I_zzs - I_yys "
-      "- M_s*h_s^2)*sin(phi)*cos(phi);\n\nF_c = zeros(4,1);             \n\nF_c(1) = sigFx  + A1*phi_d*psi_d;\nF_c(2) ="
-      " sigFy  + B1*(phi_d^2 + psi_d^2);\n\nF_c(3) = sigTxs + C1*phi_d*psi_d + C2*psi_d^2 + M_s*h_s*cos(phi)*psi_d*v_x "
-      "- M_s*h_s^2*sin(phi)*cos(phi)*(phi_d^2 + psi_d^2);\n\n%-M_s*h_s*l_cgs*cos(phi)*psi_dd - M_s*h_s^2*cos(phi)^2*phi"
-      "_dd = M_s*h_s*cos(phi)*psi_d*v_x - M_s*cos(phi)*h_s^2*phi_d^2*sin(phi) - M_s*h_s^2*cos(phi)*psi_d^2*sin(phi));\n"
-      " \nF_c(4) = sigTz  + D1*phi_d^2     + D2*psi_d*phi_d;\n\n% decouple the EoM\nF_u = Mass_Matrix^-1*F_c; \n\n% ext"
-      "ract the left hand side of the EoM\na_x_new = F_u(1);\na_y_new = F_u(2);\nphi_dd_new = F_u(3);\npsi_dd_new = F_u"
-      "(4);\n%---------------------------------------%\n%EoM NOXON NEW END\n%---------------------------------------%\n"
-      "\n%==Update independent variables==%\n%acceleration outputs\nacc_out = [a_x_new;a_y_new;a_sy;phi_dd_new;psi_dd_n"
-      "ew];        \npdot = [a_x_new;a_y_new;phi_d;phi_dd_new;psi_d;psi_dd_new];\n%----------------------------------%\n"
-      "%end\n%nd\n%d\n%\n"
-      editorLayout	      "100 M4x1[42 218 1696 1026]"
+      "ations==%\n% a_sx = a_x ...\n%      - psi_d*v_y ...\n%      - 2*h_s*phi_d*psi_d*cos(phi) ...\n%      - l_cgs*psi"
+      "_d^2;\na_sy = psi_d*v_x ...\n     + l_cgs*psi_dd ...\n     + h_s*cos(phi)*phi_dd ...\n     - h_s*phi_d^2*sin(phi"
+      ") ...\n     - h_s*psi_d^2*sin(phi);\n% a_ufx = a_x - l_f*psi_d^2;\n% a_ufy = a_y + l_f*psi_dd;\n% a_urx = a_x + "
+      "l_r*psi_d^2;\n% a_ury = a_y - l_r*psi_dd;\n%-------------------------------------%\n \n%==rotation Matrix==%\nRO"
+      "T = [1,0,0;\n       0,cos(phi),sin(phi);\n       0,-sin(phi),cos(phi)];\n \nI_b = [I_xxs+M_s*h_s^2,I_xys,I_xzs+M"
+      "_s*h_s*l_cgs;...\n       I_xys,I_yys+M_s*(h_s^2+l_cgs^2),I_yzs;...\n       I_xzs+M_s*h_s*l_cgs,I_yzs,I_zzs+M_s*l"
+      "_cgs^2];\n   \nI_c = ROT*I_b*ROT'; %chassis M.o.I. tensor\n \nI_zzus = M_uf*l_f^2 + ...\n         M_ur*l_r^2 + ."
+      "..\n         I_zzuf + I_zzur;\n \nI_zzo = I_c(3,3) + I_zzus; %effective I_zz\n%---------------------------------"
+      "------------%\n \n%==Dynamic Weight Transfer Forces==%\n% Fzax = (M_s*h_s*a_sx + M_uf*h_uf*a_ufx + M_ur*h_ur*a_u"
+      "rx)/(2*L);\n% \n% Fzayf = 1/t_f*(M_s*l_r*h_f/L*a_sy + M_uf*h_uf*a_ufy);\n% Fzayr = 1/t_r*(M_s*l_f*h_r/L*a_sy + M"
+      "_ur*h_ur*a_ury);\n% \n% Fzphif = -1/t_f*(K_phif*phi + B_phif*phi_d);\n% Fzphir = -1/t_r*(K_phir*phi + B_phir*phi"
+      "_d);\n%----------------------------------%\n \n%==Tire Normal Forces==% \n% Fzlf = M*g*l_r/(2*L) - Fzax - Fzayf "
+      "+ Fzphif;\n% Fzrf = M*g*l_r/(2*L) - Fzax + Fzayf - Fzphif;\n% Fzlr = M*g*l_f/(2*L) + Fzax - Fzayr + Fzphir;\n% F"
+      "zrr = M*g*l_f/(2*L) + Fzax + Fzayr - Fzphir;\n\nFzlf = M*g*l_r/(2*L);\nFzrf = M*g*l_r/(2*L);\nFzlr = M*g*l_f/(2*"
+      "L);\nFzrr = M*g*l_f/(2*L);\n%----------------------%\n \n%==Tire Longitudinal/Lateral Forces==%\n%left front whe"
+      "el velocity\nvx_lf = v_x + psi_d*t_f/2;\nvy_lf = v_y + psi_d*l_f;\n \n%right front wheel velocity\nvx_rf = v_x -"
+      " psi_d*t_f/2;\nvy_rf = v_y + psi_d*l_f;\n \n%left rear wheel velocity\nvx_lr = v_x + psi_d*t_r/2;\nvy_lr = v_y -"
+      " psi_d*l_r;\n \n%right rear wheel velocity\nvx_rr = v_x - psi_d*t_r/2;\nvy_rr = v_y - psi_d*l_r;  \n\n% %-------"
+      "--------------------------------%\n% %SLIP ANGLES HIRTLE\n% %---------------------------------------%\n% beta_lf"
+      " = atan(vy_lf/vx_lf);\n% beta_rf = atan(vy_rf/vx_rf);\n% beta_lr = atan(vy_lr/vx_lr);\n% beta_rr = atan(vy_rr/vx"
+      "_rr);\n%  \n% a_lf = beta_lf - delta;\n% a_rf = beta_rf - delta;\n% a_lr = beta_lr;\n% a_rr = beta_rr;\n%  \n% s"
+      "lp_ang = [a_lf,a_rf,a_lr,a_rr];\n% %---------------------------------------%\n% %END SLIP ANGLES HIRTLE\n% %----"
+      "-----------------------------------%\n\n%---------------------------------------%\n%SLIP ANGLES NIKOLA\n%-------"
+      "--------------------------------%\n% Tire longitudinal and cornering velocities\nvc_lf = vy_lf*cos(delta) - vx_l"
+      "f*sin(delta);\nvl_lf = vy_lf*sin(delta) + vx_lf*cos(delta);\n\nvc_rf = vy_rf*cos(delta) - vx_rf*sin(delta);\nvl_"
+      "rf = vy_rf*sin(delta) + vx_rf*cos(delta);\n\nvc_lr = vy_lr;\nvl_lr = vx_lr;\n\nvc_rr = vy_rr;\nvl_rr = vx_rr;\n\n"
+      "% Slip angles\na_lf = atan(vc_lf/vl_lf);\na_rf = atan(vc_rf/vl_rf);\na_lr = atan(vc_lr/vl_lr);\na_rr = atan(vc_r"
+      "r/vl_rr);\n\nslp_ang = [a_lf,a_rf,a_lr,a_rr];\n%---------------------------------------%\n%END SLIP ANGLES NIKOL"
+      "A\n%---------------------------------------%\n\n%Linearized Force Coefficients (C_alpha)\nC_alf = vary(2,2)/vary"
+      "(2,1)*Fzlf;\nC_arf = vary(2,2)/vary(2,1)*Fzrf;\nC_alr = vary(2,2)/vary(2,1)*Fzlr;\nC_arr = vary(2,2)/vary(2,1)*F"
+      "zrr;\n\nFxtlf = 0;\nFxtrf = 0;\nFxtlr = 0;\nFxtrr = 0;\n \nFytlf = -a_lf*C_alf;\nFytrf = -a_rf*C_arf;\nFytlr = -"
+      "a_lr*C_alr;\nFytrr = -a_rr*C_arr;\n \nFxlf = Fxtlf*cos(delta) - Fytlf*sin(delta);\nFxrf = Fxtrf*cos(delta) - Fyt"
+      "rf*sin(delta);\nFxlr = Fxtlr;\nFxrr = Fxtrr;\n \nFylf = Fytlf*cos(delta) + Fxtlf*sin(delta);\nFyrf = Fytrf*cos(d"
+      "elta) + Fxtrf*sin(delta);\nFylr = Fytlr;\nFyrr = Fytrr;\n \nFout = [Fylf,Fyrf,Fylr,Fyrr];\n%--------------------"
+      "-------------------%\n\n%==Tire Moments==%\nMzlf = 0;\nMzrf = 0;\nMzlr = 0;\nMzrr = 0;\n\n%==Torques==%\nT_phif "
+      "= -K_phif*phi - B_phif*phi_d;\nT_phir = -K_phir*phi - B_phir*phi_d;\n%-----------%\n \n%==Sum forces and torques"
+      "==%\nsigFx   = Fxlf + Fxrf + Fxlr + Fxrr;\nsigFy   = Fylf + Fyrf + Fylr + Fyrr;\nsigTxs  = T_phif + T_phir - ..."
+      "\n          M_s*g*h_s*sin(phi);\n% sigTxs  = T_phif + T_phir - ...\n%           M_s*g*h_s*sin(phi) + M_s*h_s*a_s"
+      "y*cos(phi);\nsigTz   = (Fylf + Fyrf)*l_f - (Fylr + Fyrr)*l_r + ...\n          t_f/2*(Fxlf - Fxrf) + t_r/2*(Fxlr "
+      "- Fxrr) + ...\n          Mzlf + Mzrf + Mzlr + Mzrr;\n%--------------------------%\n\n% %------------------------"
+      "---------------%\n% %EoM HIRTLE\n% %---------------------------------------%\n% a_x_new =  psi_d*v_y + (sigFx + "
+      "...\n%            M_s.*(-2*h_s.*phi_d.*psi_d.*cos(phi) - ...\n%            h_s.*psi_dd.*sin(phi)))./M;\n% a_y_ne"
+      "w = -psi_d*v_x + (sigFy - ...\n%            M_s*(-h_s*phi_dd*cos(phi) + ...\n%            h_s*phi_d^2*sin(phi) +"
+      " ...\n%            h_s*psi_d^2*sin(phi)))./M;\n% phi_dd_new = (sigTxs - ...\n%            (I_xzs+M_s*h_s*l_cgs)*"
+      "cos(phi)*psi_dd + ...\n%            (I_xzs+M_s*h_s*l_cgs)*sin(phi)*phi_d*psi_d + ...\n%            (I_zzs - I_yy"
+      "s - M_s*h_s^2)*sin(phi)*cos(phi)*psi_d^2)./ ...\n%            (I_xxs+M_s*h_s^2);\n% psi_dd_new = (sigTz - ...\n%"
+      "            (I_xzs+M_s*h_s*l_cgs)*cos(phi)*phi_dd - ...\n%            (I_xzs+M_s*h_s*l_cgs)*sin(phi)*phi_d^2 - ."
+      "..\n%             M_s*h_s*a_x*sin(phi) - ...\n%            (I_zzs - I_yys - M_s*h_s^2)*sin(phi)*cos(phi)*psi_d*p"
+      "hi_d)./ ...\n%             I_zzo;\n% %---------------------------------------%\n% %EoM HIRTLE END\n% %----------"
+      "-----------------------------%\n\n% %---------------------------------------%\n% %EoM NOXON\n% %----------------"
+      "-----------------------%\n% %==Equations of Motion==%\n% \n% % mass matrix for coupled equations of motion\n% Am"
+      "  = M_s*h_s*sin(phi);\n% Bm  = -M_s*h_s*cos(phi);\n% Cm  = (I_xzs+M_s*h_s*l_cgs)*cos(phi);\n% Dm1 = M_s*h_s*sin("
+      "phi);\n% Dm2 = (I_xzs+M_s*h_s*l_cgs)*cos(phi);\n% \n% Mass_Matrix =   [M                  0     0               "
+      "                  M_s*h_s*sin(phi)\n%                  0                  M     -M_s*h_s*cos(phi)               "
+      "  0\n%                  0                  0     (I_xxs+M_s*h_s^2)                 (I_xzs+M_s*h_s*l_cgs)*cos(phi"
+      ")\n%                  M_s*h_s*sin(phi)   0     (I_xzs+M_s*h_s*l_cgs)*cos(phi)    I_zzo];\n% \n% % coupled equati"
+      "ons of motion\n% A1 = -2*M_s*h_s*cos(phi);\n% B1 = -M_s*h_s*sin(phi);\n% C1 = (I_xzs+M_s*h_s*l_cgs)*sin(phi);\n%"
+      " C2 = (I_zzs - I_yys - M_s*h_s^2)*sin(phi)*cos(phi);\n% D1 = -(I_xzs+M_s*h_s*l_cgs)*sin(phi);\n% D2 = -(I_zzs - "
+      "I_yys - M_s*h_s^2)*sin(phi)*cos(phi);\n% \n% F_c = zeros(4,1);             \n% \n% F_c(1) = sigFx  + A1*phi_d*ps"
+      "i_d;\n% F_c(2) = sigFy  + B1*(phi_d^2 + psi_d^2);\n% F_c(3) = sigTxs + C1*phi_d*psi_d + C2*psi_d^2;\n% F_c(4) = "
+      "sigTz  + D1*phi_d^2     + D2*psi_d*phi_d;\n% \n% % decouple the EoM\n% F_u = Mass_Matrix^-1*F_c; \n% \n% % extra"
+      "ct the left hand side of the EoM\n% a_x_new = F_u(1);\n% a_y_new = F_u(2);\n% phi_dd_new = F_u(3);\n% psi_dd_new"
+      " = F_u(4);\n% %---------------------------------------%\n% %EoM NOXON END\n% %----------------------------------"
+      "-----%\n\n%---------------------------------------%\n%EoM NOXON NEW\n%---------------------------------------%\n"
+      "%==Equations of Motion==%\n\n% mass matrix for coupled equations of motion\nAm  = M_s*h_s*sin(phi);\nBm  = -M_s*"
+      "h_s*cos(phi);\nCm  = (I_xzs+M_s*h_s*l_cgs)*cos(phi);\nDm1 = M_s*h_s*sin(phi);\nDm2 = (I_xzs+M_s*h_s*l_cgs)*cos(p"
+      "hi);\n\nMass_Matrix =   [M                  0     0                                 M_s*h_s*sin(phi)\n          "
+      "       0                  M     -M_s*h_s*cos(phi)                 0\n                 0                  0     ("
+      "I_xxs+M_s*h_s^2*sin(phi)^2)      I_xzs*cos(phi)\n                 M_s*h_s*sin(phi)   0     (I_xzs+M_s*h_s*l_cgs)"
+      "*cos(phi)    I_zzo];\n\n% coupled equations of motion\nA1 = -2*M_s*h_s*cos(phi);\nB1 = -M_s*h_s*sin(phi);\nC1 = "
+      "(I_xzs+M_s*h_s*l_cgs)*sin(phi);\nC2 = (I_zzs - I_yys - M_s*h_s^2)*sin(phi)*cos(phi);\nD1 = -(I_xzs+M_s*h_s*l_cgs"
+      ")*sin(phi);\nD2 = -(I_zzs - I_yys - M_s*h_s^2)*sin(phi)*cos(phi);\n\nF_c = zeros(4,1);             \n\nF_c(1) = "
+      "sigFx  + A1*phi_d*psi_d;\nF_c(2) = sigFy  + B1*(phi_d^2 + psi_d^2);\n\nF_c(3) = sigTxs + C1*phi_d*psi_d + C2*psi"
+      "_d^2 + M_s*h_s*cos(phi)*psi_d*v_x - M_s*h_s^2*sin(phi)*cos(phi)*(phi_d^2 + psi_d^2);\n\n%-M_s*h_s*l_cgs*cos(phi)"
+      "*psi_dd - M_s*h_s^2*cos(phi)^2*phi_dd = M_s*h_s*cos(phi)*psi_d*v_x - M_s*cos(phi)*h_s^2*phi_d^2*sin(phi) - M_s*h"
+      "_s^2*cos(phi)*psi_d^2*sin(phi));\n \nF_c(4) = sigTz  + D1*phi_d^2     + D2*psi_d*phi_d;\n\n% decouple the EoM\nF"
+      "_u = Mass_Matrix^-1*F_c; \n\n% extract the left hand side of the EoM\na_x_new = F_u(1);\na_y_new = F_u(2);\nphi_"
+      "dd_new = F_u(3);\npsi_dd_new = F_u(4);\n%---------------------------------------%\n%EoM NOXON NEW END\n%--------"
+      "-------------------------------%\n\n%==Update independent variables==%\n%acceleration outputs\nacc_out = [a_x_ne"
+      "w;a_y_new;a_sy;phi_dd_new;psi_dd_new];        \npdot = [a_x_new;a_y_new;phi_d;phi_dd_new;psi_d;psi_dd_new];\n%--"
+      "--------------------------------%\n%end\n%nd\n%d\n%\n"
+      editorLayout	      "100 M4x1[42 218 1296 816]"
     }
   }
   junction {
