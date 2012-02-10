@@ -1,0 +1,21 @@
+p = [20,0,0,0,0,0.1];
+x_in = [20,0,0.1]';
+acc_in = [0,0,0,0,0];
+
+steer = 90;
+torque = 0;
+Ts = 0.1;
+Tf = 1;
+T = 0;
+
+Du = steer;
+
+while ( T < Tf)
+    [pdot,slp_ang,acc_out,Fout,DfDu] = DVM(p,steer,torque,acc_in)
+    x_in = 
+    [G, x_out] = bicycle_stability(x_in,DfDu,Du)
+    
+    p = p + pdot(1:6)'*Ts;
+    x_in = x_out;
+    T = T + Ts;
+end

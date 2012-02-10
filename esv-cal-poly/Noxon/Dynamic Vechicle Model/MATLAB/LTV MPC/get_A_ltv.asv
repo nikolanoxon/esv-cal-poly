@@ -1,0 +1,34 @@
+function [output] = get_A_ltv(A_ltv, current_state)
+%get_A_ltv - solves for the variable A_ltv matrix in numeric form
+%
+% Inputs:
+%    A_ltv  - The linearized plant of the discrete vehicle state in
+%    variable form
+%    current_state - the current state of the system [x_d y_d phi_d phi psi_d psi sigFy sigFx sigTxs sigTz]
+%
+% Outputs:
+%    output - A_ltv in numeric form with the current state applied
+%
+% Author: Nikola Noxon
+% email: nikolanoxon@gmail.com
+% Jan 2012; Last revision: 1-12-12
+
+%------------- BEGIN CODE --------------
+
+output = subs( A_ltv, current_state);
+
+test1 = subs( temp1, [x_d y_d phi_d phi psi_d psi delta], current_state);
+test2 = subs( temp2, [x_d y_d phi_d phi psi_d psi delta], current_state);
+test3 = subs( temp3, [x_d y_d phi_d phi psi_d psi delta], current_state);
+test4 = subs( temp4, [x_d y_d phi_d phi psi_d psi delta], current_state);
+test5 = subs( temp5, [x_d y_d phi_d phi psi_d psi delta], current_state);
+test6 = subs( temp6, [x_d y_d phi_d phi psi_d psi delta], current_state);
+
+output = [test1, test2, test3, test4, test5, test6];
+
+%------------- END OF CODE --------------
+%Please send suggestions for improvement of the above template header 
+%to Denis Gilbert at this email address: gilbertd@dfo-mpo.gc.ca.
+%Your contribution towards improving this template will be acknowledged in
+%the "Changes" section of the TEMPLATE_HEADER web page on the Matlab
+%Central File Exchange

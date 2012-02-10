@@ -1220,53 +1220,100 @@ static void c1_c1_Simulation(SFc1_SimulationInstanceStruct *chartInstance)
   /* Car physical variables */
   _SFD_EML_CALL(0, 25);
   c1_l_fs = 1.01476;
+
+  /* length from sprung mass CG to front suspension */
   _SFD_EML_CALL(0, 26);
   c1_l_rs = 1.67524;
+
+  /* length from sprung mass CG to rear suspension */
   _SFD_EML_CALL(0, 27);
   c1_t_f = 1.54;
+
+  /* front vehicle width */
   _SFD_EML_CALL(0, 28);
   c1_t_r = 1.53;
+
+  /* rear vehicle width */
   _SFD_EML_CALL(0, 29);
   c1_h_f = 0.13;
+
+  /* height from ground to front suspension */
   _SFD_EML_CALL(0, 30);
   c1_h_r = 0.11;
+
+  /* height from ground to rear suspension */
   _SFD_EML_CALL(0, 31);
   c1_h_cgs = 0.567851;
+
+  /* height from ground to sprung CG */
   _SFD_EML_CALL(0, 32);
   c1_h_cguf = 0.32;
+
+  /* height from ground to front unsprung CG */
   _SFD_EML_CALL(0, 33);
   c1_h_cgur = 0.32;
+
+  /* height from ground to rear unsprung CG */
   _SFD_EML_CALL(0, 34);
   c1_M = 1704.7;
+
+  /* total vehicle mass */
   _SFD_EML_CALL(0, 35);
   c1_M_uf = 98.1;
+
+  /* unsprung front mass */
   _SFD_EML_CALL(0, 36);
   c1_M_ur = 79.7;
+
+  /* unsprung rear mass */
   _SFD_EML_CALL(0, 37);
   c1_I_xxs = 440.911;
+
+  /* sprung XX inertia */
   _SFD_EML_CALL(0, 38);
   c1_I_xys = 0.0;
+
+  /* sprung XY inertia */
   _SFD_EML_CALL(0, 39);
   c1_I_xzs = 7.54097;
+
+  /* sprung XZ inertia */
   _SFD_EML_CALL(0, 40);
   c1_I_yys = 2498.9;
+
+  /* sprung YY inertia */
   _SFD_EML_CALL(0, 41);
   c1_I_yzs = 0.0;
+
+  /* sprung yz inertia */
   _SFD_EML_CALL(0, 42);
   c1_I_zzs = 2619.28;
+
+  /* sprung ZZ inertia */
   _SFD_EML_CALL(0, 43);
   c1_I_zzuf = 58.163489999999996;
+
+  /* front unsprung ZZ inertia */
   _SFD_EML_CALL(0, 44);
   c1_I_zzur = 46.6424325;
+
+  /* rear unsprung ZZ inertia */
   _SFD_EML_CALL(0, 45);
   c1_I_tlf = 0.99;
+
+  /* front left tire inertia */
   _SFD_EML_CALL(0, 46);
   c1_I_trf = 0.99;
+
+  /* front right tire inertia */
   _SFD_EML_CALL(0, 47);
   c1_I_tlr = 0.99;
+
+  /* rear left tire inertia */
   _SFD_EML_CALL(0, 48);
   c1_I_trr = 0.99;
 
+  /* rear right tire inertia */
   /* spring/dampers */
   _SFD_EML_CALL(0, 51);
   c1_K_spf = 27.85;
@@ -1320,29 +1367,52 @@ static void c1_c1_Simulation(SFc1_SimulationInstanceStruct *chartInstance)
   /* ==calculated parameters==% */
   _SFD_EML_CALL(0, 74);
   c1_L = 2.6900000000000004;
+
+  /* distance from front to rear suspension */
   _SFD_EML_CALL(0, 75);
   c1_M_s = 1526.9;
+
+  /* sprung mass */
   _SFD_EML_CALL(0, 76);
   c1_l_cgs = 0.019926480905731212;
+
+  /* distance from vehicle CG to sprung CG */
   _SFD_EML_CALL(0, 77);
   c1_l_f = 1.0346864809057312;
+
+  /* distance from vehicle CG to front suspension */
   _SFD_EML_CALL(0, 78);
   c1_l_r = 1.6553135190942689;
+
+  /* distance from vehicle CG to rear suspension */
   _SFD_EML_CALL(0, 79);
   c1_M_f = 1049.0010988847582;
+
+  /* front vehicle mass */
   _SFD_EML_CALL(0, 80);
   c1_M_r = 655.6989011152416;
+
+  /* rear vehicle mass */
   _SFD_EML_CALL(0, 81);
   c1_h_o = 0.12230716371073806;
+
+  /* height from ground to roll axis */
   _SFD_EML_CALL(0, 82);
   c1_h_s = 0.44554383628926192;
+
+  /* height from roll axis to sprung CG */
   _SFD_EML_CALL(0, 83);
   c1_h_uf = 0.19769283628926193;
+
+  /* height from roll axis to front suspension */
   _SFD_EML_CALL(0, 84);
   c1_h_ur = 0.19769283628926193;
+
+  /* height from roll axis to rear suspension */
   _SFD_EML_CALL(0, 85);
   c1_h_cg = 0.542000171232475;
 
+  /* height from gound to vehicle CG */
   /* ----------------------------% */
   /* ==tire properties==% */
   _SFD_EML_CALL(0, 89);
@@ -3192,10 +3262,10 @@ static void init_dsm_address_info(SFc1_SimulationInstanceStruct *chartInstance)
 /* SFunction Glue Code */
 void sf_c1_Simulation_get_check_sum(mxArray *plhs[])
 {
-  ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(361492238U);
-  ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(1857284892U);
-  ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(605197331U);
-  ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(2114303879U);
+  ((real_T *)mxGetPr((plhs[0])))[0] = (real_T)(714612223U);
+  ((real_T *)mxGetPr((plhs[0])))[1] = (real_T)(4102370248U);
+  ((real_T *)mxGetPr((plhs[0])))[2] = (real_T)(4195610299U);
+  ((real_T *)mxGetPr((plhs[0])))[3] = (real_T)(2222124582U);
 }
 
 mxArray *sf_c1_Simulation_get_autoinheritance_info(void)
@@ -3209,10 +3279,10 @@ mxArray *sf_c1_Simulation_get_autoinheritance_info(void)
   {
     mxArray *mxChecksum = mxCreateDoubleMatrix(4,1,mxREAL);
     double *pr = mxGetPr(mxChecksum);
-    pr[0] = (double)(3238456150U);
-    pr[1] = (double)(1858255985U);
-    pr[2] = (double)(2977493085U);
-    pr[3] = (double)(4143368660U);
+    pr[0] = (double)(561274717U);
+    pr[1] = (double)(2532653041U);
+    pr[2] = (double)(1536935699U);
+    pr[3] = (double)(1637662186U);
     mxSetField(mxAutoinheritanceInfo,0,"checksum",mxChecksum);
   }
 
@@ -3467,10 +3537,10 @@ static void chart_debug_initialization(SimStruct *S, unsigned int
 
         /* Initialization of EML Model Coverage */
         _SFD_CV_INIT_EML(0,1,3,0,0,0,0,0,0);
-        _SFD_CV_INIT_EML_FCN(0,0,"eML_blk_kernel",0,-1,7503);
-        _SFD_CV_INIT_EML_IF(0,0,4161,4174,4321,4357);
-        _SFD_CV_INIT_EML_IF(0,1,4179,4201,4257,4320);
-        _SFD_CV_INIT_EML_IF(0,2,4986,4999,5029,5062);
+        _SFD_CV_INIT_EML_FCN(0,0,"eML_blk_kernel",0,-1,9033);
+        _SFD_CV_INIT_EML_IF(0,0,5691,5704,5851,5887);
+        _SFD_CV_INIT_EML_IF(0,1,5709,5731,5787,5850);
+        _SFD_CV_INIT_EML_IF(0,2,6516,6529,6559,6592);
         _SFD_TRANS_COV_WTS(0,0,0,1,0);
         if (chartAlreadyPresent==0) {
           _SFD_TRANS_COV_MAPS(0,
@@ -3711,10 +3781,10 @@ static void mdlSetWorkWidths_c1_Simulation(SimStruct *S)
   }
 
   ssSetOptions(S,ssGetOptions(S)|SS_OPTION_WORKS_WITH_CODE_REUSE);
-  ssSetChecksum0(S,(2025029638U));
-  ssSetChecksum1(S,(2219187364U));
-  ssSetChecksum2(S,(3771204954U));
-  ssSetChecksum3(S,(3997230830U));
+  ssSetChecksum0(S,(1196532706U));
+  ssSetChecksum1(S,(1410823614U));
+  ssSetChecksum2(S,(4125912698U));
+  ssSetChecksum3(S,(3911497443U));
   ssSetmdlDerivatives(S, NULL);
   ssSetExplicitFCSSCtrl(S,1);
 }
