@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.136"
+    ComputedModelVersion    "1.138"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -26,9 +26,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "Nikola"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed Feb 15 18:06:01 2012"
+  LastModifiedDate	  "Wed Feb 15 18:24:20 2012"
   RTWModifiedTimeStamp	  251229199
-  ModelVersionFormat	  "1.%<AutoIncrement:136>"
+  ModelVersionFormat	  "1.%<AutoIncrement:138>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -781,7 +781,7 @@ Model {
   }
   System {
     Name		    "DVM_Nikola_final"
-    Location		    [-1278, -150, -2, 779]
+    Location		    [2, 74, 1261, 779]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -798,7 +798,7 @@ Model {
     SIDHighWatermark	    "53"
     Block {
       BlockType		      SubSystem
-      Name		      "8 DOF Dynamic Vehicle Model"
+      Name		      "DVM"
       SID		      "3"
       Ports		      [2, 4]
       Position		      [260, 315, 390, 740]
@@ -826,16 +826,8 @@ Model {
       MaskIconRotate	      "none"
       MaskPortRotate	      "default"
       MaskIconUnits	      "autoscale"
-      Port {
-	PortNumber		1
-	PropagatedSignals	"pdot"
-	LinearAnalysisOutput	on
-	LinearAnalysisOpenLoop	on
-	RTWStorageClass		"Auto"
-	DataLoggingNameMode	"SignalName"
-      }
       System {
-	Name			"8 DOF Dynamic Vehicle Model"
+	Name			"DVM"
 	Location		[257, 457, 812, 717]
 	Open			off
 	ModelBrowserVisibility	off
@@ -1098,6 +1090,12 @@ Model {
       Ports		      [1, 1]
       Position		      [425, 355, 455, 385]
       InitialCondition	      "[11.11,0,0,0,0,0]"
+      Port {
+	PortNumber		1
+	LinearAnalysisOutput	on
+	RTWStorageClass		"Auto"
+	DataLoggingNameMode	"SignalName"
+      }
     }
     Block {
       BlockType		      Scope
@@ -1208,19 +1206,6 @@ Model {
       SampleTime	      "0"
     }
     Block {
-      BlockType		      Constant
-      Name		      "Steer input"
-      SID		      "44"
-      Position		      [65, 620, 95, 650]
-      Value		      "142"
-      Port {
-	PortNumber		1
-	LinearAnalysisInput	on
-	RTWStorageClass		"Auto"
-	DataLoggingNameMode	"SignalName"
-      }
-    }
-    Block {
       BlockType		      Terminator
       Name		      "Terminator"
       SID		      "52"
@@ -1249,6 +1234,19 @@ Model {
       SaveName		      "ScopeData6"
       DataFormat	      "StructureWithTime"
       SampleTime	      "0"
+    }
+    Block {
+      BlockType		      Constant
+      Name		      "steer"
+      SID		      "44"
+      Position		      [65, 620, 95, 650]
+      Value		      "142"
+      Port {
+	PortNumber		1
+	LinearAnalysisInput	on
+	RTWStorageClass		"Auto"
+	DataLoggingNameMode	"SignalName"
+      }
     }
     Block {
       BlockType		      Scope
@@ -1337,7 +1335,7 @@ Model {
       st		      "-1"
     }
     Line {
-      SrcBlock		      "8 DOF Dynamic Vehicle Model"
+      SrcBlock		      "DVM"
       SrcPort		      2
       DstBlock		      "Gain3"
       DstPort		      1
@@ -1466,7 +1464,7 @@ Model {
       DstPort		      1
     }
     Line {
-      SrcBlock		      "8 DOF Dynamic Vehicle Model"
+      SrcBlock		      "DVM"
       SrcPort		      1
       Points		      [15, 0]
       Branch {
@@ -1486,7 +1484,7 @@ Model {
       Points		      [15, 0]
       Branch {
 	Points			[0, -65; -230, 0]
-	DstBlock		"8 DOF Dynamic Vehicle Model"
+	DstBlock		"DVM"
 	DstPort			1
       }
       Branch {
@@ -1495,17 +1493,17 @@ Model {
       }
     }
     Line {
-      SrcBlock		      "8 DOF Dynamic Vehicle Model"
+      SrcBlock		      "DVM"
       SrcPort		      3
       DstBlock		      "Tire Forces (LF, RF, LR, RR)"
       DstPort		      1
     }
     Line {
-      SrcBlock		      "Steer input"
+      SrcBlock		      "steer"
       SrcPort		      1
       Points		      [100, 0]
       Branch {
-	DstBlock		"8 DOF Dynamic Vehicle Model"
+	DstBlock		"DVM"
 	DstPort			2
       }
       Branch {
@@ -1522,7 +1520,7 @@ Model {
       DstPort		      3
     }
     Line {
-      SrcBlock		      "8 DOF Dynamic Vehicle Model"
+      SrcBlock		      "DVM"
       SrcPort		      4
       Points		      [265, 0; 0, -460]
       DstBlock		      "Mux"
@@ -1562,7 +1560,7 @@ Stateflow {
   }
   chart {
     id			    2
-    name		    "8 DOF Dynamic Vehicle Model"
+    name		    "DVM"
     windowPosition	    [281.813 329.45 200.25 189.75]
     viewLimits		    [0 156.75 0 153.75]
     screen		    [1 1 1280 1024 1.333333333333333]
@@ -1841,7 +1839,7 @@ Stateflow {
   }
   instance {
     id			    12
-    name		    "8 DOF Dynamic Vehicle Model"
+    name		    "DVM"
     machine		    1
     chart		    2
   }

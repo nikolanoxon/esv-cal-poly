@@ -13,15 +13,15 @@ clear
 % consists of the model initial state values and input signals.
 
 % Open Simulink model.
-sys = 'DVM_Hirtle_test';
+sys = 'DVM_Nikola_linsys';
 load_system(sys);
 open_system(sys)
 
 
 % Specify to linearize the DVM System block using linearization I/O
 % points. Each linearization I/O point is associated with a block outport.
-sys_io(1)=linio('DVM_Hirtle_test/steer',1,'in');
-sys_io(2)=linio('DVM_Hirtle_test/DVM',1,'out');
+sys_io(1)=linio('DVM_Nikola_linsys/steer',1,'in');
+sys_io(2)=linio('DVM_Nikola_linsys/Subsystem',2,'out');
 
 % Note: When there are multiple block output signals and you want to
 % specify an output port other than the first output, enter the desired
